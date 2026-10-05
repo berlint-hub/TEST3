@@ -1,0 +1,10 @@
+# Visual Studio & .NET build artifacts
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.userprefs
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
