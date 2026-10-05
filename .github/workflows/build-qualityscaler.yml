@@ -104,12 +104,13 @@ jobs:
           Copy-Item AI-onnx\*.txt dist\QualityScaler\AI-onnx\ -ErrorAction SilentlyContinue
           Copy-Item LICENSE, LICENSE.txt, README.md dist\QualityScaler\ -ErrorAction SilentlyContinue
 
-          @"
-Sem nakopíruj stažené AI modely (*.onnx) z odkazu v README QualityScaleru:
-https://github.com/Djdefrag/QualityScaler#-make-it-work-by-yourself
-
-Soubory musí mít název ve tvaru <NazevModelu>_fp16.onnx (např. RealESR_Gx4_fp16.onnx).
-"@ | Set-Content -Path dist\QualityScaler\AI-onnx\README_CZ.txt -Encoding utf8
+          $readme = @(
+            "Sem nakopiruj stazene AI modely (*.onnx) z odkazu v README QualityScaleru:",
+            "https://github.com/Djdefrag/QualityScaler#-make-it-work-by-yourself",
+            "",
+            "Soubory musi mit nazev ve tvaru <NazevModelu>_fp16.onnx (napr. RealESR_Gx4_fp16.onnx)."
+          )
+          Set-Content -Path dist\QualityScaler\AI-onnx\README_CZ.txt -Value $readme -Encoding utf8
 
       - name: Smoke test – spustit .exe a ověřit, že nespadne
         working-directory: QualityScaler/dist/QualityScaler
