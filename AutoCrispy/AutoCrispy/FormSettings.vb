@@ -3,27 +3,27 @@
     Public Shared Sub LoadSettings(Source As Form1, LoadedSettings As Settings)
         'Load Caffe Settings
         Source.CaffeMode.Text = LoadedSettings.CaffePak.Mode
-        Source.CaffeScale.Value = LoadedSettings.CaffePak.Scale
-        Source.CaffeNoise.Value = LoadedSettings.CaffePak.Noise
+        Source.CaffeScale.Value = Math.Max(Source.CaffeScale.Minimum, Math.Min(Source.CaffeScale.Maximum, CDec(LoadedSettings.CaffePak.Scale)))
+        Source.CaffeNoise.Value = Math.Max(Source.CaffeNoise.Minimum, Math.Min(Source.CaffeNoise.Maximum, CDec(LoadedSettings.CaffePak.Noise)))
         Source.CaffeProcess.Text = LoadedSettings.CaffePak.Process
         Source.CaffeTAA.Checked = LoadedSettings.CaffePak.TAA
 
         'Load Vulkan Settings
-        Source.VulkanScale.Value = LoadedSettings.VulkanPak.Scale
-        Source.VulkanNoise.Value = LoadedSettings.VulkanPak.Noise
+        Source.VulkanScale.Value = Math.Max(Source.VulkanScale.Minimum, Math.Min(Source.VulkanScale.Maximum, CDec(LoadedSettings.VulkanPak.Scale)))
+        Source.VulkanNoise.Value = Math.Max(Source.VulkanNoise.Minimum, Math.Min(Source.VulkanNoise.Maximum, CDec(LoadedSettings.VulkanPak.Noise)))
         Source.VulkanFormat.Text = LoadedSettings.VulkanPak.Format
         Source.VulkanTAA.Checked = LoadedSettings.VulkanPak.TAA
 
         'Load Cpp Settings
         Source.WaifuCPPMode.Text = LoadedSettings.CppPak.Mode
-        Source.WaifuCPPScale.Value = LoadedSettings.CppPak.Scale
-        Source.WaifuCPPNoise.Value = LoadedSettings.CppPak.Noise
+        Source.WaifuCPPScale.Value = Math.Max(Source.WaifuCPPScale.Minimum, Math.Min(Source.WaifuCPPScale.Maximum, CDec(LoadedSettings.CppPak.Scale)))
+        Source.WaifuCPPNoise.Value = Math.Max(Source.WaifuCPPNoise.Minimum, Math.Min(Source.WaifuCPPNoise.Maximum, CDec(LoadedSettings.CppPak.Noise)))
         Source.WaifuCPPFormat.Text = LoadedSettings.CppPak.Format
         Source.WaifuCppGPU.Checked = LoadedSettings.CppPak.GPU
         Source.WaifuCPPOpenCL.Checked = LoadedSettings.CppPak.ForceOpenCL
 
         'Load Anime4k Settings
-        Source.AnimeCPPScale.Value = LoadedSettings.AnimePak.Scale
+        Source.AnimeCPPScale.Value = Math.Max(Source.AnimeCPPScale.Minimum, Math.Min(Source.AnimeCPPScale.Maximum, CDec(LoadedSettings.AnimePak.Scale)))
         Source.AnimeCppPre.Checked = LoadedSettings.AnimePak.PreProcess
         Source.AnimeCppPost.Checked = LoadedSettings.AnimePak.PostProcess
         Source.AnimeCppPreFilter.Checked = LoadedSettings.AnimePak.PreFilter
@@ -45,10 +45,10 @@
         Source.AlphaCheckBox.Checked = LoadedSettings.TexConvPak.StraightAlpha
 
         'Load xBRZ Settings
-        Source.xBRZScale.Value = LoadedSettings.xBRZPak.Scale
+        Source.xBRZScale.Value = Math.Max(Source.xBRZScale.Minimum, Math.Min(Source.xBRZScale.Maximum, CDec(LoadedSettings.xBRZPak.Scale)))
 
         'Load ESRGAN Settings
-        Source.PyTileSize.Value = LoadedSettings.PythonPak.TileSize
+        Source.PyTileSize.Value = Math.Max(Source.PyTileSize.Minimum, Math.Min(Source.PyTileSize.Maximum, CDec(LoadedSettings.PythonPak.TileSize)))
         Source.PyCPU.Checked = LoadedSettings.PythonPak.CPUOnly
 
         'Load UI Paths
@@ -58,10 +58,10 @@
 
         'Load Basic UI Settings
         Source.ThreadComboBox.SelectedIndex = LoadedSettings.BasicSettings.ThreadIndex
-        Source.NumericThreads.Value = LoadedSettings.BasicSettings.ThreadCount
+        Source.NumericThreads.Value = Math.Max(Source.NumericThreads.Minimum, Math.Min(Source.NumericThreads.Maximum, CDec(LoadedSettings.BasicSettings.ThreadCount)))
         Source.DefringeCheck.Checked = LoadedSettings.BasicSettings.Defringe
         Source.PS2Check.Checked = LoadedSettings.BasicSettings.FixPS2
-        Source.DefringeThresh.Value = LoadedSettings.BasicSettings.DefringeThreshold
+        Source.DefringeThresh.Value = Math.Max(Source.DefringeThresh.Minimum, Math.Min(Source.DefringeThresh.Maximum, CDec(LoadedSettings.BasicSettings.DefringeThreshold)))
         Source.TabGroup.SelectedIndex = LoadedSettings.BasicSettings.SelectedTab
 
         'Load Expert UI Settings
