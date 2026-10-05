@@ -1,0 +1,6 @@
+# TexUp runtime dependencies (PyTorch is installed separately with the CUDA index – see install.bat)
+spandrel>=0.4
+numpy
+Pillow
+watchdog>=3
+customtkinter>=5.2
