@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Form1
     Inherits System.Windows.Forms.Form
 
@@ -360,7 +360,7 @@ Partial Class Form1
         '
         Me.NumericThreads.Location = New System.Drawing.Point(264, 71)
         Me.NumericThreads.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
-        Me.NumericThreads.Maximum = New Decimal(New Integer() {64, 0, 0, 0})
+        Me.NumericThreads.Maximum = New Decimal(New Integer() {512, 0, 0, 0})
         Me.NumericThreads.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericThreads.Name = "NumericThreads"
         Me.NumericThreads.Size = New System.Drawing.Size(60, 26)
@@ -826,8 +826,8 @@ Partial Class Form1
         'PyTileSize
         '
         Me.PyTileSize.Location = New System.Drawing.Point(351, 31)
-        Me.PyTileSize.Maximum = New Decimal(New Integer() {1024, 0, 0, 0})
-        Me.PyTileSize.Minimum = New Decimal(New Integer() {64, 0, 0, 0})
+        Me.PyTileSize.Maximum = New Decimal(New Integer() {4096, 0, 0, 0})
+        Me.PyTileSize.Minimum = New Decimal(New Integer() {0, 0, 0, 0})
         Me.PyTileSize.Name = "PyTileSize"
         Me.PyTileSize.Size = New System.Drawing.Size(169, 26)
         Me.PyTileSize.TabIndex = 4

@@ -979,49 +979,56 @@ Public Class Form1
     End Function
 
     Private Sub Defringe(Source As String, Threshold As Integer)
-        Dim NewImage As New DirectBitmap(GetUnlockedImage(Source))
-        For X = 0 To NewImage.Width - 1
-            For Y = 0 To NewImage.Height - 1
-                If NewImage.GetPixel(X, Y).A < Threshold Then
-                    NewImage.SetPixel(X, Y, Color.Transparent)
+        Using NewImage As New DirectBitmap(GetUnlockedImage(Source))
+            Dim TotalPixels As Integer = NewImage.Width * NewImage.Height
+            Dim Bits As Integer() = NewImage.Bits
+            For i = 0 To TotalPixels - 1
+                Dim Argb As Integer = Bits(i)
+                Dim A As Integer = (Argb >> 24) And &HFF
+                If A < Threshold Then
+                    Bits(i) = 0
                 End If
             Next
-        Next
-        NewImage.Bitmap.Save(Source)
+            NewImage.Bitmap.Save(Source)
+        End Using
     End Sub
 
     Private Sub RemovePS2Alpha(Source As String)
-        Dim NewImage As New DirectBitmap(GetUnlockedImage(Source))
-        Dim AlphaMax As Integer = 0
-        For X = 0 To NewImage.Width - 1
-            For Y = 0 To NewImage.Height - 1
-                Dim TempColor As Color = NewImage.GetPixel(X, Y)
-                If TempColor.A > AlphaMax Then
-                    AlphaMax = TempColor.A
-                End If
-                If Not AlphaMax <= 128 Then
-                    NewImage.Dispose()
-                    Exit Sub
-                End If
-                If TempColor.A <> 0 Then
-                    NewImage.SetPixel(X, Y, Color.FromArgb((TempColor.A * 2) - 1, TempColor.R, TempColor.G, TempColor.B))
+        Using NewImage As New DirectBitmap(GetUnlockedImage(Source))
+            Dim TotalPixels As Integer = NewImage.Width * NewImage.Height
+            Dim Bits As Integer() = NewImage.Bits
+            Dim AlphaMax As Integer = 0
+            For i = 0 To TotalPixels - 1
+                Dim A As Integer = (Bits(i) >> 24) And &HFF
+                If A > AlphaMax Then AlphaMax = A
+                If AlphaMax > 128 Then Exit Sub
+            Next
+            For i = 0 To TotalPixels - 1
+                Dim Argb As Integer = Bits(i)
+                Dim A As Integer = (Argb >> 24) And &HFF
+                If A <> 0 Then
+                    Dim NewA As Integer = Math.Min(255, (A * 2) - 1)
+                    Bits(i) = (NewA << 24) Or (Argb And &HFFFFFF)
                 End If
             Next
-        Next
-        NewImage.Bitmap.Save(Source)
+            NewImage.Bitmap.Save(Source)
+        End Using
     End Sub
 
     Private Sub AddPS2Alpha(Source As String)
-        Dim NewImage As New DirectBitmap(GetUnlockedImage(Source))
-        For X = 0 To NewImage.Width - 1
-            For Y = 0 To NewImage.Height - 1
-                Dim TempColor As Color = NewImage.GetPixel(X, Y)
-                If TempColor.A <> 0 Then
-                    NewImage.SetPixel(X, Y, Color.FromArgb((TempColor.A + 1) / 2, TempColor.R, TempColor.G, TempColor.B))
+        Using NewImage As New DirectBitmap(GetUnlockedImage(Source))
+            Dim TotalPixels As Integer = NewImage.Width * NewImage.Height
+            Dim Bits As Integer() = NewImage.Bits
+            For i = 0 To TotalPixels - 1
+                Dim Argb As Integer = Bits(i)
+                Dim A As Integer = (Argb >> 24) And &HFF
+                If A <> 0 Then
+                    Dim NewA As Integer = (A + 1) \ 2
+                    Bits(i) = (NewA << 24) Or (Argb And &HFFFFFF)
                 End If
             Next
-        Next
-        NewImage.Bitmap.Save(Source)
+            NewImage.Bitmap.Save(Source)
+        End Using
     End Sub
 
 #End Region
