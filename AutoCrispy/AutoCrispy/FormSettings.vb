@@ -1,4 +1,4 @@
-﻿<Serializable()> Public Class FormSettings
+<Serializable()> Public Class FormSettings
 
     Public Shared Sub LoadSettings(Source As Form1, LoadedSettings As Settings)
         'Load Caffe Settings
@@ -75,10 +75,32 @@
         Source.HotKeyCheckbox.Checked = LoadedSettings.ExpertSettings.SendHotkey
         Source.PortableCheckBox.Checked = LoadedSettings.ExpertSettings.Portable
 
+        'Load Backend & Model
+        If Not String.IsNullOrEmpty(LoadedSettings.BasicSettings.Backend) AndAlso Source.ExeComboBox.Items.Contains(LoadedSettings.BasicSettings.Backend) Then
+            Source.ExeComboBox.SelectedItem = LoadedSettings.BasicSettings.Backend
+        ElseIf Source.ExeComboBox.Items.Count > 0 Then
+            Source.ExeComboBox.SelectedIndex = 0
+        End If
+
+        If Not String.IsNullOrEmpty(LoadedSettings.PythonPak.Model) AndAlso Source.PyModels.Contains(LoadedSettings.PythonPak.Model) Then
+            Source.PyModel.SelectedIndex = Source.PyModels.IndexOf(LoadedSettings.PythonPak.Model)
+        ElseIf Source.PyModel.Items.Count > 0 Then
+            Source.PyModel.SelectedIndex = 0
+        End If
+
         'Load Internal Settings
-        Source.ChainList = LoadedSettings.Chain
-        For Each ChainItem As ChainObject In Source.ChainList
-            Source.ChainControl.ListItems.Add(New DragDropList.DragDropItem(Source.ChainList.IndexOf(ChainItem), ChainItem.Name, Source.ChainThumbs.Item(ChainItem.IconIndex)))
+        Source.ChainControl.ListItems.Clear()
+        If LoadedSettings.Chain IsNot Nothing Then
+            Source.ChainList = LoadedSettings.Chain
+        Else
+            Source.ChainList = New List(Of ChainObject)()
+        End If
+
+        For i = 0 To Source.ChainList.Count - 1
+            Dim ChainItem As ChainObject = Source.ChainList(i)
+            Dim IconIdx As Integer = Math.Max(0, Math.Min(ChainItem.IconIndex, Source.ChainThumbs.Count - 1))
+            Dim Thumb As Image = If(Source.ChainThumbs.Count > 0, Source.ChainThumbs.Item(IconIdx), Nothing)
+            Source.ChainControl.ListItems.Add(New DragDropList.DragDropItem(i, ChainItem.Name, Thumb))
         Next
     End Sub
 
@@ -142,7 +164,7 @@
             Chain = Source.ChainList
         End Sub
         Public Function GetPyStr(PyList As List(Of String), Index As Integer) As String
-            If PyList.Count > 0 Then
+            If PyList IsNot Nothing AndAlso PyList.Count > 0 AndAlso Index >= 0 AndAlso Index < PyList.Count Then
                 Return PyList(Index)
             End If
             Return ""
@@ -240,7 +262,11 @@
                 Case "xBRZ"
                     Package = New xBRZPackage(Source.xBRZScale.Value)
                 Case "ESRGAN"
-                    Package = New PythonPackage(Source.PyModels(Source.PyModel.SelectedIndex), Source.PyTileSize.Value, Source.PyCPU.Checked)
+                    Dim PyModelPath As String = ""
+                    If Source.PyModels IsNot Nothing AndAlso Source.PyModels.Count > 0 AndAlso Source.PyModel.SelectedIndex >= 0 AndAlso Source.PyModel.SelectedIndex < Source.PyModels.Count Then
+                        PyModelPath = Source.PyModels(Source.PyModel.SelectedIndex)
+                    End If
+                    Package = New PythonPackage(PyModelPath, Source.PyTileSize.Value, Source.PyCPU.Checked)
             End Select
         End Sub
     End Structure

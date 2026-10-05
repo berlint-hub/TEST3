@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Reflection
 
 Public Class Form1
@@ -59,6 +59,13 @@ Public Class Form1
         Application.CurrentCulture = New Globalization.CultureInfo("EN-US")
         PreloadImageList()
         ChainControl = New DragDropList(ChainPreview, 7)
+        AddHandler ChainControl.OrderChanged, AddressOf ChainControl_OrderChanged
+
+        If ExeTextBox.Text <> "" Then
+            Root = ExeTextBox.Text
+        End If
+        StartUpCheckEXE()
+
         Try
             If File.Exists(Root & "\portable.xml") Then
                 FormSettings.LoadSettings(Me, Deserialize(Of FormSettings.Settings)(File.ReadAllText(Root & "\portable.xml")))
@@ -74,14 +81,14 @@ Public Class Form1
             MsgBox("Failed to load Settings!  Loading program defaults.")
             FormSettings.LoadSettings(Me, Deserialize(Of FormSettings.Settings)(My.Resources.default_settings))
         End Try
-        If ExeTextBox.Text <> "" Then
-            Root = ExeTextBox.Text
-        End If
-        StartUpCheckEXE()
-        If ExeComboBox.Items.Count > 0 Then
+
+        If ExeComboBox.Items.Count > 0 AndAlso ExeComboBox.SelectedIndex = -1 Then
             ExeComboBox.SelectedIndex = 0
             SetSettingsWindow()
+        ElseIf ExeComboBox.SelectedIndex >= 0 Then
+            SetSettingsWindow()
         End If
+
         ChainControl.DrawList(ChainControl.ListItems)
         WatchDogButton.Select()
         If Environment.GetCommandLineArgs.Count > 1 Then
@@ -201,9 +208,15 @@ Public Class Form1
             If OFD.ShowDialog = DialogResult.OK Then
                 ChainControl.ListItems.Clear()
                 ChainList.Clear()
-                ChainList = Deserialize(Of List(Of FormSettings.ChainObject))(File.ReadAllText(OFD.FileName))
-                For Each ChainItem As FormSettings.ChainObject In ChainList
-                    ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.IndexOf(ChainItem), ChainItem.Name, ChainThumbs.Item(ChainItem.IconIndex)))
+                Dim LoadedChain = Deserialize(Of List(Of FormSettings.ChainObject))(File.ReadAllText(OFD.FileName))
+                If LoadedChain IsNot Nothing Then
+                    ChainList = LoadedChain
+                End If
+                For i = 0 To ChainList.Count - 1
+                    Dim ChainItem As FormSettings.ChainObject = ChainList(i)
+                    Dim IconIdx As Integer = Math.Max(0, Math.Min(ChainItem.IconIndex, ChainThumbs.Count - 1))
+                    Dim Thumb As Image = If(ChainThumbs.Count > 0, ChainThumbs.Item(IconIdx), Nothing)
+                    ChainControl.ListItems.Add(New DragDropList.DragDropItem(i, ChainItem.Name, Thumb))
                 Next
                 ChainControl.DrawList(ChainControl.ListItems)
             End If
@@ -211,40 +224,68 @@ Public Class Form1
     End Sub
 
     Private Sub ChainAdd_Click(sender As Object, e As EventArgs) Handles ChainAdd.Click
-        AddModelToChain(ExeComboBox.SelectedItem)
+        If ExeComboBox.SelectedItem IsNot Nothing Then
+            AddModelToChain(ExeComboBox.SelectedItem.ToString())
+        End If
+    End Sub
+
+    Private Sub ChainRemove_Click(sender As Object, e As EventArgs) Handles ChainRemove.Click
+        If ChainList.Count > 0 Then
+            Dim RemoveIdx As Integer = ChainControl.GetCurrentIndex()
+            If RemoveIdx < 0 OrElse RemoveIdx >= ChainList.Count Then
+                RemoveIdx = ChainList.Count - 1
+            End If
+            ChainList.RemoveAt(RemoveIdx)
+            If RemoveIdx < ChainControl.ListItems.Count Then
+                ChainControl.ListItems.RemoveAt(RemoveIdx)
+            End If
+            ChainControl.ReorderList()
+            ChainControl.DrawList(ChainControl.ListItems)
+        End If
     End Sub
 
     Private Sub RemoveItemFromChain(sender As Object, e As EventArgs) Handles ChainContextDelete.Click
-        Dim Remove As Integer = ChainControl.GetCurrentIndex
-        ChainList.RemoveAt(Remove)
-        ChainControl.ListItems.RemoveAt(Remove)
-        ChainControl.ReorderList()
-        ChainControl.DrawList(ChainControl.ListItems)
+        Dim RemoveIdx As Integer = ChainControl.GetCurrentIndex()
+        If RemoveIdx >= 0 AndAlso RemoveIdx < ChainList.Count Then
+            ChainList.RemoveAt(RemoveIdx)
+            If RemoveIdx < ChainControl.ListItems.Count Then
+                ChainControl.ListItems.RemoveAt(RemoveIdx)
+            End If
+            ChainControl.ReorderList()
+            ChainControl.DrawList(ChainControl.ListItems)
+        End If
     End Sub
 
     Private Sub ChainContextEdit_Click(sender As Object, e As EventArgs) Handles ChainContextEdit.Click
-        Dim ItemIndex As Integer = ChainControl.GetCurrentIndex
-        Using ECD As New EditChainDialog(Serialize(ChainList(ItemIndex)))
-            If ECD.ShowDialog = DialogResult.OK Then
-                Try
-                    Dim NewChainItem As FormSettings.ChainObject = Deserialize(Of FormSettings.ChainObject)(ECD.ResultText)
-                    ChainList(ItemIndex) = NewChainItem
-                Catch ex As Exception
-                    MsgBox("Error: New settings could not be parsed.")
-                End Try
-            End If
-        End Using
+        Dim ItemIndex As Integer = ChainControl.GetCurrentIndex()
+        If ItemIndex >= 0 AndAlso ItemIndex < ChainList.Count Then
+            Using ECD As New EditChainDialog(Serialize(ChainList(ItemIndex)))
+                If ECD.ShowDialog = DialogResult.OK Then
+                    Try
+                        Dim NewChainItem As FormSettings.ChainObject = Deserialize(Of FormSettings.ChainObject)(ECD.ResultText)
+                        ChainList(ItemIndex) = NewChainItem
+                        If ItemIndex < ChainControl.ListItems.Count Then
+                            Dim IconIdx As Integer = Math.Max(0, Math.Min(NewChainItem.IconIndex, ChainThumbs.Count - 1))
+                            Dim Thumb As Image = If(ChainThumbs.Count > 0, ChainThumbs.Item(IconIdx), Nothing)
+                            ChainControl.ListItems(ItemIndex) = New DragDropList.DragDropItem(ItemIndex, NewChainItem.Name, Thumb)
+                            ChainControl.DrawList(ChainControl.ListItems)
+                        End If
+                    Catch ex As Exception
+                        MsgBox("Error: New settings could not be parsed.")
+                    End Try
+                End If
+            End Using
+        End If
     End Sub
 
-    Private Sub ChainPreview_MouseUp(sender As Object, e As MouseEventArgs) Handles ChainPreview.MouseUp
-        If e.Button = MouseButtons.Left Then
-            Dim TempList As New List(Of FormSettings.ChainObject)
-            For Each Item As DragDropList.DragDropItem In ChainControl.ListItems
-                TempList.Add(ChainList(Item.Index))
-            Next
-            ChainList = TempList
-            ChainControl.ReorderList()
-        End If
+    Private Sub ChainControl_OrderChanged(OldIndices As List(Of Integer))
+        Dim TempList As New List(Of FormSettings.ChainObject)
+        For Each OldIdx As Integer In OldIndices
+            If OldIdx >= 0 AndAlso OldIdx < ChainList.Count Then
+                TempList.Add(ChainList(OldIdx))
+            End If
+        Next
+        ChainList = TempList
     End Sub
 
     Private Sub DDxFormatListBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DDxFormatListBox.SelectedIndexChanged
@@ -266,13 +307,11 @@ Public Class Form1
                 Using SFD As New SaveFileDialog With {.Filter = "PNG Images|*.png"}
                     If SFD.ShowDialog = DialogResult.OK Then
                         Dim TempPath As String = Path.GetTempPath & "Single_0"
-                        Directory.CreateDirectory(Path.GetTempPath & "Single_0")
+                        If Directory.Exists(TempPath) Then Directory.Delete(TempPath, True)
+                        Directory.CreateDirectory(TempPath)
                         File.Copy(OFD.FileName, TempPath & "\" & Path.GetFileName(SFD.FileName), True)
                         LoadedSettings = New FormSettings.Settings(Me)
                         LoadedSettings.Paths = New FormSettings.ProgramPaths(TempPath, Directory.GetParent(SFD.FileName).FullName, Root)
-                        If ChainControl.ListItems.Count = 0 Then
-                            AddModelToChain(ExeComboBox.SelectedItem, False)
-                        End If
                         SwitchGroups(False)
                         WorkHorse.RunWorkerAsync()
                     End If
@@ -385,6 +424,7 @@ Public Class Form1
 #Region "Background"
 
     Private Sub WatchDog_Tick(sender As Object, e As EventArgs) Handles WatchDog.Tick
+        If Not Directory.Exists(InputTextBox.Text) OrElse Not Directory.Exists(OutputTextBox.Text) Then Exit Sub
         Dim Source = Directory.GetFiles(InputTextBox.Text, "*.*", SearchOption.AllDirectories).Count
         Dim FileCheck = GetMissingFiles(InputTextBox.Text, OutputTextBox.Text).Count
         If Source = 0 OrElse FileCheck = 0 Then
@@ -394,9 +434,6 @@ Public Class Form1
             WaitScale = 0
             WatchDog.Interval = 1000
             LoadedSettings = New FormSettings.Settings(Me)
-            If ChainControl.ListItems.Count = 0 Then
-                AddModelToChain(ExeComboBox.SelectedItem, False)
-            End If
             WorkHorse.RunWorkerAsync()
         End If
     End Sub
@@ -420,9 +457,6 @@ Public Class Form1
 
     Private Sub WorkHorse_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles WorkHorse.RunWorkerCompleted
         UpscaleProgress.Value = 0
-        If ChainControl.ListItems.Count = 0 Then
-            ChainList.Clear()
-        End If
         If e.Cancelled = True Then
             WatchDog.Enabled = False
             WatchDogButton.Text = "Running: " & False
@@ -433,7 +467,8 @@ Public Class Form1
         If WatchDogButton.Text = "Running: True" Then
             WatchDog.Start()
         Else
-            Directory.Delete(Path.GetTempPath & "Single_0", True)
+            Dim SingleDir As String = Path.GetTempPath & "Single_0"
+            If Directory.Exists(SingleDir) Then Directory.Delete(SingleDir, True)
             SwitchGroups(True)
         End If
     End Sub
@@ -443,35 +478,75 @@ Public Class Form1
 #Region "Upscale Routine"
 
     Private Sub MakeUpscale()
+        Dim ActiveChain As List(Of FormSettings.ChainObject)
+        If ChainList IsNot Nothing AndAlso ChainList.Count > 0 Then
+            ActiveChain = New List(Of FormSettings.ChainObject)(ChainList)
+        Else
+            ActiveChain = New List(Of FormSettings.ChainObject)
+            Dim SingleModel As FormSettings.ChainObject = GetCurrentBackendChainObject()
+            If SingleModel.PackageType IsNot Nothing Then
+                ActiveChain.Add(SingleModel)
+            End If
+        End If
+
+        If ActiveChain.Count = 0 Then Exit Sub
+
         Dim TempPath As String = GetChainPath("Temp", 0)
         Dim ThreadCount As Integer = GetThreads(LoadedSettings.BasicSettings.ThreadIndex, LoadedSettings.BasicSettings.ThreadCount)
         Dim Source As String() = GetMissingFiles(LoadedSettings.Paths.InputPath, LoadedSettings.Paths.OutputPath)
-        For i = 0 To Source.Count - 1 Step ThreadCount
+        If Source.Length = 0 Then Exit Sub
+
+        For i = 0 To Source.Length - 1 Step ThreadCount
             Dim ChainPaths As New List(Of String)
             Dim DeletedChainPaths As New List(Of String)
             ChainPaths.Add(TempPath)
-            For j = 0 To ChainList.Count - 2
+            For j = 0 To ActiveChain.Count - 2
                 Dim TempName As String = GetChainPath("Chain", j)
                 ChainPaths.Add(TempName)
+                If Directory.Exists(TempName) Then Directory.Delete(TempName, True)
                 Directory.CreateDirectory(TempName)
             Next
             ChainPaths.Add(LoadedSettings.Paths.OutputPath)
+            If Directory.Exists(TempPath) Then Directory.Delete(TempPath, True)
             Directory.CreateDirectory(TempPath)
+
             CopyFiles(Source, SkipList, TempPath, i, ThreadCount)
-            For Each Model In ChainList
+
+            For m = 0 To ActiveChain.Count - 1
+                Dim Model As FormSettings.ChainObject = ActiveChain(m)
                 Dim NewImages As New List(Of String)
                 Dim DiffImages = GetMissingFiles(ChainPaths(0), LoadedSettings.Paths.OutputPath)
                 For Each NewImage As String In DiffImages
-                    Dim AcceptExt As Boolean = Model.Package.FileTypes.Contains(Path.GetExtension(NewImage).ToLower)
+                    Dim AcceptExt As Boolean = False
+                    Try
+                        If Model.Package IsNot Nothing Then
+                            Dim FileTypesProp = Model.Package.GetType().GetProperty("FileTypes")
+                            If FileTypesProp IsNot Nothing Then
+                                Dim FileTypesVal = FileTypesProp.GetValue(Model.Package, Nothing)
+                                If FileTypesVal IsNot Nothing Then
+                                    AcceptExt = DirectCast(FileTypesVal, List(Of String)).Contains(Path.GetExtension(NewImage).ToLower)
+                                Else
+                                    AcceptExt = True
+                                End If
+                            Else
+                                AcceptExt = True
+                            End If
+                        Else
+                            AcceptExt = True
+                        End If
+                    Catch ex As Exception
+                        AcceptExt = True
+                    End Try
+
                     If File.Exists(NewImage) AndAlso AcceptExt = True Then
                         NewImages.Add(NewImage)
                         If LoadedSettings.BasicSettings.FixPS2 = True Then
-                            If (ChainList.IndexOf(Model) = 0 AndAlso Model.Name <> "TexConv") OrElse (ChainList(0).Name = "TexConv" AndAlso ChainList.IndexOf(Model) = 1) Then
+                            If (m = 0 AndAlso Model.PackageType <> "TexConv") OrElse (ActiveChain(0).PackageType = "TexConv" AndAlso m = 1) Then
                                 RemovePS2Alpha(NewImage)
                             End If
                         End If
                         If LoadedSettings.ExpertSettings.SeamlessMode > 0 Then
-                            If (ChainList.IndexOf(Model) = 0 AndAlso Model.Name <> "TexConv") OrElse (ChainList(0).Name = "TexConv" AndAlso ChainList.IndexOf(Model) = 1) Then
+                            If (m = 0 AndAlso Model.PackageType <> "TexConv") OrElse (ActiveChain(0).PackageType = "TexConv" AndAlso m = 1) Then
                                 Dim SeamlessImage As Bitmap = GetUnlockedImage(NewImage)
                                 SeamlessImage = MakeSeamless(SeamlessImage, LoadedSettings.ExpertSettings.SeamlessMode, LoadedSettings.ExpertSettings.SeamlessMargin)
                                 SeamlessImage.Save(NewImage)
@@ -479,50 +554,59 @@ Public Class Form1
                         End If
                     End If
                 Next
+
                 StartBuilder(ChainPaths(0), ChainPaths(1), NewImages, Model)
                 DeletedChainPaths.Add(ChainPaths(0))
                 ChainPaths.RemoveAt(0)
-                If (ChainList.IndexOf(Model) = ChainList.Count - 1 AndAlso Model.Name <> "TexConv") OrElse (ChainList(ChainList.Count - 1).Name = "TexConv" AndAlso ChainList.IndexOf(Model) = ChainList.Count - 2) Then
+
+                If (m = ActiveChain.Count - 1 AndAlso Model.PackageType <> "TexConv") OrElse (ActiveChain(ActiveChain.Count - 1).PackageType = "TexConv" AndAlso m = ActiveChain.Count - 2) Then
                     If LoadedSettings.BasicSettings.Defringe = True Then
                         For Each NewImage In NewImages
-                            If File.Exists(ChainPaths(0) & "\" & Path.GetFileName(NewImage)) Then Defringe(ChainPaths(0) & "\" & Path.GetFileName(NewImage), LoadedSettings.BasicSettings.DefringeThreshold)
+                            Dim ProcessedImgPath As String = ChainPaths(0) & "\" & Path.GetFileName(NewImage)
+                            If File.Exists(ProcessedImgPath) Then Defringe(ProcessedImgPath, LoadedSettings.BasicSettings.DefringeThreshold)
                         Next
                     End If
                     If LoadedSettings.ExpertSettings.SeamlessMode > 0 Then
                         For Each NewImage In NewImages
-                            If File.Exists(ChainPaths(0) & "\" & Path.GetFileName(NewImage)) Then
+                            Dim ProcessedImgPath As String = ChainPaths(0) & "\" & Path.GetFileName(NewImage)
+                            If File.Exists(ProcessedImgPath) Then
                                 Dim ScaleVal As Integer = LoadedSettings.ExpertSettings.SeamlessScale * LoadedSettings.ExpertSettings.SeamlessMargin
-                                Dim CroppedImage As Bitmap = GetUnlockedImage(ChainPaths(0) & "\" & Path.GetFileName(NewImage))
+                                Dim CroppedImage As Bitmap = GetUnlockedImage(ProcessedImgPath)
                                 CroppedImage = CropImage(CroppedImage, ScaleVal, ScaleVal, CroppedImage.Width - (ScaleVal * 2), CroppedImage.Height - (ScaleVal * 2), 0)
-                                CroppedImage.Save(ChainPaths(0) & "\" & Path.GetFileName(NewImage))
+                                CroppedImage.Save(ProcessedImgPath)
                             End If
                         Next
                     End If
                     If LoadedSettings.BasicSettings.FixPS2 = True Then
                         For Each NewImage In NewImages
-                            If File.Exists(ChainPaths(0) & "\" & Path.GetFileName(NewImage)) Then
-                                AddPS2Alpha(ChainPaths(0) & "\" & Path.GetFileName(NewImage))
+                            Dim ProcessedImgPath As String = ChainPaths(0) & "\" & Path.GetFileName(NewImage)
+                            If File.Exists(ProcessedImgPath) Then
+                                AddPS2Alpha(ProcessedImgPath)
                             End If
                         Next
                     End If
                 End If
+
                 If WorkHorse.CancellationPending = True Then
-                    Directory.Delete(TempPath, True)
-                    For j = 0 To ChainList.Count - 2
+                    If Directory.Exists(TempPath) Then Directory.Delete(TempPath, True)
+                    For j = 0 To ActiveChain.Count - 2
                         Dim TempName As String = GetChainPath("Chain", j)
-                        Directory.Delete(TempName, True)
+                        If Directory.Exists(TempName) Then Directory.Delete(TempName, True)
                     Next
                     Exit Sub
                 End If
             Next
+
             For Each ChainDir As String In DeletedChainPaths
-                Directory.Delete(ChainDir, True)
+                If Directory.Exists(ChainDir) Then Directory.Delete(ChainDir, True)
             Next
-            WorkHorse.ReportProgress(Math.Floor(((i * 100) + 1) / Source.Count))
+
+            WorkHorse.ReportProgress(CInt(Math.Min(100, Math.Floor(((i + 1) * 100) / Source.Length))))
         Next
+
         If CleanupCheckBox.Checked = True Then
             For Each SourceImage As String In Source
-                File.Delete(SourceImage)
+                If File.Exists(SourceImage) Then File.Delete(SourceImage)
             Next
         End If
     End Sub
@@ -531,10 +615,11 @@ Public Class Form1
 
 #Region "Upscale Subroutines"
 
-    Private Sub CopyFiles(FileList As String(), ByRef SkipList As List(Of String), RootPath As String, ByRef CurrentIndex As Integer, BatchSize As Integer)
+    Private Sub CopyFiles(FileList As String(), ByRef SkipList As List(Of String), RootPath As String, CurrentIndex As Integer, BatchSize As Integer)
         Dim CopyCounter As Integer = 0
-        Do While CopyCounter < BatchSize
-            Dim FilePath As String = FileList(CurrentIndex)
+        Dim Idx As Integer = CurrentIndex
+        Do While CopyCounter < BatchSize AndAlso Idx < FileList.Length
+            Dim FilePath As String = FileList(Idx)
             If Not SkipList.Contains(FilePath) Then
                 Select Case LoadedSettings.ExpertSettings.AlphaMode
                     Case 0
@@ -552,12 +637,11 @@ Public Class Form1
                             File.Copy(FilePath, RootPath & "\" & Path.GetFileName(FilePath), True)
                             CopyCounter += 1
                         Else
-                            Skiplist.Add(filepath)
+                            SkipList.Add(FilePath)
                         End If
                 End Select
             End If
-            If CurrentIndex >= FileList.Count - 1 Then Exit Do
-            CurrentIndex += 1
+            Idx += 1
         Loop
     End Sub
 
@@ -619,25 +703,25 @@ Public Class Form1
     Private Function MakeCommand(Source As String, Dest As String, Mode As String, Package As Object) As String
         Select Case Mode
             Case "Waifu2x Caffe"
-                Return MakeCaffeCommand(Source, Dest, Package)
+                Return MakeCaffeCommand(Source, Dest, DirectCast(Package, FormSettings.Waifu2xCaffePackage))
             Case "Waifu2x Vulkan"
-                Return MakeVulkanCommand(Source, Dest, False, Package)
+                Return MakeVulkanCommand(Source, Dest, False, DirectCast(Package, FormSettings.VulkanNcnnPackage))
             Case "RealSR Vulkan"
-                Return MakeVulkanCommand(Source, Dest, True, Package)
+                Return MakeVulkanCommand(Source, Dest, True, DirectCast(Package, FormSettings.VulkanNcnnPackage))
             Case "RealESRGAN Vulkan"
-                Return MakeVulkanCommand(Source, Dest, True, Package)
+                Return MakeVulkanCommand(Source, Dest, True, DirectCast(Package, FormSettings.VulkanNcnnPackage))
             Case "SRMD Vulkan"
-                Return MakeVulkanCommand(Source, Dest, False, Package)
+                Return MakeVulkanCommand(Source, Dest, False, DirectCast(Package, FormSettings.VulkanNcnnPackage))
             Case "Waifu2x CPP"
-                Return MakeCPPCommand(Source, Dest, Package)
+                Return MakeCPPCommand(Source, Dest, DirectCast(Package, FormSettings.Waifu2xCppPackage))
             Case "Anime4k CPP"
-                Return MakeA4KCommand(Source, Dest, Package)
+                Return MakeA4KCommand(Source, Dest, DirectCast(Package, FormSettings.Anime4kPackage))
             Case "TexConv"
-                Return MakeTexConvCommand(Source, Dest, Package)
+                Return MakeTexConvCommand(Source, Dest, DirectCast(Package, FormSettings.DDxPackage))
             Case "xBRZ"
-                Return MakeXBRZCommand(Source, Dest, Package)
+                Return MakeXBRZCommand(Source, Dest, DirectCast(Package, FormSettings.xBRZPackage))
             Case "ESRGAN"
-                Return MakePyCommand(Source, Dest, Package)
+                Return MakePyCommand(Source, Dest, DirectCast(Package, FormSettings.PythonPackage))
         End Select
         Return ""
     End Function
@@ -645,38 +729,87 @@ Public Class Form1
     Private Sub AddModelToChain(Mode As String, Optional AddPreview As Boolean = True)
         Select Case Mode
             Case "Waifu2x Caffe"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "Caffe", ChainThumbs.Item(0)))
-                ChainList.Add(New FormSettings.ChainObject("Caffe", 0, CaffePath, "Waifu2x Caffe", Me))
+                Dim ItemName As String = "Caffe " & CaffeScale.Value & "x"
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ItemName, ChainThumbs.Item(0)))
+                ChainList.Add(New FormSettings.ChainObject(ItemName, 0, CaffePath, "Waifu2x Caffe", Me))
             Case "Waifu2x Vulkan"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "Waifu Vulkan", ChainThumbs.Item(1)))
-                ChainList.Add(New FormSettings.ChainObject("Waifu Vulkan", 1, WaifuNcnnPath, "Waifu2x Vulkan", Me))
+                Dim ItemName As String = "Waifu2x " & VulkanScale.Value & "x"
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ItemName, ChainThumbs.Item(1)))
+                ChainList.Add(New FormSettings.ChainObject(ItemName, 1, WaifuNcnnPath, "Waifu2x Vulkan", Me))
             Case "RealSR Vulkan"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "RealSR Vulkan", ChainThumbs.Item(2)))
-                ChainList.Add(New FormSettings.ChainObject("RealSR Vulkan", 2, RealSRNcnnPath, "RealSR Vulkan", Me))
+                Dim ItemName As String = "RealSR " & VulkanScale.Value & "x"
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ItemName, ChainThumbs.Item(2)))
+                ChainList.Add(New FormSettings.ChainObject(ItemName, 2, RealSRNcnnPath, "RealSR Vulkan", Me))
             Case "RealESRGAN Vulkan"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "RealESRGAN Vulkan", ChainThumbs.Item(8)))
-                ChainList.Add(New FormSettings.ChainObject("RealESRGAN Vulkan", 8, RealESRGNcnnPath, "RealESRGAN Vulkan", Me))
+                Dim ItemName As String = "RealESRGAN"
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ItemName, ChainThumbs.Item(8)))
+                ChainList.Add(New FormSettings.ChainObject(ItemName, 8, RealESRGNcnnPath, "RealESRGAN Vulkan", Me))
             Case "SRMD Vulkan"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "SRMD Vulkan", ChainThumbs.Item(3)))
-                ChainList.Add(New FormSettings.ChainObject("SRMD Vulkan", 3, SRMDNcnnPath, "SRMD Vulkan", Me))
+                Dim ItemName As String = "SRMD " & VulkanScale.Value & "x"
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ItemName, ChainThumbs.Item(3)))
+                ChainList.Add(New FormSettings.ChainObject(ItemName, 3, SRMDNcnnPath, "SRMD Vulkan", Me))
             Case "Waifu2x CPP"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "Waifu CPP", ChainThumbs.Item(4)))
-                ChainList.Add(New FormSettings.ChainObject("Waifu CPP", 4, WaifuCppPath, "Waifu2x CPP", Me))
+                Dim ItemName As String = "Waifu CPP " & WaifuCPPScale.Value & "x"
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ItemName, ChainThumbs.Item(4)))
+                ChainList.Add(New FormSettings.ChainObject(ItemName, 4, WaifuCppPath, "Waifu2x CPP", Me))
             Case "Anime4k CPP"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "Anime4k", ChainThumbs.Item(5)))
-                ChainList.Add(New FormSettings.ChainObject("Anime4k", 5, Anime4kPath, "Anime4k CPP", Me))
+                Dim ItemName As String = "Anime4k " & AnimeCPPScale.Value & "x"
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ItemName, ChainThumbs.Item(5)))
+                ChainList.Add(New FormSettings.ChainObject(ItemName, 5, Anime4kPath, "Anime4k CPP", Me))
             Case "TexConv"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "TexConv", ChainThumbs.Item(7)))
-                ChainList.Add(New FormSettings.ChainObject("TexConv", 7, TexConvPath, "TexConv", Me))
+                Dim ItemName As String = "TexConv (" & IIf(DDxModeBox.SelectedIndex = 0, "In", "Out") & ")"
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ItemName, ChainThumbs.Item(7)))
+                ChainList.Add(New FormSettings.ChainObject(ItemName, 7, TexConvPath, "TexConv", Me))
             Case "xBRZ"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "xBRZ", ChainThumbs.Item(0)))
-                ChainList.Add(New FormSettings.ChainObject("xBRZ", 0, xBRZPath, "xBRZ", Me))
+                Dim ItemName As String = "xBRZ " & xBRZScale.Value & "x"
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ItemName, ChainThumbs.Item(0)))
+                ChainList.Add(New FormSettings.ChainObject(ItemName, 0, xBRZPath, "xBRZ", Me))
             Case "ESRGAN"
-                ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, "ESRGAN", ChainThumbs.Item(6)))
-                ChainList.Add(New FormSettings.ChainObject("ESRGAN", 6, PyPath, "ESRGAN", Me))
+                Dim ModelName As String = "ESRGAN"
+                If PyModel.SelectedItem IsNot Nothing AndAlso PyModel.SelectedItem.ToString <> "" Then
+                    ModelName = Path.GetFileNameWithoutExtension(PyModel.SelectedItem.ToString)
+                ElseIf PyModels.Count > 0 AndAlso PyModel.SelectedIndex >= 0 AndAlso PyModel.SelectedIndex < PyModels.Count Then
+                    ModelName = Path.GetFileNameWithoutExtension(PyModels(PyModel.SelectedIndex))
+                End If
+                If AddPreview Then ChainControl.ListItems.Add(New DragDropList.DragDropItem(ChainList.Count, ModelName, ChainThumbs.Item(6)))
+                ChainList.Add(New FormSettings.ChainObject(ModelName, 6, PyPath, "ESRGAN", Me))
         End Select
-        ChainControl.DrawList(ChainControl.ListItems)
+        If AddPreview Then ChainControl.DrawList(ChainControl.ListItems)
     End Sub
+
+    Private Function GetCurrentBackendChainObject() As FormSettings.ChainObject
+        If ExeComboBox.SelectedItem Is Nothing Then Return Nothing
+        Dim Mode As String = ExeComboBox.SelectedItem.ToString()
+        Select Case Mode
+            Case "Waifu2x Caffe"
+                Return New FormSettings.ChainObject("Caffe " & CaffeScale.Value & "x", 0, CaffePath, "Waifu2x Caffe", Me)
+            Case "Waifu2x Vulkan"
+                Return New FormSettings.ChainObject("Waifu2x " & VulkanScale.Value & "x", 1, WaifuNcnnPath, "Waifu2x Vulkan", Me)
+            Case "RealSR Vulkan"
+                Return New FormSettings.ChainObject("RealSR " & VulkanScale.Value & "x", 2, RealSRNcnnPath, "RealSR Vulkan", Me)
+            Case "RealESRGAN Vulkan"
+                Return New FormSettings.ChainObject("RealESRGAN", 8, RealESRGNcnnPath, "RealESRGAN Vulkan", Me)
+            Case "SRMD Vulkan"
+                Return New FormSettings.ChainObject("SRMD " & VulkanScale.Value & "x", 3, SRMDNcnnPath, "SRMD Vulkan", Me)
+            Case "Waifu2x CPP"
+                Return New FormSettings.ChainObject("Waifu CPP " & WaifuCPPScale.Value & "x", 4, WaifuCppPath, "Waifu2x CPP", Me)
+            Case "Anime4k CPP"
+                Return New FormSettings.ChainObject("Anime4k " & AnimeCPPScale.Value & "x", 5, Anime4kPath, "Anime4k CPP", Me)
+            Case "TexConv"
+                Return New FormSettings.ChainObject("TexConv (" & IIf(DDxModeBox.SelectedIndex = 0, "In", "Out") & ")", 7, TexConvPath, "TexConv", Me)
+            Case "xBRZ"
+                Return New FormSettings.ChainObject("xBRZ " & xBRZScale.Value & "x", 0, xBRZPath, "xBRZ", Me)
+            Case "ESRGAN"
+                Dim ModelName As String = "ESRGAN"
+                If PyModel.SelectedItem IsNot Nothing AndAlso PyModel.SelectedItem.ToString <> "" Then
+                    ModelName = Path.GetFileNameWithoutExtension(PyModel.SelectedItem.ToString)
+                ElseIf PyModels.Count > 0 AndAlso PyModel.SelectedIndex >= 0 AndAlso PyModel.SelectedIndex < PyModels.Count Then
+                    ModelName = Path.GetFileNameWithoutExtension(PyModels(PyModel.SelectedIndex))
+                End If
+                Return New FormSettings.ChainObject(ModelName, 6, PyPath, "ESRGAN", Me)
+        End Select
+        Return Nothing
+    End Function
 
 #End Region
 
@@ -821,7 +954,11 @@ Public Class Form1
         Dim SourceBytes As Byte() = New Byte(SourceByteCount - 1) {}
         Runtime.InteropServices.Marshal.Copy(SourcePtr, SourceBytes, 0, SourceByteCount)
         For i = 3 To SourceBytes.Length - 1 Step 4
-            If SourceBytes(i) = 0 Then Return True
+            If SourceBytes(i) = 0 Then
+                SourceImage.UnlockBits(SourceData)
+                SourceImage.Dispose()
+                Return True
+            End If
         Next
         SourceImage.UnlockBits(SourceData)
         SourceImage.Dispose()
@@ -891,10 +1028,23 @@ Public Class Form1
 
 #Region "XML"
 
+    Private Shared Function GetExtraTypes() As Type()
+        Return {
+            GetType(FormSettings.Waifu2xCaffePackage),
+            GetType(FormSettings.VulkanNcnnPackage),
+            GetType(FormSettings.Waifu2xCppPackage),
+            GetType(FormSettings.Anime4kPackage),
+            GetType(FormSettings.DDxPackage),
+            GetType(FormSettings.xBRZPackage),
+            GetType(FormSettings.PythonPackage),
+            GetType(FormSettings.ChainObject)
+        }
+    End Function
+
     Public Shared Function Serialize(Of T)(Source As T) As String
         Dim Result As String = ""
         Using XmlStream As New MemoryStream
-            Dim XmlSerializer As New Xml.Serialization.XmlSerializer(GetType(T))
+            Dim XmlSerializer As New Xml.Serialization.XmlSerializer(GetType(T), GetExtraTypes())
             Dim XmlSettings As New Xml.XmlWriterSettings With {.Indent = True, .CloseOutput = True}
             Dim XmlWriter As Xml.XmlWriter = Xml.XmlWriter.Create(XmlStream, XmlSettings)
             XmlSerializer.Serialize(XmlWriter, Source)
@@ -911,7 +1061,7 @@ Public Class Form1
     Public Shared Function Deserialize(Of T)(Xml As String) As T
         Dim Result As New Object
         Using XmlStream As New MemoryStream
-            Dim XmlSerializer As New Xml.Serialization.XmlSerializer(GetType(T))
+            Dim XmlSerializer As New Xml.Serialization.XmlSerializer(GetType(T), GetExtraTypes())
             Dim XmlWriter As New StreamWriter(XmlStream)
             XmlWriter.Write(Xml)
             XmlWriter.Flush()
@@ -934,9 +1084,13 @@ Public Class Form1
 
     Private Function GetMissingFiles(Path1 As String, Path2 As String) As String()
         Dim Result As New List(Of String)
+        If Not Directory.Exists(Path1) Then Return Result.ToArray
         Dim Path1MasterList = Directory.GetFiles(Path1, "*.*", SearchOption.AllDirectories)
         Dim Path1List = Directory.GetFiles(Path1, "*.*", SearchOption.AllDirectories).ToList
-        Dim Path2List = Directory.GetFiles(Path2, "*.*", SearchOption.AllDirectories).ToList
+        Dim Path2List As New List(Of String)
+        If Directory.Exists(Path2) Then
+            Path2List = Directory.GetFiles(Path2, "*.*", SearchOption.AllDirectories).ToList
+        End If
         For i = 0 To Path1List.Count - 1
             Path1List(i) = Path.GetFileNameWithoutExtension(Path1List(i)).ToLower
         Next

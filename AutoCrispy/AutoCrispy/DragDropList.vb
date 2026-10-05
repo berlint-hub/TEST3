@@ -1,4 +1,3 @@
-﻿
 Public Class DragDropList
 
     Private ListImage As Bitmap
@@ -16,6 +15,8 @@ Public Class DragDropList
     Private CurrentIndex As Integer
 
     Private WithEvents DragTimer As New Timer With {.Interval = 100, .Enabled = False}
+
+    Public Event OrderChanged(OldIndices As List(Of Integer))
 
     Public Sub New(ByRef _PictureBox As PictureBox, _ThumbsPerRow As Integer)
         ListCanvas = _PictureBox
@@ -38,9 +39,10 @@ Public Class DragDropList
 
     Private Sub DragTimer_Tick(sender As Object, e As EventArgs) Handles DragTimer.Tick
         Dim NewIndex As Integer = GetCurrentIndex()
-        If CurrentIndex <> NewIndex Then
+        If CurrentIndex <> NewIndex AndAlso NewIndex >= 0 AndAlso NewIndex < TempListItems.Count Then
+            Dim DraggedItem As DragDropItem = TempListItems(CurrentIndex)
             TempListItems.RemoveAt(CurrentIndex)
-            TempListItems.Insert(NewIndex, ListItems(ClickedIndex))
+            TempListItems.Insert(NewIndex, DraggedItem)
             CurrentIndex = NewIndex
             DrawList(TempListItems)
         End If
@@ -49,7 +51,7 @@ Public Class DragDropList
     Public Sub ListCanvas_MouseDown(sender As Object, e As MouseEventArgs) Handles ListCanvas.MouseDown
         ClickedIndex = GetCurrentIndex()
         CurrentIndex = GetCurrentIndex()
-        If e.Button = MouseButtons.Left Then
+        If e.Button = MouseButtons.Left AndAlso ClickedIndex >= 0 AndAlso ClickedIndex < ListItems.Count Then
             TempListItems.Clear()
             TempListItems.AddRange(ListItems)
             Form1.Cursor = Cursors.SizeAll
@@ -58,12 +60,18 @@ Public Class DragDropList
     End Sub
 
     Public Sub ListCanvas_MouseUp(sender As Object, e As MouseEventArgs) Handles ListCanvas.MouseUp
-        If e.Button = MouseButtons.Left Then
+        If e.Button = MouseButtons.Left AndAlso DragTimer.Enabled Then
             DragTimer.Enabled = False
             Form1.Cursor = Cursors.Default
+            Dim OrderMap As New List(Of Integer)
+            For Each Item As DragDropItem In TempListItems
+                OrderMap.Add(Item.Index)
+            Next
             ListItems.Clear()
             ListItems.AddRange(TempListItems)
             ReorderList()
+            DrawList(ListItems)
+            RaiseEvent OrderChanged(OrderMap)
         End If
     End Sub
 
@@ -73,14 +81,15 @@ Public Class DragDropList
         Next
     End Sub
 
-    Public Function GetCurrentIndex()
+    Public Function GetCurrentIndex() As Integer
         Dim MPos As Point = ListCanvas.PointToClient(Control.MousePosition)
         If (MPos.X >= 0) AndAlso (MPos.X <= ListCanvas.Width) AndAlso (MPos.Y >= 0) AndAlso (MPos.Y <= ListCanvas.Height) Then
             Dim XPos As Integer = Math.Floor(MPos.X / (ThumbSize + 10))
             Dim YPos As Integer = Math.Floor(MPos.Y / (ThumbSize + 10))
             Dim Width As Integer = Math.Floor((ImageWidth - 10) / (ThumbSize + 10))
+            If Width <= 0 Then Return -1
             Dim Index As Integer = (YPos * Width) + XPos
-            If Index < ListItems.Count Then
+            If Index >= 0 AndAlso Index < ListItems.Count Then
                 Return Index
             Else
                 Return ClickedIndex
@@ -91,21 +100,30 @@ Public Class DragDropList
     End Function
 
     Public Sub DrawList(ItemList As List(Of DragDropItem))
+        If ImageWidth <= 0 OrElse ImageHeight <= 0 Then Exit Sub
         ListImage = New Bitmap(ImageWidth, ImageHeight)
         ListImage.SetResolution(300, 300)
         Using Gr As Graphics = Graphics.FromImage(ListImage)
             Gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBicubic
             Gr.FillRectangle(Brushes.White, 0, 0, ImageWidth, ImageHeight)
-            Gr.TextRenderingHint = 3
-            Dim ItemFont = New Font(New FontFamily("Times New Roman"), 10, FontStyle.Regular, GraphicsUnit.Pixel)
-            Dim FormatFlags As StringFormat = New StringFormat With {.LineAlignment = StringAlignment.Center, .Alignment = StringAlignment.Center}
+            Gr.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
+            Dim ItemFont = New Font("Arial", 9.0F, FontStyle.Regular, GraphicsUnit.Pixel)
+            Dim FormatFlags As StringFormat = New StringFormat With {
+                .LineAlignment = StringAlignment.Center,
+                .Alignment = StringAlignment.Center,
+                .Trimming = StringTrimming.EllipsisCharacter,
+                .FormatFlags = StringFormatFlags.NoWrap
+            }
             For Each Item As DragDropItem In ItemList
                 Dim BaseX As Integer = Math.Floor(ItemList.IndexOf(Item) Mod ThumbsPerRow)
                 Dim BaseY As Integer = Math.Floor(ItemList.IndexOf(Item) / ThumbsPerRow)
                 Dim RealX As Integer = 10 + ((ThumbSize + 10) * BaseX)
                 Dim RealY As Integer = 10 + ((ThumbSize + 10) * BaseY)
-                Gr.DrawImage(Item.Thumbnail, RealX, RealY, ThumbSize, ThumbSize)
-                Gr.DrawString(Item.Name, ItemFont, Brushes.Black, New Point(RealX + Math.Floor(ThumbSize / 2), RealY + ThumbSize + 10), FormatFlags)
+                If Item.Thumbnail IsNot Nothing Then
+                    Gr.DrawImage(Item.Thumbnail, RealX, RealY, ThumbSize, ThumbSize)
+                End If
+                Dim TextRect As New RectangleF(RealX - 4, RealY + ThumbSize + 2, ThumbSize + 8, 16)
+                Gr.DrawString(Item.Name, ItemFont, Brushes.Black, TextRect, FormatFlags)
             Next
         End Using
         ListCanvas.BackgroundImage = ListImage
