@@ -28,4 +28,12 @@ jobs:
       - name: Lint
         run: python -m pyflakes texup tests
       - name: Tests
-        run: python -m pytest -q tests
+        run: |
+          set +e
+          python -m pytest -q tests 2>&1 | tee pytest.log
+          code=${PIPESTATUS[0]}
+          if [ "$code" -ne 0 ]; then
+            msg=$(tail -c 3500 pytest.log | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+            echo "::error title=pytest failed (exit $code)::$msg"
+          fi
+          exit $code
