@@ -492,9 +492,10 @@ Public Class Form1
         If ActiveChain.Count = 0 Then Exit Sub
 
         Dim TempPath As String = GetChainPath("Temp", 0)
-        Dim ThreadCount As Integer = GetThreads(LoadedSettings.BasicSettings.ThreadIndex, LoadedSettings.BasicSettings.ThreadCount)
         Dim Source As String() = GetMissingFiles(LoadedSettings.Paths.InputPath, LoadedSettings.Paths.OutputPath)
         If Source.Length = 0 Then Exit Sub
+
+        Dim ThreadCount As Integer = GetThreads(LoadedSettings.BasicSettings.ThreadIndex, LoadedSettings.BasicSettings.ThreadCount, Source.Length)
 
         For i = 0 To Source.Length - 1 Step ThreadCount
             Dim ChainPaths As New List(Of String)
@@ -1110,16 +1111,18 @@ Public Class Form1
         Return Result.ToArray
     End Function
 
-    Private Function GetThreads(Index As Integer, Count As Integer)
+    Private Function GetThreads(Index As Integer, Count As Integer, Optional TotalFiles As Integer = 512) As Integer
         Select Case Index
-            Case 0
+            Case 0 ' Single
                 Return 1
-            Case 1
-                Return Count
-            Case 2
-                Return Environment.ProcessorCount
+            Case 1 ' Custom
+                Return Math.Max(1, Count)
+            Case 2 ' All
+                Return Math.Max(1, TotalFiles)
+            Case 3 ' Max (512)
+                Return 512
         End Select
-        Return 512
+        Return Math.Max(1, TotalFiles)
     End Function
 
     Private Function GetUnlockedImage(Source As String) As Bitmap
