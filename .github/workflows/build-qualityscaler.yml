@@ -1,0 +1,142 @@
+name: Build QualityScaler (Windows .exe)
+
+# Zkompiluje https://github.com/Djdefrag/QualityScaler do QualityScaler.exe
+# pomocí PyInstalleru na Windows runneru a nabídne výsledek jako artifact.
+#
+# Výstup (artifact "QualityScaler-windows-x64"):
+#   QualityScaler/
+#   ├── QualityScaler.exe
+#   ├── Assets/            (ikony + ffmpeg.exe)
+#   ├── AI-onnx/           (PRÁZDNÁ – sem nakopíruj stažené *.onnx modely)
+#   └── ... (runtime knihovny: python, onnxruntime, DirectML.dll, ...)
+
+on:
+  workflow_dispatch:
+    inputs:
+      qualityscaler_ref:
+        description: "Git ref (commit/tag/branch) repozitáře Djdefrag/QualityScaler"
+        required: false
+        default: "8c4c7410e641daa7580133e6f90ff7cd7ef73532"
+      python_version:
+        description: "Verze Pythonu (onnxruntime-directml 1.24.4 podporuje 3.11–3.14)"
+        required: false
+        default: "3.12"
+  push:
+    paths:
+      - ".github/workflows/build-qualityscaler.yml"
+
+env:
+  QS_REF: ${{ github.event.inputs.qualityscaler_ref || '8c4c7410e641daa7580133e6f90ff7cd7ef73532' }}
+  PY_VERSION: ${{ github.event.inputs.python_version || '3.12' }}
+  FFMPEG_URL: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
+
+jobs:
+  build-windows:
+    name: PyInstaller build (windows-latest)
+    runs-on: windows-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Checkout QualityScaler
+        uses: actions/checkout@v4
+        with:
+          repository: Djdefrag/QualityScaler
+          ref: ${{ env.QS_REF }}
+          path: QualityScaler
+
+      - name: Setup Python ${{ env.PY_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PY_VERSION }}
+          architecture: x64
+
+      - name: Install dependencies
+        working-directory: QualityScaler
+        run: |
+          python -m pip install --upgrade pip wheel setuptools
+          # requirements.txt v upstreamu je uložen jako UTF-16 – pip ho zvládne díky BOM,
+          # ale pro jistotu ho převedeme na UTF-8.
+          $raw = Get-Content -Raw -Encoding Unicode requirements.txt
+          Set-Content -Path requirements-utf8.txt -Value $raw -Encoding utf8
+          Get-Content requirements-utf8.txt
+          python -m pip install -r requirements-utf8.txt
+          python -m pip list
+
+      - name: Download ffmpeg.exe into Assets
+        working-directory: QualityScaler
+        run: |
+          Invoke-WebRequest -Uri $env:FFMPEG_URL -OutFile ffmpeg.zip
+          Expand-Archive -Path ffmpeg.zip -DestinationPath ffmpeg-tmp -Force
+          $ffmpeg = Get-ChildItem -Path ffmpeg-tmp -Recurse -Filter ffmpeg.exe | Select-Object -First 1
+          if (-not $ffmpeg) { throw "ffmpeg.exe not found in archive" }
+          Copy-Item $ffmpeg.FullName -Destination Assets\ffmpeg.exe
+          Remove-Item ffmpeg.zip, ffmpeg-tmp -Recurse -Force
+          & Assets\ffmpeg.exe -version | Select-Object -First 1
+
+      - name: Sanity check – imports & ONNX Runtime providers
+        working-directory: QualityScaler
+        run: |
+          python -c "import onnxruntime as ort, customtkinter, cv2, PIL, numpy, natsort, psutil, win32api, winotify; print('onnxruntime', ort.__version__, ort.get_available_providers())"
+
+      - name: Build with PyInstaller
+        working-directory: QualityScaler
+        run: |
+          pyinstaller `
+            --noconfirm --clean `
+            --onedir --windowed `
+            --name QualityScaler `
+            --icon Assets\logo.ico `
+            --contents-directory . `
+            --add-data "Assets;Assets" `
+            --collect-data customtkinter `
+            --collect-all onnxruntime `
+            --hidden-import winotify `
+            --hidden-import win32api `
+            --hidden-import win32con `
+            --hidden-import win32timezone `
+            QualityScaler.py
+
+          # Složka pro AI modely (hledají se přes sys._MEIPASS = vedle .exe díky --contents-directory .)
+          New-Item -ItemType Directory -Force -Path dist\QualityScaler\AI-onnx | Out-Null
+          Copy-Item AI-onnx\*.txt dist\QualityScaler\AI-onnx\ -ErrorAction SilentlyContinue
+          Copy-Item LICENSE, LICENSE.txt, README.md dist\QualityScaler\ -ErrorAction SilentlyContinue
+
+          @"
+Sem nakopíruj stažené AI modely (*.onnx) z odkazu v README QualityScaleru:
+https://github.com/Djdefrag/QualityScaler#-make-it-work-by-yourself
+
+Soubory musí mít název ve tvaru <NazevModelu>_fp16.onnx (např. RealESR_Gx4_fp16.onnx).
+"@ | Set-Content -Path dist\QualityScaler\AI-onnx\README_CZ.txt -Encoding utf8
+
+      - name: Smoke test – spustit .exe a ověřit, že nespadne
+        working-directory: QualityScaler/dist/QualityScaler
+        continue-on-error: true
+        run: |
+          $p = Start-Process -FilePath .\QualityScaler.exe -PassThru
+          Start-Sleep -Seconds 20
+          if ($p.HasExited) {
+            Write-Error "QualityScaler.exe exited early with code $($p.ExitCode)"
+            exit 1
+          }
+          Write-Host "QualityScaler.exe is running (PID $($p.Id)) – OK"
+          Stop-Process -Id $p.Id -Force
+          Get-Process -Name QualityScaler -ErrorAction SilentlyContinue | Stop-Process -Force
+
+      - name: Report build output
+        working-directory: QualityScaler/dist
+        run: |
+          Get-ChildItem QualityScaler | Select-Object Name, Length | Format-Table -AutoSize
+          $size = (Get-ChildItem QualityScaler -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB
+          Write-Host ("Total size: {0:N1} MB" -f $size)
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: QualityScaler-windows-x64
+          path: QualityScaler/dist/QualityScaler
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 30
