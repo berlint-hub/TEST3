@@ -20,6 +20,7 @@ Licensed under **GPL-3.0**, see [LICENSE](LICENSE).
 | 3 | **Smooth queue on `Threads: All`** | All pending textures are handed to the backend in a single batch — one Python/Vulkan launch instead of a restart per batch. |
 | 4 | **`Tile Size: 0` unlocked** | Range widened from `64–1024` to `0–4096`. `0` disables tiling and lets ESRGAN use the whole frame of VRAM. |
 | 5 | **Fast CPU post-processing** | `Defringe` and the PS2 alpha passes now work directly on `DirectBitmap.Bits` instead of per-pixel `Color` structures. |
+| 6 | **Progress bar** | Shows how much of the whole dump is already upscaled (input vs. output), so it no longer sits at 0 for an entire `Threads: All` run. |
 
 Full technical detail, including the root cause of each bug, is in [CHANGES.md](CHANGES.md).
 

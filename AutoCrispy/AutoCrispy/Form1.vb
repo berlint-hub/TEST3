@@ -218,6 +218,9 @@ Public Class Form1
         End If
         ChainControl.DrawList(ChainControl.ListItems)
         WatchDogButton.Select()
+        ' Show the real state of the dump straight away instead of waiting for the first tick.
+        ProgressPollTimer.Enabled = True
+        ProgressPollTimer_Tick(ProgressPollTimer, EventArgs.Empty)
         If Environment.GetCommandLineArgs.Count > 1 Then
             WatchDogButton_Click(sender, e)
         End If
@@ -627,6 +630,40 @@ Public Class Form1
         End If
     End Sub
 
+    ' The progress bar shows how much of the dump is upscaled overall - how many input files
+    ' already have a counterpart in the output folder - rather than how far the current batch got.
+    '
+    ' Reporting once per batch cannot express that: with "Threads: All" a whole run is a single
+    ' batch, so the bar sat at 0 for the entire queue, jumped to 100 at the end, and went back to 0
+    ' when the watchdog started the next run.  Polling the two folders keeps it meaningful across
+    ' batches, across runs, and even while nothing is running at all.
+    Private Sub ProgressPollTimer_Tick(sender As Object, e As EventArgs) Handles ProgressPollTimer.Tick
+        Try
+            Dim Percent As Integer = GetOverallProgress()
+            If Percent < UpscaleProgress.Minimum Then Percent = UpscaleProgress.Minimum
+            If Percent > UpscaleProgress.Maximum Then Percent = UpscaleProgress.Maximum
+            UpscaleProgress.Value = Percent
+        Catch ex As Exception
+            ' A folder on a removable or network drive can vanish mid-scan; never take the UI down.
+        End Try
+        ' Both folder trees are walked on the UI thread every tick, so poll once a second while
+        ' textures are actually being written and back off to five seconds when idle.
+        ProgressPollTimer.Interval = IIf(WorkHorse.IsBusy, 1000, 5000)
+    End Sub
+
+    Private Function GetOverallProgress() As Integer
+        Dim InputPath As String = InputTextBox.Text
+        Dim OutputPath As String = OutputTextBox.Text
+        If Not Directory.Exists(InputPath) OrElse Not Directory.Exists(OutputPath) Then Return 0
+        Dim InputFiles As String() = Directory.GetFiles(InputPath, "*.*", SearchOption.AllDirectories)
+        If InputFiles.Count = 0 Then Return 0
+        Dim Done As Integer = InputFiles.Count - GetMissingFiles(InputFiles, OutputPath).Count
+        If Done <= 0 Then Return 0
+        If Done >= InputFiles.Count Then Return 100
+        ' Double arithmetic: an Integer Done * 100 would overflow on an absurdly large dump.
+        Return CInt(Math.Floor((Done * 100.0R) / InputFiles.Count))
+    End Function
+
     Private Sub WorkHorse_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles WorkHorse.DoWork
         WatchDog.Stop()
         MakeUpscale()
@@ -636,7 +673,9 @@ Public Class Form1
     End Sub
 
     Private Sub WorkHorse_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles WorkHorse.ProgressChanged
-        UpscaleProgress.Value = e.ProgressPercentage
+        ' The progress bar is deliberately not touched here - ProgressPollTimer owns it, because
+        ' this event only fires once per batch.  What this handler is for is poking the emulator to
+        ' reload its textures as soon as a batch has landed.
         If (HotKeyCheckbox.Checked = True) AndAlso (GetActiveWindow <> Me.Handle) Then
             SendKeys.Send(HotToggle)
             Threading.Thread.Sleep(200)
@@ -645,7 +684,6 @@ Public Class Form1
     End Sub
 
     Private Sub WorkHorse_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles WorkHorse.RunWorkerCompleted
-        UpscaleProgress.Value = 0
         ' Drop the backend that was added implicitly for this run.  The old check tested the
         ' preview, which the implicit entry had already been added to, so it never cleared: the
         ' silently added model stayed in the chain and was written to settings.xml on exit.
@@ -759,8 +797,8 @@ Public Class Form1
             For Each ChainDir As String In DeletedChainPaths
                 Directory.Delete(ChainDir, True)
             Next
-            ' Clamp: ReportProgress throws outside 0-100, and a single mega batch now covers
-            ' the whole queue at once.
+            ' Drives the texture-reload hotkey, once per batch.  ReportProgress throws outside
+            ' 0-100, so the value is clamped; the bar itself is owned by ProgressPollTimer.
             WorkHorse.ReportProgress(Math.Max(0, Math.Min(100, CInt(Math.Floor(((i + ThreadCount) * 100) / Source.Count)))))
         Next
         If CleanupCheckBox.Checked = True Then
@@ -1247,18 +1285,28 @@ Public Class Form1
     Private Declare Function GetActiveWindow Lib "user32" Alias "GetActiveWindow" () As IntPtr
 
     Private Function GetMissingFiles(Path1 As String, Path2 As String) As String()
+        If Not Directory.Exists(Path1) Then Return New String() {}
+        Return GetMissingFiles(Directory.GetFiles(Path1, "*.*", SearchOption.AllDirectories), Path2)
+    End Function
+
+    ' Files from InputFiles that have no counterpart in Path2 yet, matched on the file name without
+    ' its extension (so a .png dump counts as done once TexConv has written the .dds).
+    '
+    ' The lookup runs through a HashSet rather than List.Contains: the old version did an O(n*m)
+    ' string comparison per call, which was tolerable once per batch but is now also called once
+    ' per second by the progress poller on dumps with thousands of textures.
+    Private Function GetMissingFiles(InputFiles As String(), Path2 As String) As String()
+        Dim DoneNames As New HashSet(Of String)
+        If Directory.Exists(Path2) Then
+            For Each DoneFile As String In Directory.GetFiles(Path2, "*.*", SearchOption.AllDirectories)
+                DoneNames.Add(Path.GetFileNameWithoutExtension(DoneFile).ToLower)
+            Next
+        End If
         Dim Result As New List(Of String)
-        Dim Path1MasterList = Directory.GetFiles(Path1, "*.*", SearchOption.AllDirectories)
-        Dim Path1List = Directory.GetFiles(Path1, "*.*", SearchOption.AllDirectories).ToList
-        Dim Path2List = Directory.GetFiles(Path2, "*.*", SearchOption.AllDirectories).ToList
-        For i = 0 To Path1List.Count - 1
-            Path1List(i) = Path.GetFileNameWithoutExtension(Path1List(i)).ToLower
-        Next
-        For i = 0 To Path2List.Count - 1
-            Path2List(i) = Path.GetFileNameWithoutExtension(Path2List(i)).ToLower
-        Next
-        For i = 0 To Path1List.Count - 1
-            If Not Path2List.Contains(Path1List(i)) Then Result.Add(Path1MasterList(i))
+        For Each InputFile As String In InputFiles
+            If Not DoneNames.Contains(Path.GetFileNameWithoutExtension(InputFile).ToLower) Then
+                Result.Add(InputFile)
+            End If
         Next
         Return Result.ToArray
     End Function

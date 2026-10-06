@@ -35,6 +35,7 @@ Partial Class Form1
         Me.Label3 = New System.Windows.Forms.Label()
         Me.CaffeMode = New System.Windows.Forms.ComboBox()
         Me.WatchDog = New System.Windows.Forms.Timer(Me.components)
+        Me.ProgressPollTimer = New System.Windows.Forms.Timer(Me.components)
         Me.WatchDogButton = New System.Windows.Forms.Button()
         Me.SettingsGroup = New System.Windows.Forms.GroupBox()
         Me.PS2Check = New System.Windows.Forms.CheckBox()
@@ -285,6 +286,10 @@ Partial Class Form1
         'WatchDog
         '
         Me.WatchDog.Interval = 1000
+        '
+        'ProgressPollTimer
+        '
+        Me.ProgressPollTimer.Interval = 1000
         '
         'WatchDogButton
         '
@@ -1487,6 +1492,7 @@ Partial Class Form1
     End Sub
     Friend WithEvents CaffeGroup As GroupBox
     Friend WithEvents WatchDog As Timer
+    Friend WithEvents ProgressPollTimer As Timer
     Friend WithEvents WatchDogButton As Button
     Friend WithEvents SettingsGroup As GroupBox
     Friend WithEvents CleanupCheckBox As CheckBox

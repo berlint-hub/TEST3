@@ -7,7 +7,7 @@ Files touched:
 
 ```
 AutoCrispy/AutoCrispy/Form1.vb            chaining, batch queue, process handling, post-processing
-AutoCrispy/AutoCrispy/Form1.Designer.vb   Tile Size range + hint label
+AutoCrispy/AutoCrispy/Form1.Designer.vb   Tile Size range + hint label, progress poll timer
 AutoCrispy/AutoCrispy/DragDropList.vb     hit testing, drag & drop, redraw
 AutoCrispy/AutoCrispy/FormSettings.vb     chain loading, numeric clamping
 AutoCrispy/AutoCrispy/My Project/AssemblyInfo.vb
@@ -234,6 +234,44 @@ Two leaks in the same code path are fixed as well:
   three routines now run inside a `Using`, and a shared `LoadDirectBitmap` helper releases the
   intermediate copy as soon as the pinned buffer has been filled.
 - `Defringe` wrote `Color.Transparent` through `SetPixel`; it now writes `0`, the same packed value.
+
+---
+
+## 6. Progress bar
+
+`WorkHorse.ReportProgress` fired once per batch and `WorkHorse_ProgressChanged` copied that value
+straight into the bar. With `Threads: All` a whole run is now a *single* batch, so the bar sat at 0
+for the entire queue, jumped to 100 when it finished, and went back to 0 as soon as the watchdog
+started the next run — on a 1400-texture dump it effectively showed nothing at all.
+
+The bar is now driven by a `ProgressPollTimer` (1 s while the worker is busy, 5 s when idle) that
+reports overall completion of the dump:
+
+```
+Done  = input files that already have a counterpart in the output folder
+Total = all files in the input folder
+```
+
+Matching is on the file name without its extension, the same rule `GetMissingFiles` already used, so
+a `.png` dump counts as done once TexConv has written the `.dds`. Because it reads the two folders
+rather than the batch counter, the value stays correct across batches, across watchdog runs, and
+even while nothing is running — the bar doubles as a "how complete is my texture pack" indicator.
+
+`WorkHorse_ProgressChanged` keeps firing once per batch but no longer touches the bar; it still
+sends the texture-reload hotkey to the emulator when a batch lands.
+
+Two notes on the semantics:
+
+- With **Cleanup** (delete originals) enabled the input folder is pruned after each run, so the bar
+  shows the progress of the currently dumped batch and cycles 0 → 100 % per run. That is the only
+  reading that makes sense once the originals are gone.
+- With an **Alpha mode** that skips textures (`Skip transparent` / `Skip opaque`), skipped files
+  never reach the output folder, so the bar plateaus below 100 %. It is reporting the true state of
+  the dump, not a stall.
+
+`GetMissingFiles` was also rebuilt on a `HashSet` — it used `List.Contains`, i.e. an O(n·m) string
+comparison per call. That was tolerable once per batch, but it now runs once per second on dumps
+with thousands of textures. It also guards against a missing folder instead of throwing.
 
 ---
 
