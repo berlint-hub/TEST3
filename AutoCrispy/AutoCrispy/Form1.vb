@@ -648,48 +648,84 @@ Public Class Form1
 
     Private Sub StartBuilder(SourcePath As String, DestPath As String, ImageList As List(Of String), Model As FormSettings.ChainObject)
         If ImageList.Count > 0 Then
-            Dim BuildProcess As ProcessStartInfo
+            Dim ExeFullPath As String = Root & Model.FileLocation
+            Dim WorkingDir As String = Directory.GetParent(ExeFullPath).FullName
+
             If Model.PackageType = "ESRGAN" OrElse Model.PackageType.Contains("Vulkan") Then
-                BuildProcess = New ProcessStartInfo(Root & Model.FileLocation, MakeCommand(SourcePath, DestPath, Model.PackageType, Model.Package))
-                BuildProcess.WorkingDirectory = Directory.GetParent(Root & Model.FileLocation).FullName
-                BuildProcess.RedirectStandardOutput = True
-                BuildProcess.RedirectStandardError = True
-                BuildProcess.UseShellExecute = False
-                BuildProcess.CreateNoWindow = True
-                Dim BatchProcess As Process = Process.Start(BuildProcess)
-                BatchProcess.WaitForExit()
-                If LoadedSettings.ExpertSettings.Logging = True Then
-                    WriteLog(BatchProcess, LoadedSettings.Paths.OutputPath)
-                End If
+                Dim Args As String = MakeCommand(SourcePath, DestPath, Model.PackageType, Model.Package)
+                Dim BuildProcess As New ProcessStartInfo(ExeFullPath, Args) With {
+                    .WorkingDirectory = WorkingDir,
+                    .UseShellExecute = False,
+                    .CreateNoWindow = True
+                }
+                RunSingleProcess(BuildProcess, LoadedSettings.ExpertSettings.Logging, LoadedSettings.Paths.OutputPath)
             Else
                 Dim ProcessBag As New List(Of Process)
                 For j = 0 To ImageList.Count - 1
                     Dim NewImage As String = DestPath & "\" & Path.GetFileName(ImageList(j))
-                    BuildProcess = New ProcessStartInfo(Root & Model.FileLocation, MakeCommand(ImageList(j), NewImage, Model.PackageType, Model.Package))
-                    BuildProcess.WorkingDirectory = Directory.GetParent(Root & Model.FileLocation).FullName
-                    BuildProcess.RedirectStandardOutput = True
-                    BuildProcess.RedirectStandardError = True
-                    BuildProcess.UseShellExecute = False
-                    BuildProcess.CreateNoWindow = True
+                    Dim Args As String = MakeCommand(ImageList(j), NewImage, Model.PackageType, Model.Package)
+                    Dim BuildProcess As New ProcessStartInfo(ExeFullPath, Args) With {
+                        .WorkingDirectory = WorkingDir,
+                        .UseShellExecute = False,
+                        .CreateNoWindow = True
+                    }
                     Dim BatchProcess As Process = Process.Start(BuildProcess)
                     ProcessBag.Add(BatchProcess)
-                    If LoadedSettings.ExpertSettings.Logging = True Then
-                        WriteLog(BatchProcess, LoadedSettings.Paths.OutputPath)
-                    End If
                 Next
-                Do
-                    Dim CompletionStatus As New List(Of Boolean)
-                    For Each Job As Process In ProcessBag
-                        CompletionStatus.Add(Job.HasExited)
-                    Next
-                    If Not CompletionStatus.Contains(False) Then
-                        Exit Do
-                    End If
-                Loop
+                For Each Proc In ProcessBag
+                    Proc.WaitForExit()
+                    Proc.Dispose()
+                Next
             End If
+
             For Each TempImage As String In Directory.GetFiles(SourcePath)
-                File.Delete(TempImage)
+                Try
+                    File.Delete(TempImage)
+                Catch
+                End Try
             Next
+        End If
+    End Sub
+
+    Private Sub RunSingleProcess(StartInfo As ProcessStartInfo, LogOutput As Boolean, OutputDir As String)
+        If LogOutput Then
+            StartInfo.RedirectStandardOutput = True
+            StartInfo.RedirectStandardError = True
+            Dim StdOut As New System.Text.StringBuilder()
+            Dim StdErr As New System.Text.StringBuilder()
+
+            Using Proc As Process = Process.Start(StartInfo)
+                AddHandler Proc.OutputDataReceived, Sub(sender As Object, e As DataReceivedEventArgs)
+                                                        If e.Data IsNot Nothing Then
+                                                            SyncLock StdOut
+                                                                StdOut.AppendLine(e.Data)
+                                                            End SyncLock
+                                                        End If
+                                                    End Sub
+                AddHandler Proc.ErrorDataReceived, Sub(sender As Object, e As DataReceivedEventArgs)
+                                                       If e.Data IsNot Nothing Then
+                                                           SyncLock StdErr
+                                                           StdErr.AppendLine(e.Data)
+                                                       End SyncLock
+                                                   End If
+                                               End Sub
+                Proc.BeginOutputReadLine()
+                Proc.BeginErrorReadLine()
+                Proc.WaitForExit()
+
+                Dim Filename As String = OutputDir & "\Log_" & Now.ToString("yyyy-MM-dd_HH-mm-ss") & ".txt"
+                Dim LogText As String = StartInfo.FileName & " " & StartInfo.Arguments & vbNewLine & vbNewLine & StdOut.ToString() & vbNewLine & vbNewLine & StdErr.ToString()
+                Try
+                    File.WriteAllText(Filename, LogText)
+                Catch
+                End Try
+            End Using
+        Else
+            StartInfo.RedirectStandardOutput = False
+            StartInfo.RedirectStandardError = False
+            Using Proc As Process = Process.Start(StartInfo)
+                Proc.WaitForExit()
+            End Using
         End If
     End Sub
 
