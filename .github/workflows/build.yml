@@ -1,0 +1,88 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to the same branch supersedes the run that is still going.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SOLUTION_PATH: AutoCrispy/AutoCrispy.sln
+  CONFIGURATION: Release
+  PLATFORM: Any CPU
+  OUTPUT_DIR: AutoCrispy/AutoCrispy/bin/Release
+
+jobs:
+  build:
+    name: Build (Windows / .NET Framework 4.7.2)
+
+    # Deliberately pinned to windows-2022 instead of windows-latest.
+    # windows-latest currently resolves to the Windows Server 2025 + Visual Studio 2026 image,
+    # which only installs the .NET Framework 4.8.1 targeting pack.  AutoCrispy targets v4.7.2, so
+    # it would fail there with "MSB3644: The reference assemblies for .NETFramework,Version=v4.7.2
+    # were not found".  The windows-2022 image still ships
+    # Microsoft.Net.Component.4.7.2.TargetingPack, which is what MSBuild needs.
+    runs-on: windows-2022
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Show toolchain
+        shell: pwsh
+        run: |
+          Write-Host "Runner image : $env:ImageOS"
+          msbuild -version -nologo
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          if (Test-Path $vswhere) {
+            & $vswhere -latest -products * -property displayName
+            & $vswhere -latest -products * -property catalog_productDisplayVersion
+          }
+
+      - name: Build solution
+        shell: pwsh
+        run: |
+          # The Platform value contains a space, so the whole switch has to stay quoted or
+          # PowerShell hands MSBuild two separate arguments.
+          msbuild $env:SOLUTION_PATH `
+            /p:Configuration=$env:CONFIGURATION `
+            "/p:Platform=$env:PLATFORM" `
+            /m `
+            /nologo `
+            /verbosity:minimal `
+            /consoleloggerparameters:Summary
+
+      - name: Verify build output
+        shell: pwsh
+        run: |
+          $exe = Join-Path $env:OUTPUT_DIR 'AutoCrispy.exe'
+          if (-not (Test-Path $exe)) {
+            throw "Expected build output not found: $exe"
+          }
+          Get-ChildItem $env:OUTPUT_DIR | Select-Object Name, Length | Format-Table -AutoSize
+          $info = (Get-Item $exe).VersionInfo
+          Write-Host ("AutoCrispy.exe  FileVersion={0}  ProductVersion={1}" -f $info.FileVersion, $info.ProductVersion)
+
+      - name: Upload AutoCrispy.exe
+        uses: actions/upload-artifact@v7
+        with:
+          name: AutoCrispy-${{ env.CONFIGURATION }}
+          path: |
+            ${{ env.OUTPUT_DIR }}/AutoCrispy.exe
+            ${{ env.OUTPUT_DIR }}/AutoCrispy.exe.config
+            ${{ env.OUTPUT_DIR }}/AutoCrispy.pdb
+            ${{ env.OUTPUT_DIR }}/AutoCrispy.xml
+          if-no-files-found: error
+          retention-days: 30
