@@ -8,7 +8,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("AutoCrispy")>
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyDescription("Automatically apply AI Upscaling on Dumped Textures")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("AutoCrispy")>
 <Assembly: AssemblyCopyright("Copyright ©  2023")>
@@ -30,5 +30,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.2.0.1")>
-<Assembly: AssemblyFileVersion("1.2.0.1")>
+<Assembly: AssemblyVersion("1.2.1.0")>
+<Assembly: AssemblyFileVersion("1.2.1.0")>
