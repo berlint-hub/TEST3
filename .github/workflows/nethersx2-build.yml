@@ -108,11 +108,21 @@ jobs:
           "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
             switch-mesa switch-curl switch-zlib switch-ntfs-3g
 
-      - name: Install portlibs (emulator only)
+      # Installed one by one and non-fatally: switch-mesa may already pull the
+      # GL-side dependency in, and switch-zstd is only linked by the MESA SDK
+      # configuration. Letting the build run tells us which of them the default
+      # OpenGL path actually needs.
+      - name: Install portlib switch-libdrm_nouveau
+        continue-on-error: true
         run: |
-          set -euo pipefail
-          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
-            switch-libdrm_nouveau switch-zstd
+          set -uo pipefail
+          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed switch-libdrm_nouveau 2>&1 | tail -5
+
+      - name: Install portlib switch-zstd
+        continue-on-error: true
+        run: |
+          set -uo pipefail
+          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed switch-zstd 2>&1 | tail -5
 
       - name: Restore cached storage dependencies
         uses: actions/cache@v4
