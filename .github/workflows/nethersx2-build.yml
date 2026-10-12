@@ -1,4 +1,6 @@
 # Continuous integration for NetherSX2_nx.
+# File name is namespaced (nethersx2-build.yml): this repository already hosts
+# unrelated workflows, including another project at .github/workflows/build.yml.
 #
 # What this CAN do
 # ----------------
@@ -15,7 +17,7 @@
 # NetherSX2 APKs) and, for the Vulkan renderer, the Mesa NVK archives under
 # `vulkan/`. CI therefore builds what it can and treats the binaries as build
 # validation artifacts, not as releases. See the notes in "How to build".
-name: build
+name: NetherSX2 build
 
 on:
   push:
@@ -177,7 +179,10 @@ jobs:
   # ---------------------------------------------------------------------------
   emulator-vk:
     name: emulator (Vulkan, opt-in)
-    if: ${{ vars.ENABLE_VK_BUILD == 'true' && secrets.MESA_SDK_URL != '' }}
+    # Only the repository variable can be tested here: the `secrets` context is
+    # not available in a job-level `if` (GitHub rejects the file outright). The
+    # secret is validated in the step below instead.
+    if: ${{ vars.ENABLE_VK_BUILD == 'true' }}
     runs-on: ubuntu-latest
     container:
       image: devkitpro/devkita64:latest
@@ -203,6 +208,10 @@ jobs:
           MESA_SDK_URL: ${{ secrets.MESA_SDK_URL }}
         run: |
           set -euo pipefail
+          if [ -z "${MESA_SDK_URL:-}" ]; then
+            echo "::error::ENABLE_VK_BUILD is set but the MESA_SDK_URL secret is empty."
+            exit 1
+          fi
           curl -fsSL "$MESA_SDK_URL" -o /tmp/mesa-sdk.tar.xz
           mkdir -p "$GITHUB_WORKSPACE/mesa-sdk"
           tar -xf /tmp/mesa-sdk.tar.xz -C "$GITHUB_WORKSPACE/mesa-sdk" --strip-components=1

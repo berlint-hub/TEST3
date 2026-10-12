@@ -105,7 +105,7 @@ libsmb2 and libusbhsfs revisions.
 
 ### Continuous integration
 
-`.github/workflows/build.yml` builds the OpenGL emulator core host and the
+`.github/workflows/nethersx2-build.yml` builds the OpenGL emulator core host and the
 launcher (plus the forwarder stub) with devkitPro on every push and pull
 request, and runs the host-side tests for the Tegra X1 memory primitives.
 
