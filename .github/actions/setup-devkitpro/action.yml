@@ -1,15 +1,15 @@
 # Shared devkitPro setup for the container jobs.
 #
-# Why this looks more complicated than "run pacman":
-# GitHub's log archive (results-receiver.actions.githubusercontent.com) is not
-# reachable from every network and the REST API exposes no per-step output, so
-# a failing install used to be a single opaque "exit 1". The probe step writes
-# the environment facts to a file and publishes it as an artifact (with the key
-# numbers folded into the artifact NAME, which is readable via the API), and
-# each install phase reports its own error the same way.
+# The official devkitPro images are NOT all Arch-based: on the Ubuntu-based
+# ones there is no `pacman` on PATH, only the `dkp-pacman` wrapper, and host
+# tools (cmake/ninja/curl) have to come from apt because dkp-pacman only serves
+# devkitPro packages. This action detects which world it is in and does the
+# right thing in both.
 #
-# -Sy, never -Syu: a full upgrade on a throwaway container regularly breaks on
-# stale Arch mirrors and buys nothing.
+# Why the probing: GitHub's log archive (results-receiver.actions.
+# githubusercontent.com) is not reachable from every network and the REST API
+# exposes no per-step output, so each phase reports its state through the NAME
+# of an uploaded artifact, which IS readable through the API.
 name: Setup devkitPro
 description: Install devkitA64 + tools and the requested Switch portlibs.
 
@@ -21,45 +21,76 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Probe container environment
+    - name: Detect package manager and host tools
       id: probe
       shell: bash
       run: |
         set -uo pipefail
-        SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
-        P="/$GITHUB_WORKSPACE/probe.txt"; P="${P//\/\//\/}"
+        PACMAN=""
+        for cand in dkp-pacman pacman \
+                    /opt/devkitpro/pacman/bin/pacman \
+                    /opt/devkitpro/pacman/bin/dkp-pacman; do
+          if command -v "$cand" >/dev/null 2>&1; then PACMAN="$cand"; break; fi
+        done
+        echo "pacman=$PACMAN" >> "$GITHUB_OUTPUT"
+        echo "has_apt=$(command -v apt-get >/dev/null 2>&1 && echo yes || echo no)" >> "$GITHUB_OUTPUT"
+        echo "os=$(. /etc/os-release 2>/dev/null && echo "${ID:-unknown}" || echo unknown)" >> "$GITHUB_OUTPUT"
+        echo "cmake=$(command -v cmake || echo no)" >> "$GITHUB_OUTPUT"
+        echo "ninja=$(command -v ninja || echo no)" >> "$GITHUB_OUTPUT"
         {
-          echo "user=$(id -u -n)"
-          echo "pacman_bin=$(command -v pacman || echo MISSING)"
-          echo "sudo_bin=$(command -v sudo || echo MISSING)"
-          echo "pacman_conf_sections=$(grep -c '^\[' /etc/pacman.conf 2>/dev/null || echo 0)"
-          echo "available_packages=$(timeout 60 pacman -Sl 2>/dev/null | wc -l)"
-          echo "switch_packages=$(timeout 60 pacman -Ssq '^switch-' 2>/dev/null | wc -l)"
-          echo "db_refresh=$(timeout 180 $SUDO pacman -Sy --noconfirm 2>&1 | tail -3 | tr '\n' ' ' | tr -c 'A-Za-z0-9 =._:/-' ' ' | cut -c1-120)"
-          echo "dkp_pacman=$(command -v dkp-pacman || echo MISSING)"
-        } > "$P" 2>&1
-        cat "$P"
-        echo "path=$P" >> "$GITHUB_OUTPUT"
-        echo "summary=user-$(id -u -n)-pacman-$(command -v pacman >/dev/null 2>&1 && echo yes || echo no)-pkgs-$(timeout 60 pacman -Sl 2>/dev/null | wc -l)-switch-$(timeout 60 pacman -Ssq '^switch-' 2>/dev/null | wc -l)" >> "$GITHUB_OUTPUT"
+          echo "pacman=$PACMAN"
+          echo "os=$(. /etc/os-release 2>/dev/null && . /etc/os-release && echo "$NAME")"
+          echo "devkitpro=${DEVKITPRO:-unset}"
+          echo "dkp_bin=$(ls /opt/devkitpro 2>/dev/null | tr '\n' ' ')"
+        } > "$GITHUB_WORKSPACE/probe.txt" 2>&1
+        {
+          echo "pacman=$PACMAN"
+          echo "os=$(. /etc/os-release 2>/dev/null && echo "${ID:-unknown}")"
+          echo "devkitpro=${DEVKITPRO:-unset}"
+          echo "dkp_bin=$(ls /opt/devkitpro 2>/dev/null | tr '\n' ' ')"
+          echo "cmake=$(command -v cmake || echo no)"
+          echo "ninja=$(command -v ninja || echo no)"
+        } > "$GITHUB_WORKSPACE/probe.txt" 2>&1
+        cat "$GITHUB_WORKSPACE/probe.txt"
+        if [ -z "$PACMAN" ]; then
+          echo "::error::No pacman/dkp-pacman found in the container image."
+          exit 1
+        fi
 
     - name: Upload environment probe
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: probe-${{ github.job }}-${{ steps.probe.outputs.summary }}
-        path: ${{ steps.probe.outputs.path }}
+        name: probe-${{ github.job }}-os-${{ steps.probe.outputs.os }}-pacman-${{ steps.probe.outputs.pacman }}-apt-${{ steps.probe.outputs.has_apt }}
+        path: ${{ github.workspace }}/probe.txt
         if-no-files-found: warn
         retention-days: 1
 
-    - name: Install toolchain and host tools
+    - name: Install host tools (cmake, ninja)
+      shell: bash
+      run: |
+        set -uo pipefail
+        if [ "${{ steps.probe.outputs.has_apt }}" = "yes" ]; then
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -qq
+          apt-get install -y --no-install-recommends cmake ninja-build curl ca-certificates
+        else
+          ${{ steps.probe.outputs.pacman }} -Sy --noconfirm
+          ${{ steps.probe.outputs.pacman }} -S --noconfirm --needed cmake ninja curl
+        fi
+
+    - name: Install devkitPro toolchain
       id: toolchain
       shell: bash
       run: |
         set -uo pipefail
-        SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
-        if ! OUT=$($SUDO pacman -S --noconfirm --needed devkitA64 libnx switch-tools cmake ninja git 2>&1); then
+        PACMAN="${{ steps.probe.outputs.pacman }}"
+        if ! OUT=$($PACMAN -Sy --noconfirm 2>&1); then
+          printf '%s\n' "$OUT" | tail -25 > "$GITHUB_WORKSPACE/diag-sy.txt"
+          exit 1
+        fi
+        if ! OUT=$($PACMAN -S --noconfirm --needed devkitA64 libnx switch-tools 2>&1); then
           printf '%s\n' "$OUT" | tail -25 > "$GITHUB_WORKSPACE/diag-toolchain.txt"
-          echo "error=$(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 ._+' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
           exit 1
         fi
 
@@ -68,11 +99,9 @@ runs:
       shell: bash
       run: |
         set -uo pipefail
-        SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
         # shellcheck disable=SC2086
-        if ! OUT=$($SUDO pacman -S --noconfirm --needed ${{ inputs.portlibs }} 2>&1); then
+        if ! OUT=$(${{ steps.probe.outputs.pacman }} -S --noconfirm --needed ${{ inputs.portlibs }} 2>&1); then
           printf '%s\n' "$OUT" | tail -25 > "$GITHUB_WORKSPACE/diag-portlibs.txt"
-          echo "error=$(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 ._+' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
           exit 1
         fi
 
@@ -80,7 +109,7 @@ runs:
       if: failure()
       uses: actions/upload-artifact@v4
       with:
-        name: diag-${{ github.job }}-${{ steps.toolchain.outputs.error }}${{ steps.portlibs.outputs.error }}
+        name: diag-${{ github.job }}-toolchain-${{ steps.toolchain.conclusion }}-portlibs-${{ steps.portlibs.conclusion }}-apt-${{ steps.probe.outputs.has_apt }}
         path: ${{ github.workspace }}/diag-*.txt
         if-no-files-found: warn
         retention-days: 1
