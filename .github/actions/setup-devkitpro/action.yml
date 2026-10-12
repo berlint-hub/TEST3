@@ -64,13 +64,21 @@ runs:
       shell: bash
       run: |
         set -uo pipefail
+        retry() {
+          local n=1
+          until "$@"; do
+            if [ "$n" -ge 5 ]; then echo "FAILED after $n attempts: $*"; return 1; fi
+            echo "attempt $n failed; retrying in $((n * 10))s"
+            n=$((n + 1)); sleep $((n * 10))
+          done
+        }
         if [ "${{ steps.probe.outputs.has_apt }}" = "yes" ]; then
           export DEBIAN_FRONTEND=noninteractive
-          apt-get update -qq
-          apt-get install -y --no-install-recommends cmake ninja-build curl ca-certificates
+          retry apt-get update -qq
+          retry apt-get install -y --no-install-recommends cmake ninja-build curl ca-certificates
         else
-          ${{ steps.probe.outputs.pacman }} -Sy --noconfirm
-          ${{ steps.probe.outputs.pacman }} -S --noconfirm --needed cmake ninja curl
+          retry ${{ steps.probe.outputs.pacman }} -Sy --noconfirm
+          retry ${{ steps.probe.outputs.pacman }} -S --noconfirm --needed cmake ninja curl
         fi
 
     - name: Refresh devkitPro package databases
@@ -78,7 +86,14 @@ runs:
       shell: bash
       run: |
         set -uo pipefail
-        if ! OUT=$(${{ steps.probe.outputs.pacman }} -Sy --noconfirm 2>&1); then
+        retry() {
+          local n=1
+          until "$@"; do
+            if [ "$n" -ge 5 ]; then return 1; fi
+            n=$((n + 1)); sleep $((n * 10))
+          done
+        }
+        if ! OUT=$(retry ${{ steps.probe.outputs.pacman }} -Sy --noconfirm 2>&1); then
           printf '%s\n' "$OUT" | tail -20
           echo "error=SY $(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 =._:/-' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
           exit 1
@@ -89,7 +104,14 @@ runs:
       shell: bash
       run: |
         set -uo pipefail
-        if ! OUT=$(${{ steps.probe.outputs.pacman }} -S --noconfirm --needed devkitA64 libnx switch-tools 2>&1); then
+        retry() {
+          local n=1
+          until "$@"; do
+            if [ "$n" -ge 5 ]; then return 1; fi
+            n=$((n + 1)); sleep $((n * 10))
+          done
+        }
+        if ! OUT=$(retry ${{ steps.probe.outputs.pacman }} -S --noconfirm --needed devkitA64 libnx switch-tools 2>&1); then
           printf '%s\n' "$OUT" | tail -20
           echo "error=TOOLCHAIN $(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 =._:/-' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
           exit 1

@@ -85,27 +85,37 @@ jobs:
       # steps collapse into one job step in the API, and the run logs are not
       # downloadable from every network, so each install phase has to be its
       # own step to stay debuggable.
+      # pkg.devkitpro.org and the apt mirrors both drop connections often
+      # enough to fail a job outright, so every install goes through a retry
+      # helper written once here and sourced by the steps below.
       - name: Install host tools (cmake, ninja)
         run: |
           set -euo pipefail
+          # Written with printf rather than a heredoc: a heredoc terminator
+          # inside a YAML block scalar breaks the block's indentation.
+          printf '%s\n' 'retry() { local n=1; until "$@"; do if [ "$n" -ge 5 ]; then echo "FAILED after 5 attempts: $*"; return 1; fi; echo "attempt $n failed; retrying"; n=$((n+1)); sleep $((n*10)); done; }' > /tmp/ci-retry.sh
+          . /tmp/ci-retry.sh
           export DEBIAN_FRONTEND=noninteractive
-          apt-get update -qq
-          apt-get install -y --no-install-recommends cmake ninja-build curl ca-certificates
+          retry apt-get update -qq
+          retry apt-get install -y --no-install-recommends cmake ninja-build curl ca-certificates
 
       - name: Refresh devkitPro package databases
         run: |
           set -euo pipefail
-          "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm
 
       - name: Install devkitPro toolchain
         run: |
           set -euo pipefail
-          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed devkitA64 libnx switch-tools
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed devkitA64 libnx switch-tools
 
       - name: Install portlibs (shared with the launcher)
         run: |
           set -euo pipefail
-          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
             switch-mesa switch-curl switch-zlib switch-ntfs-3g
 
       # Installed one by one and non-fatally: switch-mesa may already pull the
@@ -116,13 +126,15 @@ jobs:
         continue-on-error: true
         run: |
           set -uo pipefail
-          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed switch-libdrm_nouveau 2>&1 | tail -5
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed switch-libdrm_nouveau 2>&1 | tail -5
 
       - name: Install portlib switch-zstd
         continue-on-error: true
         run: |
           set -uo pipefail
-          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed switch-zstd 2>&1 | tail -5
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed switch-zstd 2>&1 | tail -5
 
       - name: Restore cached storage dependencies
         uses: actions/cache@v4
