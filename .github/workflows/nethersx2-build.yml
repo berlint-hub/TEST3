@@ -64,6 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: devkitpro/devkita64:latest
+      options: --user root
     defaults:
       run:
         shell: bash
@@ -119,6 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: devkitpro/devkita64:latest
+      options: --user root
     defaults:
       run:
         shell: bash
@@ -176,6 +178,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: devkitpro/devkita64:latest
+      options: --user root
     defaults:
       run:
         shell: bash

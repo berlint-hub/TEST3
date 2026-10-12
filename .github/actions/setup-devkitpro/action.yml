@@ -1,10 +1,16 @@
 # Shared devkitPro setup for the container jobs.
 #
-# Each install is a separate step on purpose: the failure shows up as a named
-# step in the run summary, which is what makes an untestable CI pipeline
-# debuggable (GitHub's log download is not reachable from everywhere).
+# Why this looks more complicated than "run pacman":
+# GitHub's log archive is not reachable from every network, so a failed
+# install used to be a single opaque "exit 1". Each phase is therefore its own
+# step and, on failure, the last error line is sanitised and published as the
+# NAME of a diagnostic artifact -- artifact names are readable through the REST
+# API when the logs are not.
+#
+# -Sy, never -Syu: a full upgrade on a throwaway container regularly breaks on
+# stale Arch mirrors and buys nothing.
 name: Setup devkitPro
-description: Refresh pacman, install devkitA64 + tools and the requested Switch portlibs.
+description: Install devkitA64 + tools and the requested Switch portlibs.
 
 inputs:
   portlibs:
@@ -15,25 +21,50 @@ runs:
   using: composite
   steps:
     - name: Refresh package databases
+      id: refresh
       shell: bash
       run: |
-        set -euo pipefail
+        set -uo pipefail
         SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
-        # -Sy, never -Syu: a full upgrade regularly breaks on outdated Arch
-        # mirrors in CI and buys nothing on a throwaway container.
-        $SUDO pacman -Sy --noconfirm
+        echo "whoami=$(id -u -n)"
+        if ! OUT=$($SUDO pacman -Sy --noconfirm 2>&1); then
+          printf '%s\n' "$OUT" | tail -25
+          echo "error=$(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 ._+' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
+          exit 1
+        fi
 
     - name: Install toolchain and host tools
+      id: toolchain
       shell: bash
       run: |
-        set -euo pipefail
+        set -uo pipefail
         SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
-        $SUDO pacman -S --noconfirm --needed devkitA64 libnx switch-tools cmake ninja git
+        if ! OUT=$($SUDO pacman -S --noconfirm --needed devkitA64 libnx switch-tools cmake ninja git 2>&1); then
+          printf '%s\n' "$OUT" | tail -25
+          echo "error=$(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 ._+' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
+          exit 1
+        fi
 
     - name: Install Switch portlibs
+      id: portlibs
       shell: bash
       run: |
-        set -euo pipefail
+        set -uo pipefail
         SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
         # shellcheck disable=SC2086
-        $SUDO pacman -S --noconfirm --needed ${{ inputs.portlibs }}
+        if ! OUT=$($SUDO pacman -S --noconfirm --needed ${{ inputs.portlibs }} 2>&1); then
+          printf '%s\n' "$OUT" | tail -25
+          echo "error=$(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 ._+' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
+          exit 1
+        fi
+
+    # Only runs when one of the steps above failed; the artifact name carries
+    # the truncated pacman error so it can be read without the logs.
+    - name: Publish install failure reason
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: diag-${{ github.job }}-${{ steps.refresh.outcome }}-${{ steps.toolchain.outcome }}-${{ steps.portlibs.conclusion }}-${{ steps.refresh.outputs.error }}${{ steps.toolchain.outputs.error }}${{ steps.portlibs.outputs.error }}
+        path: ${{ github.workspace }}/diag.txt
+        if-no-files-found: ignore
+        retention-days: 1
