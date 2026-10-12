@@ -103,6 +103,17 @@ libsmb2 and libusbhsfs revisions.
 ./build_all.sh
 ```
 
+### Continuous integration
+
+`.github/workflows/build.yml` builds the OpenGL emulator core host and the
+launcher (plus the forwarder stub) with devkitPro on every push and pull
+request, and runs the host-side tests for the Tegra X1 memory primitives.
+
+It cannot produce a usable release `NetherSX2.nro`: the two emulator cores and
+the Mesa NVK archives are not in this repository and are not redistributable,
+so CI artifacts are build validation only. The Vulkan job is opt-in — set the
+`ENABLE_VK_BUILD` repository variable and a `MESA_SDK_URL` secret to enable it.
+
 ### Credits
 
 * The AetherSX2 / PCSX2 developers for the emulator.

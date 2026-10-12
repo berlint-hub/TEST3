@@ -1,0 +1,238 @@
+# Continuous integration for NetherSX2_nx.
+#
+# What this CAN do
+# ----------------
+#   * build the emulator core host (GL renderer) with devkitA64,
+#   * build the launcher (SDL2 add-on) and the forwarder stub,
+#   * run the host-side logic tests for the Tegra X1 memory primitives.
+#
+# What this CANNOT do -- by design
+# --------------------------------
+#   * produce a usable release .nro.
+#
+# `build_all.sh` needs inputs that are not in this repository and must not be
+# redistributed: the two emulator cores (`libemucore.so` extracted from the
+# NetherSX2 APKs) and, for the Vulkan renderer, the Mesa NVK archives under
+# `vulkan/`. CI therefore builds what it can and treats the binaries as build
+# validation artifacts, not as releases. See the notes in "How to build".
+name: build
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DEVKITPRO: /opt/devkitpro
+  # The top-level Makefile derives the output name from the checkout directory,
+  # which is the repository name in CI -- pin it so the artifact is predictable.
+  EMU_TARGET: NetherSX2_nx
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Host tests: no devkitPro required, runs in seconds, catches regressions in
+  # the AArch64 memory primitives' index math.
+  # ---------------------------------------------------------------------------
+  host-tests:
+    name: host tests (x1mem logic)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and run the memory primitive tests
+        run: |
+          set -euo pipefail
+          gcc -O2 -Wall -Wextra -o x1mem_logic_test tests/x1mem_logic_test.c
+          ./x1mem_logic_test
+
+  # ---------------------------------------------------------------------------
+  # Emulator core host (OpenGL renderer).
+  # ---------------------------------------------------------------------------
+  emulator-gl:
+    name: emulator (OpenGL)
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkita64:latest
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        # 1 = NEON memory primitives wired into the core's import table (the
+        # default), 0 = plain newlib. Both must build.
+        x1_fast_mem: ['1', '0']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install devkitPro portlibs
+        run: |
+          set -euo pipefail
+          SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
+          $SUDO pacman-key --init >/dev/null 2>&1 || true
+          $SUDO pacman-key --populate >/dev/null 2>&1 || true
+          $SUDO pacman -Syu --noconfirm --needed \
+            devkitA64 libnx switch-tools cmake ninja git \
+            switch-mesa switch-libdrm_nouveau switch-curl \
+            switch-zlib switch-zstd switch-ntfs-3g
+
+      - name: Restore cached storage dependencies
+        uses: actions/cache@v4
+        with:
+          path: launcher/dependencies/build
+          key: deps-v1-${{ runner.os }}-${{ hashFiles('launcher/dependencies/**') }}
+
+      - name: Build storage dependencies (libsmb2 + libusbhsfs)
+        run: |
+          set -euo pipefail
+          cmake -S launcher/dependencies -B launcher/dependencies/build -G Ninja \
+            -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/Switch.cmake" \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build launcher/dependencies/build --parallel "$(nproc)"
+
+      - name: Build emulator (X1_FAST_MEM=${{ matrix.x1_fast_mem }})
+        run: |
+          set -euo pipefail
+          make -j"$(nproc)" TARGET="$EMU_TARGET" X1_FAST_MEM=${{ matrix.x1_fast_mem }}
+          ls -l "$EMU_TARGET".nro
+
+      - name: Upload emulator artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NetherSX2_nx-gl-X1_FAST_MEM-${{ matrix.x1_fast_mem }}
+          path: |
+            ${{ env.EMU_TARGET }}.nro
+            ${{ env.EMU_TARGET }}.elf
+          if-no-files-found: error
+          retention-days: 14
+
+  # ---------------------------------------------------------------------------
+  # Launcher (SDL2 add-on) + forwarder stub.
+  # ---------------------------------------------------------------------------
+  launcher:
+    name: launcher + forwarder
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkita64:latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install devkitPro portlibs
+        run: |
+          set -euo pipefail
+          SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
+          $SUDO pacman-key --init >/dev/null 2>&1 || true
+          $SUDO pacman-key --populate >/dev/null 2>&1 || true
+          $SUDO pacman -Syu --noconfirm --needed \
+            devkitA64 libnx switch-tools cmake ninja git \
+            switch-mesa switch-curl switch-zlib switch-ntfs-3g \
+            switch-sdl2 switch-sdl2_ttf switch-sdl2_image switch-libjpeg-turbo
+
+      - name: Restore cached storage dependencies
+        uses: actions/cache@v4
+        with:
+          path: launcher/dependencies/build
+          key: deps-v1-${{ runner.os }}-${{ hashFiles('launcher/dependencies/**') }}
+
+      - name: Build storage dependencies (libsmb2 + libusbhsfs)
+        run: |
+          set -euo pipefail
+          cmake -S launcher/dependencies -B launcher/dependencies/build -G Ninja \
+            -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/Switch.cmake" \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build launcher/dependencies/build --parallel "$(nproc)"
+
+      - name: Build launcher (includes the forwarder stub)
+        run: |
+          set -euo pipefail
+          make -C launcher -j"$(nproc)"
+          ls -l launcher/NetherSX2.nro launcher/romfs/fwd
+
+      - name: Upload launcher artifact
+        uses: actions/upload-artifact@v4
+        with:
+          # No emulator cores bundled: this .nro is a build check, not a
+          # runnable release (see the header of this file).
+          name: NetherSX2-launcher-nocores
+          path: launcher/NetherSX2.nro
+          if-no-files-found: error
+          retention-days: 14
+
+  # ---------------------------------------------------------------------------
+  # Vulkan renderer: needs the Mesa NVK archives, which are not public. This
+  # job stays idle unless a repository variable enables it and a secret carries
+  # a Mesa SDK URL, so forks/PRs are never blocked by it.
+  # ---------------------------------------------------------------------------
+  emulator-vk:
+    name: emulator (Vulkan, opt-in)
+    if: ${{ vars.ENABLE_VK_BUILD == 'true' && secrets.MESA_SDK_URL != '' }}
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkita64:latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install devkitPro portlibs
+        run: |
+          set -euo pipefail
+          SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
+          $SUDO pacman-key --init >/dev/null 2>&1 || true
+          $SUDO pacman-key --populate >/dev/null 2>&1 || true
+          $SUDO pacman -Syu --noconfirm --needed \
+            devkitA64 libnx switch-tools cmake ninja git \
+            switch-mesa switch-libdrm_nouveau switch-curl \
+            switch-zlib switch-zstd switch-ntfs-3g curl
+
+      - name: Fetch the Mesa SDK
+        env:
+          MESA_SDK_URL: ${{ secrets.MESA_SDK_URL }}
+        run: |
+          set -euo pipefail
+          curl -fsSL "$MESA_SDK_URL" -o /tmp/mesa-sdk.tar.xz
+          mkdir -p "$GITHUB_WORKSPACE/mesa-sdk"
+          tar -xf /tmp/mesa-sdk.tar.xz -C "$GITHUB_WORKSPACE/mesa-sdk" --strip-components=1
+
+      - name: Restore cached storage dependencies
+        uses: actions/cache@v4
+        with:
+          path: launcher/dependencies/build
+          key: deps-v1-${{ runner.os }}-${{ hashFiles('launcher/dependencies/**') }}
+
+      - name: Build storage dependencies (libsmb2 + libusbhsfs)
+        run: |
+          set -euo pipefail
+          cmake -S launcher/dependencies -B launcher/dependencies/build -G Ninja \
+            -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/Switch.cmake" \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build launcher/dependencies/build --parallel "$(nproc)"
+
+      - name: Build emulator (Vulkan / NVK)
+        env:
+          MESA_SDK_ROOT: ${{ github.workspace }}/mesa-sdk
+        run: |
+          set -euo pipefail
+          make -j"$(nproc)" TARGET="$EMU_TARGET" RENDERER=VK
+          ls -l "$EMU_TARGET".nro
+
+      - name: Upload emulator artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NetherSX2_nx-vk
+          path: ${{ env.EMU_TARGET }}.nro
+          if-no-files-found: error
+          retention-days: 14
