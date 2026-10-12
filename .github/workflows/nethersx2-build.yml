@@ -81,11 +81,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install devkitPro + portlibs
-        uses: ./.github/actions/setup-devkitpro
-        with:
-          portlibs: switch-mesa switch-curl switch-zlib switch-ntfs-3g
-          extra-portlibs: switch-libdrm_nouveau switch-zstd
+      # Inlined instead of using the shared setup action: composite action
+      # steps collapse into one job step in the API, and the run logs are not
+      # downloadable from every network, so each install phase has to be its
+      # own step to stay debuggable.
+      - name: Install host tools (cmake, ninja)
+        run: |
+          set -euo pipefail
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -qq
+          apt-get install -y --no-install-recommends cmake ninja-build curl ca-certificates
+
+      - name: Refresh devkitPro package databases
+        run: |
+          set -euo pipefail
+          "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm
+
+      - name: Install devkitPro toolchain
+        run: |
+          set -euo pipefail
+          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed devkitA64 libnx switch-tools
+
+      - name: Install portlibs (shared with the launcher)
+        run: |
+          set -euo pipefail
+          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
+            switch-mesa switch-curl switch-zlib switch-ntfs-3g
+
+      - name: Install portlibs (emulator only)
+        run: |
+          set -euo pipefail
+          "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
+            switch-libdrm_nouveau switch-zstd
 
       - name: Restore cached storage dependencies
         uses: actions/cache@v4
