@@ -8,8 +8,8 @@
 #
 # Why the probing: GitHub's log archive (results-receiver.actions.
 # githubusercontent.com) is not reachable from every network and the REST API
-# exposes no per-step output, so each phase reports its state through the NAME
-# of an uploaded artifact, which IS readable through the API.
+# exposes no per-step output, so every failing phase publishes its last error
+# line as the NAME of an artifact -- names are readable through the API.
 name: Setup devkitPro
 description: Install devkitA64 + tools and the requested Switch portlibs.
 
@@ -17,6 +17,10 @@ inputs:
   portlibs:
     description: Space separated list of switch-* packages to install.
     required: true
+  extra-portlibs:
+    description: Space separated list of optional portlibs, installed separately so a bad package name is attributable.
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -35,21 +39,11 @@ runs:
         echo "pacman=$PACMAN" >> "$GITHUB_OUTPUT"
         echo "has_apt=$(command -v apt-get >/dev/null 2>&1 && echo yes || echo no)" >> "$GITHUB_OUTPUT"
         echo "os=$(. /etc/os-release 2>/dev/null && echo "${ID:-unknown}" || echo unknown)" >> "$GITHUB_OUTPUT"
-        echo "cmake=$(command -v cmake || echo no)" >> "$GITHUB_OUTPUT"
-        echo "ninja=$(command -v ninja || echo no)" >> "$GITHUB_OUTPUT"
         {
           echo "pacman=$PACMAN"
-          echo "os=$(. /etc/os-release 2>/dev/null && . /etc/os-release && echo "$NAME")"
           echo "devkitpro=${DEVKITPRO:-unset}"
           echo "dkp_bin=$(ls /opt/devkitpro 2>/dev/null | tr '\n' ' ')"
-        } > "$GITHUB_WORKSPACE/probe.txt" 2>&1
-        {
-          echo "pacman=$PACMAN"
-          echo "os=$(. /etc/os-release 2>/dev/null && echo "${ID:-unknown}")"
-          echo "devkitpro=${DEVKITPRO:-unset}"
-          echo "dkp_bin=$(ls /opt/devkitpro 2>/dev/null | tr '\n' ' ')"
-          echo "cmake=$(command -v cmake || echo no)"
-          echo "ninja=$(command -v ninja || echo no)"
+          echo "a64=$(ls /opt/devkitpro/devkitA64/bin 2>/dev/null | head -5 | tr '\n' ' ')"
         } > "$GITHUB_WORKSPACE/probe.txt" 2>&1
         cat "$GITHUB_WORKSPACE/probe.txt"
         if [ -z "$PACMAN" ]; then
@@ -79,18 +73,25 @@ runs:
           ${{ steps.probe.outputs.pacman }} -S --noconfirm --needed cmake ninja curl
         fi
 
+    - name: Refresh devkitPro package databases
+      id: refresh
+      shell: bash
+      run: |
+        set -uo pipefail
+        if ! OUT=$(${{ steps.probe.outputs.pacman }} -Sy --noconfirm 2>&1); then
+          printf '%s\n' "$OUT" | tail -20
+          echo "error=SY $(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 =._:/-' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
+          exit 1
+        fi
+
     - name: Install devkitPro toolchain
       id: toolchain
       shell: bash
       run: |
         set -uo pipefail
-        PACMAN="${{ steps.probe.outputs.pacman }}"
-        if ! OUT=$($PACMAN -Sy --noconfirm 2>&1); then
-          printf '%s\n' "$OUT" | tail -25 > "$GITHUB_WORKSPACE/diag-sy.txt"
-          exit 1
-        fi
-        if ! OUT=$($PACMAN -S --noconfirm --needed devkitA64 libnx switch-tools 2>&1); then
-          printf '%s\n' "$OUT" | tail -25 > "$GITHUB_WORKSPACE/diag-toolchain.txt"
+        if ! OUT=$(${{ steps.probe.outputs.pacman }} -S --noconfirm --needed devkitA64 libnx switch-tools 2>&1); then
+          printf '%s\n' "$OUT" | tail -20
+          echo "error=TOOLCHAIN $(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 =._:/-' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
           exit 1
         fi
 
@@ -101,15 +102,30 @@ runs:
         set -uo pipefail
         # shellcheck disable=SC2086
         if ! OUT=$(${{ steps.probe.outputs.pacman }} -S --noconfirm --needed ${{ inputs.portlibs }} 2>&1); then
-          printf '%s\n' "$OUT" | tail -25 > "$GITHUB_WORKSPACE/diag-portlibs.txt"
+          printf '%s\n' "$OUT" | tail -20
+          echo "error=PORTLIBS $(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 =._:/-' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
           exit 1
         fi
 
+    - name: Install extra portlibs
+      id: extra
+      if: ${{ inputs.extra-portlibs != '' }}
+      shell: bash
+      run: |
+        set -uo pipefail
+        # shellcheck disable=SC2086
+        if ! OUT=$(${{ steps.probe.outputs.pacman }} -S --noconfirm --needed ${{ inputs.extra-portlibs }} 2>&1); then
+          printf '%s\n' "$OUT" | tail -20
+          echo "error=EXTRA $(printf '%s' "$OUT" | tail -1 | tr -c 'A-Za-z0-9 =._:/-' '-' | cut -c1-90)" >> "$GITHUB_OUTPUT"
+          exit 1
+        fi
+
+    # The name carries the first error line of whichever phase failed.
     - name: Publish install failure reason
       if: failure()
       uses: actions/upload-artifact@v4
       with:
-        name: diag-${{ github.job }}-toolchain-${{ steps.toolchain.conclusion }}-portlibs-${{ steps.portlibs.conclusion }}-apt-${{ steps.probe.outputs.has_apt }}
-        path: ${{ github.workspace }}/diag-*.txt
+        name: diag-${{ github.job }}-${{ steps.refresh.outputs.error }}${{ steps.toolchain.outputs.error }}${{ steps.portlibs.outputs.error }}${{ steps.extra.outputs.error }}
+        path: ${{ github.workspace }}/probe.txt
         if-no-files-found: warn
         retention-days: 1
