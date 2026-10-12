@@ -76,16 +76,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install devkitPro portlibs
-        run: |
-          set -euo pipefail
-          SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
-          $SUDO pacman-key --init >/dev/null 2>&1 || true
-          $SUDO pacman-key --populate >/dev/null 2>&1 || true
-          $SUDO pacman -Syu --noconfirm --needed \
-            devkitA64 libnx switch-tools cmake ninja git \
-            switch-mesa switch-libdrm_nouveau switch-curl \
-            switch-zlib switch-zstd switch-ntfs-3g
+      - name: Install devkitPro + portlibs
+        uses: ./.github/actions/setup-devkitpro
+        with:
+          portlibs: switch-mesa switch-libdrm_nouveau switch-curl switch-zlib switch-zstd switch-ntfs-3g
 
       - name: Restore cached storage dependencies
         uses: actions/cache@v4
@@ -131,15 +125,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install devkitPro portlibs
-        run: |
-          set -euo pipefail
-          SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
-          $SUDO pacman-key --init >/dev/null 2>&1 || true
-          $SUDO pacman-key --populate >/dev/null 2>&1 || true
-          $SUDO pacman -Syu --noconfirm --needed \
-            devkitA64 libnx switch-tools cmake ninja git \
-            switch-mesa switch-curl switch-zlib switch-ntfs-3g \
+      - name: Install devkitPro + portlibs
+        uses: ./.github/actions/setup-devkitpro
+        with:
+          portlibs: >-
+            switch-mesa switch-curl switch-zlib switch-ntfs-3g
             switch-sdl2 switch-sdl2_ttf switch-sdl2_image switch-libjpeg-turbo
 
       - name: Restore cached storage dependencies
@@ -192,16 +182,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install devkitPro portlibs
-        run: |
-          set -euo pipefail
-          SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo)"
-          $SUDO pacman-key --init >/dev/null 2>&1 || true
-          $SUDO pacman-key --populate >/dev/null 2>&1 || true
-          $SUDO pacman -Syu --noconfirm --needed \
-            devkitA64 libnx switch-tools cmake ninja git \
-            switch-mesa switch-libdrm_nouveau switch-curl \
-            switch-zlib switch-zstd switch-ntfs-3g curl
+      - name: Install devkitPro + portlibs
+        uses: ./.github/actions/setup-devkitpro
+        with:
+          portlibs: switch-mesa switch-libdrm_nouveau switch-curl switch-zlib switch-zstd switch-ntfs-3g curl
 
       - name: Fetch the Mesa SDK
         env:
