@@ -181,11 +181,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install devkitPro + portlibs
-        uses: ./.github/actions/setup-devkitpro
-        with:
-          portlibs: >-
-            switch-mesa switch-curl switch-zlib switch-ntfs-3g
+      # Same inline install sequence as the emulator job: the shared composite
+      # action collapsed into a single job step in the API, which made a flaky
+      # download impossible to attribute.
+      - name: Install host tools (cmake, ninja)
+        run: |
+          set -euo pipefail
+          # Written with printf rather than a heredoc: a heredoc terminator
+          # inside a YAML block scalar breaks the block's indentation.
+          printf '%s\n' 'retry() { local n=1; until "$@"; do if [ "$n" -ge 5 ]; then echo "FAILED after 5 attempts: $*"; return 1; fi; echo "attempt $n failed; retrying"; n=$((n+1)); sleep $((n*10)); done; }' > /tmp/ci-retry.sh
+          . /tmp/ci-retry.sh
+          export DEBIAN_FRONTEND=noninteractive
+          retry apt-get update -qq
+          retry apt-get install -y --no-install-recommends cmake ninja-build curl ca-certificates
+
+      - name: Refresh devkitPro package databases
+        run: |
+          set -euo pipefail
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm
+
+      - name: Install devkitPro toolchain
+        run: |
+          set -euo pipefail
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed devkitA64 libnx switch-tools
+
+      - name: Install Switch portlibs
+        run: |
+          set -euo pipefail
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
+            switch-mesa switch-curl switch-zlib switch-ntfs-3g \
             switch-sdl2 switch-sdl2_ttf switch-sdl2_image switch-libjpeg-turbo
 
       - name: Restore cached storage dependencies
@@ -239,11 +266,39 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install devkitPro + portlibs
-        uses: ./.github/actions/setup-devkitpro
-        with:
-          portlibs: switch-mesa switch-curl switch-zlib switch-ntfs-3g curl
-          extra-portlibs: switch-libdrm_nouveau switch-zstd
+      # Same inline install sequence as the emulator job: the shared composite
+      # action collapsed into a single job step in the API, which made a flaky
+      # download impossible to attribute.
+      - name: Install host tools (cmake, ninja)
+        run: |
+          set -euo pipefail
+          # Written with printf rather than a heredoc: a heredoc terminator
+          # inside a YAML block scalar breaks the block's indentation.
+          printf '%s\n' 'retry() { local n=1; until "$@"; do if [ "$n" -ge 5 ]; then echo "FAILED after 5 attempts: $*"; return 1; fi; echo "attempt $n failed; retrying"; n=$((n+1)); sleep $((n*10)); done; }' > /tmp/ci-retry.sh
+          . /tmp/ci-retry.sh
+          export DEBIAN_FRONTEND=noninteractive
+          retry apt-get update -qq
+          retry apt-get install -y --no-install-recommends cmake ninja-build curl ca-certificates
+
+      - name: Refresh devkitPro package databases
+        run: |
+          set -euo pipefail
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm
+
+      - name: Install devkitPro toolchain
+        run: |
+          set -euo pipefail
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed devkitA64 libnx switch-tools
+
+      - name: Install Switch portlibs
+        run: |
+          set -euo pipefail
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
+            switch-mesa switch-curl switch-zlib switch-ntfs-3g \
+            switch-libdrm_nouveau switch-zstd
 
       - name: Fetch the Mesa SDK
         env:
