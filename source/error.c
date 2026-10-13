@@ -15,6 +15,13 @@
 #include "util.h"
 #include "error.h"
 
+#ifdef NETHERSX2_VK_DIAGNOSTIC
+// Defined in hooks/vk.c. Declared here rather than including hooks/vk.h, which
+// would pull the Vulkan headers into this translation unit for a single call.
+extern void vk_diag_note(const char *format, ...)
+   __attribute__((format(printf, 1, 2)));
+#endif
+
 void fatal_error(const char *fmt, ...) {
   // format once so we can both log it and show it on screen
   char msg[1024];
@@ -22,6 +29,13 @@ void fatal_error(const char *fmt, ...) {
   va_start(list, fmt);
   vsnprintf(msg, sizeof(msg), fmt, list);
   va_end(list);
+
+#ifdef NETHERSX2_VK_DIAGNOSTIC
+  // The message below was only ever readable by photographing the console: this
+  // function wrote nothing to a file, so a fatal error left no trace in the
+  // diagnostic log and the trace just stopped. Mirror it before displaying.
+  vk_diag_note("fatal_error: %s", msg);
+#endif
 
   PadState pad;
   padConfigureInput(1, HidNpadStyleSet_NpadStandard);
