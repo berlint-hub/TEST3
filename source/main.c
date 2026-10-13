@@ -2014,6 +2014,53 @@ int main(void) {
   padInitialize(&g_pads[1], HidNpadIdType_No2);
   hidInitializeTouchScreen();
 #if defined(USE_VULKAN) && defined(NETHERSX2_VK_DIAGNOSTIC)
+// NVK builds its physical device by walking nvInitialize/nvGpuInit/nvMapInit/
+// nvFenceInit/nvGpuGetCharacteristics. When any step fails it reports zero
+// physical devices -- which is what the on-device trace showed -- and the only
+// trace is a Mesa log line, which additionally needs MESA_LOG_FILE to open.
+// Run the same sequence from here so the Result codes land in the diagnostic
+// log.
+//
+// nvInitialize() carves __nx_nv_transfermem_size out of the process heap, which
+// __libnx_initheap() has already grown to nearly all available memory, so the
+// arena can fail to allocate. Walk a ladder of sizes and keep the first that
+// works; nvInitialize/nvExit are refcounted, so leaving nv initialized here is
+// harmless -- NVK's own call just bumps the count.
+static void nv_probe(void) {
+  extern u32 __nx_nv_transfermem_size;
+  static const u32 sizes[] = { 16u * 1024u * 1024u, 3u * 1024u * 1024u,
+                               0xC0000u /* libnx default */ };
+  Result rc = 0;
+  unsigned ok = 0;
+  for (unsigned i = 0; i < sizeof(sizes) / sizeof(sizes[0]); ++i) {
+    __nx_nv_transfermem_size = sizes[i];
+    rc = nvInitialize();
+    vk_diag_note("nv probe: nvInitialize tmem=%u rc=0x%x", sizes[i], rc);
+    if (R_SUCCEEDED(rc)) { ok = 1; break; }
+  }
+  if (!ok) return;
+
+  rc = nvGpuInit();
+  vk_diag_note("nv probe: nvGpuInit rc=0x%x", rc);
+  if (R_FAILED(rc)) { nvExit(); return; }
+
+  rc = nvMapInit();
+  vk_diag_note("nv probe: nvMapInit rc=0x%x", rc);
+  if (R_FAILED(rc)) { nvGpuExit(); nvExit(); return; }
+
+  rc = nvFenceInit();
+  vk_diag_note("nv probe: nvFenceInit rc=0x%x", rc);
+  if (R_FAILED(rc)) { nvMapExit(); nvGpuExit(); nvExit(); return; }
+
+  const void *chars = nvGpuGetCharacteristics();
+  vk_diag_note("nv probe: nvGpuGetCharacteristics chars=%p", chars);
+  // Leave nv initialized on success; unwind only if the GPU is unusable.
+  if (!chars) { nvFenceExit(); nvMapExit(); nvGpuExit(); nvExit(); }
+}
+#endif
+
+#if defined(USE_VULKAN) && defined(NETHERSX2_VK_DIAGNOSTIC)
+  nv_probe();
   vk_diag_note("starting core VM sequence");
 #endif
   run_startup_sequence();
