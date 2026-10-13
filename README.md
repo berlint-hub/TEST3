@@ -158,4 +158,7 @@ BIOS dump and legally-owned game images. We do not condone piracy.
 
 Unless noted otherwise, the source in this repository is under the MIT License
 (see LICENSE). The vendored LSFG-VK subset under `third_party/lsfg-vk` is
-GPL-3.0-or-later.
+GPL-3.0-or-later. A Vulkan build that links the
+NVK driver from [nxvk](https://github.com/PalindromicBreadLoaf/nxvk)
+(GPL-2.0-or-later) statically is a combined work under the GPL; distributing
+such a binary means offering the corresponding source.
