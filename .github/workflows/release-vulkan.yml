@@ -105,9 +105,19 @@ jobs:
     name: nxvk NVK driver
     needs: prep
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      built: ${{ steps.driver.outcome == 'success' }}
     steps:
+      - name: Check out this repository
+        uses: actions/checkout@v4
+        with:
+          path: repo
+          fetch-depth: 1
+
       - name: Download a prebuilt nxvk portlib
-        if: needs.prep.outputs.nxvk_sdk_url != ''
+        if: needs.prep.outputs.nxvk_sdk_url == ''
         run: |
           set -euo pipefail
           mkdir -p nxvk-pkg
@@ -157,66 +167,102 @@ jobs:
         working-directory: nxvk
         run: |
           set +e
-          docker build -t nxvk switch/docker 2>&1 | tee "$GITHUB_WORKSPACE/docker-build.log"
-          code=${PIPESTATUS[0]}
-          echo "docker build exit: $code"
-          exit $code
+          docker build -t nxvk switch/docker 2>&1 | tee "$GITHUB_WORKSPACE/nxvk-image.log"
+          exit ${PIPESTATUS[0]}
 
-      - name: Cross-compile the NVK driver archives
-        id: driver
+      - name: Build the native Mesa tools
+        id: native
         if: needs.prep.outputs.nxvk_sdk_url == '' && steps.image.outcome == 'success'
         continue-on-error: true
         working-directory: nxvk
         run: |
           set +e
-          make CONTAINER=docker 2>&1 | tee "$GITHUB_WORKSPACE/nxvk-build.log"
-          code=${PIPESTATUS[0]}
-          echo "make exit: $code"
-          exit $code
+          make CONTAINER=docker switch/build/native-tools/bin/mesa_clc 2>&1 \
+            | tee "$GITHUB_WORKSPACE/nxvk-native.log"
+          exit ${PIPESTATUS[0]}
 
-      # The runner logs are not reachable from where this workflow is maintained,
-      # so the failing line is surfaced as (part of) an artifact name and the full
-      # log is uploaded for anyone who can open it.
-      - name: Encode the failure in an artifact name
-        if: steps.image.outcome == 'failure' || steps.driver.outcome == 'failure'
+      - name: Build the Rust std sysroot
+        id: sysroot
+        if: needs.prep.outputs.nxvk_sdk_url == '' && steps.native.outcome == 'success'
+        continue-on-error: true
+        working-directory: nxvk
+        run: |
+          set +e
+          make CONTAINER=docker switch/rust/sysroot/.stamp 2>&1 \
+            | tee "$GITHUB_WORKSPACE/nxvk-sysroot.log"
+          exit ${PIPESTATUS[0]}
+
+      - name: Cross-compile the NVK driver archives
+        id: driver
+        if: needs.prep.outputs.nxvk_sdk_url == '' && steps.sysroot.outcome == 'success'
+        continue-on-error: true
+        working-directory: nxvk
+        run: |
+          set +e
+          make CONTAINER=docker 2>&1 | tee "$GITHUB_WORKSPACE/nxvk-build.log"
+          exit ${PIPESTATUS[0]}
+
+      # The runner log cannot be read from where this workflow is maintained, so
+      # the failing line is encoded into an artifact name and the whole log is
+      # committed to the branch (a [skip ci] commit, no re-trigger).
+      - name: Collect the diagnostic
+        id: diag
+        if: steps.image.outcome == 'failure' || steps.native.outcome == 'failure' || steps.sysroot.outcome == 'failure' || steps.driver.outcome == 'failure'
         run: |
           set -euo pipefail
-          if [ "${{ steps.image.outcome }}" = "failure" ]; then
-            phase=docker; log="$GITHUB_WORKSPACE/docker-build.log"
-          else
-            phase=make;   log="$GITHUB_WORKSPACE/nxvk-build.log"
-          fi
-          line=$(grep -aiE "error|failed|fatal|no space|not found|denied|returned|exit code" "$log" \
+          if   [ "${{ steps.image.outcome }}"   = failure ]; then phase=image;   log="$GITHUB_WORKSPACE/nxvk-image.log"
+          elif [ "${{ steps.native.outcome }}"  = failure ]; then phase=native;  log="$GITHUB_WORKSPACE/nxvk-native.log"
+          elif [ "${{ steps.sysroot.outcome }}" = failure ]; then phase=sysroot; log="$GITHUB_WORKSPACE/nxvk-sysroot.log"
+          else                                                   phase=driver;  log="$GITHUB_WORKSPACE/nxvk-build.log"; fi
+          line=$(grep -aiE "error|failed|fatal|no space|not found|denied|panic" "$log" \
                  | grep -av '^\+' | tail -1 | tr -cd '[:print:]' | cut -c1-100)
           [ -n "$line" ] || line="no-error-line-found"
           name="nxvk-$phase-fail-$(printf '%s' "$line" | tr -c 'A-Za-z0-9 ._' '-' | cut -c1-90)"
           echo "diagnostic artifact: $name"
-          echo "ARTIFACT_NAME=$name" >> "$GITHUB_ENV"
-          mkdir -p diag && cp "$log" diag/
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "phase=$phase" >> "$GITHUB_OUTPUT"
+          echo "log=$log" >> "$GITHUB_OUTPUT"
 
-      - name: Upload the nxvk failure diagnostic
-        if: steps.image.outcome == 'failure' || steps.driver.outcome == 'failure'
+      - name: Upload the failure diagnostic
+        if: steps.diag.outputs.log != ''
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: diag
+          name: ${{ steps.diag.outputs.name }}
+          path: ${{ steps.diag.outputs.log }}
           if-no-files-found: warn
           retention-days: 14
 
-      - name: Upload the build log
-        if: steps.driver.outcome != 'skipped'
-        uses: actions/upload-artifact@v4
-        with:
-          name: nxvk-build-log
-          path: ${{ github.workspace }}/*build.log
-          if-no-files-found: warn
-          retention-days: 14
+      - name: Commit the log to the branch
+        if: steps.diag.outputs.log != ''
+        working-directory: repo
+        env:
+          BRANCH: ${{ github.ref_name }}
+          LOG: ${{ steps.diag.outputs.log }}
+          PHASE: ${{ steps.diag.outputs.phase }}
+        run: |
+          set -euo pipefail
+          mkdir -p .ci-logs
+          cp "$LOG" ".ci-logs/nxvk-$PHASE-${{ github.run_number }}.log"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin "$BRANCH" || true
+          git add .ci-logs
+          git commit -m "ci: nxvk $PHASE build log for run ${{ github.run_number }} [skip ci]" || exit 0
+          git push origin "HEAD:$BRANCH"
 
-      - name: Fail the job when the driver did not build
-        if: steps.image.outcome == 'failure' || steps.driver.outcome == 'failure'
-        run: exit 1
+      - name: Stage the portlib
+        if: steps.driver.outcome == 'success'
+        run: |
+          set -euo pipefail
+          mkdir -p nxvk-pkg/lib/pkgconfig nxvk-pkg/include
+          cp nxvk/switch/build/pkg/lib/libnvk.a nxvk-pkg/lib/
+          cp nxvk/switch/build/pkg/lib/libnvk_support.a nxvk-pkg/lib/
+          cp nxvk/switch/build/pkg/lib/pkgconfig/nxvk.pc nxvk-pkg/lib/pkgconfig/
+          cp -r nxvk/include/vulkan nxvk/include/vk_video nxvk-pkg/include/
+          find nxvk-pkg -type f | sort
 
       - name: Upload the nxvk portlib
+        if: needs.prep.outputs.nxvk_sdk_url != '' || steps.driver.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: nxvk-portlib
@@ -224,12 +270,10 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-  # -------------------------------------------------------------------------
-  # Build the emulator (Vulkan) + launcher with a single bundled core.
-  # -------------------------------------------------------------------------
   build:
     name: build (Vulkan, core ${{ needs.prep.outputs.core }})
     needs: [prep, nxvk]
+    if: needs.nxvk.outputs.built == 'true'
     runs-on: ubuntu-latest
     container:
       image: devkitpro/devkita64:latest
@@ -354,6 +398,7 @@ jobs:
   release:
     name: publish release ${{ needs.prep.outputs.tag }}
     needs: [prep, build]
+    if: needs.nxvk.outputs.built == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
