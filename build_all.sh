@@ -111,6 +111,12 @@ for r in $RENDERERS; do
   # so it is a debugging aid, not something to ship.
   [[ -n "${NETHERSX2_VK_DIAGNOSTIC:-}" ]] && \
     emu_vars+=(NETHERSX2_VK_DIAGNOSTIC="$NETHERSX2_VK_DIAGNOSTIC")
+  if [[ -n "${NETHERSX2_VK_DIAGNOSTIC:-}" ]]; then
+    echo "!! diagnostic build: traces go to the SD card under /switch/nethersx2/"
+    echo "     nethersx2-vulkan.log    every hooked Vulkan call (flushed per line)"
+    echo "     nethersx2-exception.log CPU exception: pc/far/esr/sp/fp/lr"
+    echo "     nethersx2-mesa.log      Mesa/NVK output via MESA_LOG_FILE"
+  fi
   make clean TARGET=NetherSX2_nx >/dev/null 2>&1
   make -j"$JOBS" "${emu_vars[@]}"
   if [[ "$r" == "VK" ]]; then
