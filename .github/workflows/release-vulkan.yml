@@ -170,10 +170,11 @@ jobs:
           docker build -t nxvk switch/docker 2>&1 | tee "$GITHUB_WORKSPACE/nxvk-image.log"
           exit ${PIPESTATUS[0]}
 
-      # Every make phase runs the real work inside the container, i.e. as root,
-      # so the files it leaves in the checkout are root-owned and the host-side
-      # `touch`/`cp` in nxvk's own Makefile (or the steps below) get EPERM.
-      # Reclaim ownership after each phase.
+      # nxvk's recipes mix container work (docker, runs as root, so anything it
+      # writes under /work stays root-owned) with host-side `touch`/`cp` in the
+      # same recipe. Running make itself under sudo keeps both halves as root;
+      # the chown afterwards hands the checkout back to the runner so the cache
+      # and the upload steps can read it.
       - name: Build the native Mesa tools
         id: native
         if: needs.prep.outputs.nxvk_sdk_url == '' && steps.image.outcome == 'success'
@@ -181,7 +182,8 @@ jobs:
         working-directory: nxvk
         run: |
           set +e
-          make CONTAINER=docker switch/build/native-tools/bin/mesa_clc 2>&1 \
+          sudo env PATH="$PATH" HOME="$HOME" make CONTAINER=docker \
+            switch/build/native-tools/bin/mesa_clc 2>&1 \
             | tee "$GITHUB_WORKSPACE/nxvk-native.log"
           code=${PIPESTATUS[0]}
           sudo chown -R "$(id -u):$(id -g)" nxvk
@@ -194,7 +196,8 @@ jobs:
         working-directory: nxvk
         run: |
           set +e
-          make CONTAINER=docker switch/rust/sysroot/.stamp 2>&1 \
+          sudo env PATH="$PATH" HOME="$HOME" make CONTAINER=docker \
+            switch/rust/sysroot/.stamp 2>&1 \
             | tee "$GITHUB_WORKSPACE/nxvk-sysroot.log"
           code=${PIPESTATUS[0]}
           sudo chown -R "$(id -u):$(id -g)" nxvk
@@ -207,7 +210,8 @@ jobs:
         working-directory: nxvk
         run: |
           set +e
-          make CONTAINER=docker 2>&1 | tee "$GITHUB_WORKSPACE/nxvk-build.log"
+          sudo env PATH="$PATH" HOME="$HOME" make CONTAINER=docker 2>&1 \
+            | tee "$GITHUB_WORKSPACE/nxvk-build.log"
           code=${PIPESTATUS[0]}
           sudo chown -R "$(id -u):$(id -g)" nxvk
           exit $code
