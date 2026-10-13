@@ -531,6 +531,30 @@ jobs:
           ls -l "$dir/assets/GameIndex.yaml" || echo "::error::GameIndex.yaml still missing"
           sha256sum "$dir/lib/arm64-v8a/libemucore.so" | tee core.sha256
 
+      # main carries pre-baked cores (libemucore_<core>_baked.so). The port is
+      # developed against those, so the APK core above is only a fallback: a
+      # release built with the wrong core boots the launcher and then fails to
+      # start a game. Overwrite libemucore.so whenever main has the baked one.
+      - name: Prefer the baked core from main
+        env:
+          CORE: ${{ needs.prep.outputs.core }}
+        run: |
+          set -uo pipefail
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
+          dir="$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE"
+          path="libemucore_${CORE}_baked.so"
+          # Read it out of git rather than the contents API: that API refuses
+          # files over 1 MB and this core is 12 MB.
+          git config --global --add safe.directory "$GITHUB_WORKSPACE" || true
+          if git fetch --depth 1 origin main 2>&1 && \
+             git show "FETCH_HEAD:$path" > "$dir/lib/arm64-v8a/libemucore.so" 2>/dev/null; then
+            echo "using the baked core from main: $path"
+          else
+            echo "::warning::$path is not on main; keeping the core from the APK"
+          fi
+          ls -l "$dir/lib/arm64-v8a/libemucore.so"
+          sha256sum "$dir/lib/arm64-v8a/libemucore.so" | tee core.sha256
+
       - name: Build (Vulkan only, single core)
         id: build
         continue-on-error: true
@@ -540,6 +564,11 @@ jobs:
           RENDERERS: VK
           MESA_FLAVOR: nxvk
           JOBS: "4"
+          # Diagnostic build: every hooked Vulkan call is traced to
+          # /switch/nethersx2/nethersx2-vulkan.log and a CPU exception dumps
+          # pc/far/esr to nethersx2-exception.log. Drop this once the boot path
+          # is understood -- it fsyncs per line and will cost frames.
+          NETHERSX2_VK_DIAGNOSTIC: "1"
         run: |
           set +e
           log="$GITHUB_WORKSPACE/release-build.log"

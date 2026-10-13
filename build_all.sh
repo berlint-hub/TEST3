@@ -104,8 +104,15 @@ for r in $RENDERERS; do
   # The Makefile defaults TARGET to $(notdir $(CURDIR)), so a checkout named
   # anything other than NetherSX2_nx produced <dirname>.nro and the cp below
   # failed. Pin it.
+  emu_vars=(RENDERER="$r" TARGET=NetherSX2_nx)
+  # NETHERSX2_VK_DIAGNOSTIC=1 turns on the on-device trace: every hooked
+  # Vulkan call is written to /switch/nethersx2/nethersx2-vulkan.log, and a CPU
+  # exception dumps pc/far/esr to nethersx2-exception.log. It fsyncs per line,
+  # so it is a debugging aid, not something to ship.
+  [[ -n "${NETHERSX2_VK_DIAGNOSTIC:-}" ]] && \
+    emu_vars+=(NETHERSX2_VK_DIAGNOSTIC="$NETHERSX2_VK_DIAGNOSTIC")
   make clean TARGET=NetherSX2_nx >/dev/null 2>&1
-  make -j"$JOBS" RENDERER="$r" TARGET=NetherSX2_nx
+  make -j"$JOBS" "${emu_vars[@]}"
   if [[ "$r" == "VK" ]]; then
     cp -f NetherSX2_nx.nro NetherSX2_nx_vk.nro
   else
