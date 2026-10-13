@@ -388,13 +388,67 @@ jobs:
           sha256sum "$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE/lib/arm64-v8a/libemucore.so" | tee core.sha256
 
       - name: Build (Vulkan only, single core)
+        id: build
+        continue-on-error: true
         env:
           CORES_DIR: ${{ github.workspace }}/cores
           CORES: ${{ needs.prep.outputs.core }}
           RENDERERS: VK
           MESA_FLAVOR: nxvk
           JOBS: "4"
-        run: ./build_all.sh
+        run: |
+          set +e
+          ./build_all.sh 2>&1 | tee "$GITHUB_WORKSPACE/release-build.log"
+          code=${PIPESTATUS[0]}
+          SUDO=""; command -v sudo >/dev/null && SUDO=sudo
+          $SUDO chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+          exit $code
+
+      # Same reason as in the nxvk job: the runner log is not reachable from
+      # here, so the log is committed to the branch and the failing line is
+      # encoded into an artifact name.
+      - name: Collect the build diagnostic
+        id: bdiag
+        if: steps.build.outcome == 'failure'
+        run: |
+          set -euo pipefail
+          log="$GITHUB_WORKSPACE/release-build.log"
+          line=$(grep -aiE "error|undefined reference|cannot find|not found|No such file" "$log" \
+                 | grep -av '^\+' | tail -1 | tr -cd '[:print:]' | cut -c1-100)
+          [ -n "$line" ] || line="no-error-line-found"
+          name="build-fail-$(printf '%s' "$line" | tr -c 'A-Za-z0-9 ._' '-' | cut -c1-90)"
+          echo "diagnostic artifact: $name"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the build diagnostic
+        if: steps.build.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.bdiag.outputs.name }}
+          path: ${{ github.workspace }}/release-build.log
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Commit the build log to the branch
+        if: steps.build.outcome == 'failure'
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          mkdir -p .ci-logs
+          cp "$GITHUB_WORKSPACE/release-build.log" \
+             ".ci-logs/release-build-${{ github.run_number }}.log"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin "$BRANCH" || true
+          git add .ci-logs
+          git commit -m "ci: release build log for run ${{ github.run_number }} [skip ci]" || exit 0
+          git push origin "HEAD:$BRANCH"
+
+      - name: Fail the job when the build did not produce an .nro
+        if: steps.build.outcome == 'failure'
+        run: exit 1
 
       - name: Upload the release .nro
         uses: actions/upload-artifact@v4
