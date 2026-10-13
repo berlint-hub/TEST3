@@ -314,10 +314,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Every setup step appends its transcript here, and the build step folds
+      # it into the committed log: when a setup step fails the build step never
+      # runs, and an empty commit tells nothing about why.
+      - name: Start the job log
+        run: |
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
+          echo "==== job: build (Vulkan) ===="
+          echo "run ${{ github.run_number }} on ${{ github.ref_name }} @ ${{ github.sha }}"
+          date -u
+          echo "DEVKITPRO=${DEVKITPRO:-unset} PORTLIBS=${PORTLIBS:-unset}"
+          df -h / | tail -1
+
       - name: Install host tools (cmake, ninja, unzip)
         run: |
           set -euo pipefail
-          printf '%s\n' 'retry() { local n=1; until "$@"; do if [ "$n" -ge 5 ]; then echo "FAILED after 5 attempts: $*"; return 1; fi; echo "attempt $n failed; retrying"; n=$((n+1)); sleep $((n*10)); done; }' > /tmp/ci-retry.sh
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
+          printf '%s\n' 'retry() { local n=1; until "$@"; do if [ "$n" -ge 8 ]; then echo "FAILED after 8 attempts: $*"; return 1; fi; echo "attempt $n failed; retrying"; n=$((n+1)); sleep $((n*15)); done; }' > /tmp/ci-retry.sh
           . /tmp/ci-retry.sh
           export DEBIAN_FRONTEND=noninteractive
           retry apt-get update -qq
@@ -326,18 +339,29 @@ jobs:
       - name: Refresh devkitPro package databases
         run: |
           set -euo pipefail
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
           . /tmp/ci-retry.sh
-          retry "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm
+          # apt.devkitpro.org and the pacman mirrors are flaky from runners, and
+          # a stale keyring fails -Sy the same way. Refresh the keyring before
+          # retrying so a signature error does not burn every attempt.
+          if ! retry "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm; then
+            echo "::warning::pacman -Sy failed; re-initialising the devkitPro keyring"
+            pacman-key --init || true
+            pacman-key --populate || true
+            retry "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm
+          fi
 
       - name: Install devkitPro toolchain
         run: |
           set -euo pipefail
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
           . /tmp/ci-retry.sh
           retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed devkitA64 libnx switch-tools
 
       - name: Install Switch portlibs
         run: |
           set -euo pipefail
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
           . /tmp/ci-retry.sh
           retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
             switch-mesa switch-curl switch-zlib switch-ntfs-3g \
@@ -352,6 +376,7 @@ jobs:
       - name: Place the nxvk portlib next to the other portlibs
         run: |
           set -euo pipefail
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
           mkdir -p "$PORTLIBS/lib/pkgconfig" "$PORTLIBS/include"
           cp nxvk-pkg/lib/libnvk.a nxvk-pkg/lib/libnvk_support.a "$PORTLIBS/lib/"
           cp nxvk-pkg/lib/pkgconfig/nxvk.pc "$PORTLIBS/lib/pkgconfig/"
@@ -365,6 +390,7 @@ jobs:
       - name: Ensure libexpat (nxvk's driconf needs it)
         run: |
           set -euo pipefail
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
           if [ -e "$PORTLIBS/lib/libexpat.a" ]; then echo "switch-expat already present"; exit 0; fi
           if "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed switch-expat; then
             echo "installed switch-expat"; exit 0
@@ -470,6 +496,7 @@ jobs:
             echo "-- expat --"
             ls -l "$PORTLIBS"/lib/libexpat.a 2>&1
           } > "$log" 2>&1
+          cat "$GITHUB_WORKSPACE/ci-setup.log"  >> "$log" 2>&1
           cat "$GITHUB_WORKSPACE/apk-listing.txt" >> "$log" 2>&1
           echo "==== build_all.sh ====" >> "$log"
           # build_all.sh was committed 100644, so `./build_all.sh` died with
@@ -495,7 +522,13 @@ jobs:
         run: |
           set -uo pipefail
           log="$GITHUB_WORKSPACE/release-build.log"
-          [ -f "$log" ] || { echo "::error::no build log at $log"; exit 0; }
+          # A setup-step failure means the build step never ran and there is no
+          # release-build.log; the setup transcript still says why the job died.
+          if [ ! -f "$log" ]; then
+            log="$GITHUB_WORKSPACE/ci-setup.log"
+            echo "::error::build step never produced a log; publishing the setup transcript"
+          fi
+          [ -f "$log" ] || { echo "::error::no build log to publish"; exit 0; }
           # Keep the committed log bounded: the diagnostic header plus the head
           # and tail of the build output is what gets read back from the branch.
           mkdir -p .ci-logs
