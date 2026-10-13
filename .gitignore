@@ -12,3 +12,5 @@
 /out/
 /vulkan/
 Lossless.dll
+# CI-only: the cached devkitPro portlibs archive (see release-vulkan.yml)
+dkp-portlibs.tar.gz

@@ -330,42 +330,89 @@ jobs:
         run: |
           set -euo pipefail
           exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
-          printf '%s\n' 'retry() { local n=1; until "$@"; do if [ "$n" -ge 8 ]; then echo "FAILED after 8 attempts: $*"; return 1; fi; echo "attempt $n failed; retrying"; n=$((n+1)); sleep $((n*15)); done; }' > /tmp/ci-retry.sh
+          printf '%s\n' 'retry() { local n=1; until "$@"; do if [ "$n" -ge 5 ]; then echo "FAILED after 5 attempts: $*"; return 1; fi; echo "attempt $n failed; retrying"; n=$((n+1)); sleep $((n*10)); done; }' > /tmp/ci-retry.sh
           . /tmp/ci-retry.sh
           export DEBIAN_FRONTEND=noninteractive
           retry apt-get update -qq
           retry apt-get install -y --no-install-recommends cmake ninja-build unzip curl ca-certificates
 
-      - name: Refresh devkitPro package databases
+      # pkg.devkitpro.org answers 403/522 when devkitPro's CDN has banned the
+      # runner's IP range, and no devkitPro repository publishes its packages as
+      # GitHub release assets, so there is no mirror to fall back to. The
+      # portlibs are therefore cached: one successful run bootstraps every run
+      # after it, and pacman is only touched when something is actually missing.
+      - name: Restore the cached devkitPro portlibs
+        uses: actions/cache@v4
+        with:
+          # actions/cache runs on the host runner while /opt/devkitpro exists
+          # only inside the container, so the portlibs are cached as a tarball
+          # in the bind-mounted workspace instead of by path.
+          path: dkp-portlibs.tar.gz
+          key: dkp-portlibs-v1-${{ hashFiles('.github/dkp-packages.txt') }}
+          restore-keys: dkp-portlibs-v1-
+
+      - name: Unpack the cached devkitPro portlibs
         run: |
-          set -euo pipefail
+          set -uo pipefail
           exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
-          . /tmp/ci-retry.sh
-          # apt.devkitpro.org and the pacman mirrors are flaky from runners, and
-          # a stale keyring fails -Sy the same way. Refresh the keyring before
-          # retrying so a signature error does not burn every attempt.
-          if ! retry "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm; then
-            echo "::warning::pacman -Sy failed; re-initialising the devkitPro keyring"
-            pacman-key --init || true
-            pacman-key --populate || true
-            retry "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm
+          if [ -s dkp-portlibs.tar.gz ]; then
+            tar -xzf dkp-portlibs.tar.gz -C /opt/devkitpro && echo "restored cached portlibs"
+          else
+            echo "no cached portlibs archive"
           fi
 
-      - name: Install devkitPro toolchain
+      - name: Check the container toolchain
         run: |
           set -euo pipefail
           exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
-          . /tmp/ci-retry.sh
-          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed devkitA64 libnx switch-tools
+          # devkitA64, libnx and switch-tools ship in devkitpro/devkita64, so
+          # verify them locally instead of asking pacman over the network.
+          test -x "$DEVKITPRO/devkitA64/bin/aarch64-none-elf-gcc"
+          test -f "$DEVKITPRO/libnx/switch_rules"
+          test -f "$DEVKITPRO/cmake/Switch.cmake"
+          "$DEVKITPRO/devkitA64/bin/aarch64-none-elf-gcc" --version | head -1
+          echo "container toolchain OK"
 
-      - name: Install Switch portlibs
+      - name: Which devkitPro packages are missing?
+        id: missing
         run: |
-          set -euo pipefail
+          set -uo pipefail
           exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
-          . /tmp/ci-retry.sh
-          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
-            switch-mesa switch-curl switch-zlib switch-ntfs-3g \
-            switch-sdl2 switch-sdl2_ttf switch-sdl2_image switch-libjpeg-turbo
+          pacman="$(command -v dkp-pacman || command -v pacman)"
+          list=""
+          while IFS= read -r p; do
+            case "$p" in ''|'#'*) continue ;; esac
+            "$pacman" -Q "$p" >/dev/null 2>&1 || list="$list $p"
+          done < .github/dkp-packages.txt
+          echo "missing:$list"
+          echo "count=$(printf '%s' "$list" | wc -w)" >> "$GITHUB_OUTPUT"
+          echo "list=$list" >> "$GITHUB_OUTPUT"
+
+      - name: Install the missing devkitPro packages
+        if: steps.missing.outputs.count != '0'
+        run: |
+          set -uo pipefail
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
+          pacman="$(command -v dkp-pacman || command -v pacman)"
+          # Deliberately no retry loop: a 403 means devkitPro is refusing this
+          # runner's IP, so repeating the same request from the same runner
+          # cannot succeed and only burns minutes. Fail fast -- re-running the
+          # job lands on a different runner.
+          if "$pacman" -Sy --noconfirm && \
+             "$pacman" -S --noconfirm --needed ${{ steps.missing.outputs.list }}; then
+            echo "installed the missing devkitPro packages"
+          else
+            echo "::error::pkg.devkitpro.org refused this runner (403/522)."
+            echo "::error::That is devkitPro's CDN banning the runner IP range, not a build error -- re-run the job."
+            exit 1
+          fi
+
+      - name: Archive the devkitPro portlibs for the cache
+        run: |
+          set -uo pipefail
+          exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
+          tar -czf "$GITHUB_WORKSPACE/dkp-portlibs.tar.gz" -C /opt/devkitpro portlibs/switch
+          ls -lh "$GITHUB_WORKSPACE/dkp-portlibs.tar.gz"
 
       - name: Install the nxvk portlib
         uses: actions/download-artifact@v4

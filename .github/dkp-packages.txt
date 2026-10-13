@@ -1,0 +1,26 @@
+# devkitPro portlibs that the Vulkan-only release build links against.
+#
+# This file is the cache key for the portlibs archive (see the "Restore the
+# cached devkitPro portlibs" step in release-vulkan.yml), so editing it
+# invalidates the cache. Keep it to what the build actually needs:
+#
+#   emulator (Makefile, RENDERER=VK + MESA_FLAVOR=nxvk)
+#     LIBS = $(NXVK_LIBS) $(STORAGE_LIBS) -lcurl -lz -lnx -lstdc++ -lm
+#     -> switch-curl, switch-zlib, switch-ntfs-3g (libntfs-3g.a)
+#     -> switch-expat via nxvk.pc (-lexpat), handled by its own step because
+#        the package name is not guaranteed to exist
+#   launcher (launcher/Makefile)
+#     LIBS = $(STORAGE_LIBS) $(pkg-config SDL2...) -lturbojpeg -lz -lGLESv2 -lnx
+#     -> switch-sdl2*, switch-libjpeg-turbo, switch-mesa (-lGLESv2)
+#
+# devkitA64 / libnx / switch-tools are NOT listed: the devkitpro/devkita64
+# container image already provides them, and the workflow checks for them
+# instead of asking pacman over the network.
+switch-mesa
+switch-curl
+switch-zlib
+switch-ntfs-3g
+switch-sdl2
+switch-sdl2_ttf
+switch-sdl2_image
+switch-libjpeg-turbo
