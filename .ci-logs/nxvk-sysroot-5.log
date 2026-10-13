@@ -1,0 +1,54 @@
+>> building Rust std sysroot for aarch64-switch-horizon
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded getopts v0.2.24
+  Downloaded adler2 v2.0.1
+  Downloaded rustc-literal-escaper v0.0.8
+  Downloaded foldhash v0.2.0
+  Downloaded rustc-demangle v0.1.27
+  Downloaded addr2line v0.25.1
+  Downloaded miniz_oxide v0.8.9
+  Downloaded memchr v2.7.6
+  Downloaded hashbrown v0.17.1
+  Downloaded gimli v0.32.3
+  Downloaded object v0.37.3
+  Downloaded libc v0.2.185
+   Compiling compiler_builtins v0.1.160 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+   Compiling core v0.0.0 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
+   Compiling libc v0.2.185
+   Compiling object v0.37.3
+   Compiling std v0.0.0 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std)
+   Compiling rustc-std-workspace-core v1.99.0 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/rustc-std-workspace-core)
+   Compiling alloc v0.0.0 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc)
+   Compiling memchr v2.7.6
+   Compiling unwind v0.0.0 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/unwind)
+   Compiling adler2 v2.0.1
+   Compiling panic_abort v0.0.0 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/panic_abort)
+   Compiling cfg-if v1.0.4
+   Compiling rustc-demangle v0.1.27
+   Compiling rustc-literal-escaper v0.0.8
+   Compiling rustc-std-workspace-alloc v1.99.0 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/rustc-std-workspace-alloc)
+   Compiling panic_unwind v0.0.0 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/panic_unwind)
+   Compiling gimli v0.32.3
+   Compiling miniz_oxide v0.8.9
+   Compiling hashbrown v0.17.1
+   Compiling std_detect v0.1.5 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std_detect)
+   Compiling addr2line v0.25.1
+   Compiling proc_macro v0.0.0 (/opt/rust/rustup/toolchains/nightly-2026-07-02-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/proc_macro)
+   Compiling stdsr v0.0.0 (/tmp/stdsr)
+    Finished `release` profile [optimized] target(s) in 23.31s
+=== sysroot std rlibs ===
+liballoc-077ba501b5d9ba5f.rlib
+liballoc-077ba501b5d9ba5f.rmeta
+libcore-8586bd031f89ad59.rlib
+libcore-8586bd031f89ad59.rmeta
+libstd-8690e504f01dcd45.rlib
+libstd-8690e504f01dcd45.rmeta
+libstd_detect-4574bda403b62978.rlib
+libstd_detect-4574bda403b62978.rmeta
+libstdsr-3055529ff924f94f.rlib
+libstdsr-3055529ff924f94f.rmeta
+=== plain rustc --sysroot test (no build-std) ===
+SYSROOT TEST: OK
+touch: cannot touch 'switch/rust/sysroot/.stamp': Permission denied
+make: *** [Makefile:96: switch/rust/sysroot/.stamp] Error 1
