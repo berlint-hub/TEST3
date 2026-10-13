@@ -446,18 +446,28 @@ jobs:
           cp -r nxvk-pkg/include/vulkan nxvk-pkg/include/vk_video "$PORTLIBS/include/"
           "$(command -v dkp-pacman || command -v pacman)" -Ql switch-mesa >/dev/null 2>&1 || true
           ls -l "$PORTLIBS/lib/libnvk.a" "$PORTLIBS/lib/libnvk_support.a"
-          PATH="$(dirname "$(command -v aarch64-none-elf-pkg-config || echo /usr/bin/pkg-config)"):$PATH" \
+          # Purely informational: aarch64-none-elf-pkg-config is not on PATH in
+          # this step's shell (the Makefile gets it via devkitPro's
+          # switch_rules), so check before calling or the log fills with
+          # "command not found" that looks like a failure.
+          if command -v aarch64-none-elf-pkg-config >/dev/null 2>&1; then
             aarch64-none-elf-pkg-config --libs nxvk || true
+          else
+            echo "note: aarch64-none-elf-pkg-config not on PATH here; the Makefile resolves it itself"
+          fi
 
       - name: Ensure libexpat (nxvk's driconf needs it)
         run: |
           set -euo pipefail
           exec > >(tee -a "$GITHUB_WORKSPACE/ci-setup.log") 2>&1
           if [ -e "$PORTLIBS/lib/libexpat.a" ]; then echo "switch-expat already present"; exit 0; fi
-          if "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed switch-expat; then
+          # Resolve the pacman binary once: an empty command substitution here
+          # would run nothing and report a confusing failure.
+          pacman="$(command -v dkp-pacman || command -v pacman || true)"
+          if [ -n "$pacman" ] && "$pacman" -S --noconfirm --needed switch-expat; then
             echo "installed switch-expat"; exit 0
           fi
-          echo "::warning::no switch-expat package; building expat from source"
+          echo "::warning::switch-expat unavailable; building expat from source"
           curl -fsSL https://github.com/libexpat/libexpat/releases/download/R_2_7_1/expat-2.7.1.tar.gz -o expat.tar.gz
           tar xzf expat.tar.gz
           cd expat-2.7.1
@@ -583,8 +593,11 @@ jobs:
             done
             echo "-- nxvk portlib --"
             ls -l "$PORTLIBS"/lib/libnvk*.a "$PORTLIBS"/lib/pkgconfig/nxvk.pc 2>&1
-            PATH="$(dirname "$(command -v aarch64-none-elf-pkg-config || echo /usr/bin/pkg-config)"):$PATH" \
+            if command -v aarch64-none-elf-pkg-config >/dev/null 2>&1; then
               aarch64-none-elf-pkg-config --libs nxvk 2>&1
+            else
+              echo "aarch64-none-elf-pkg-config not on PATH in this shell (the Makefile resolves it)"
+            fi
             echo "-- expat --"
             ls -l "$PORTLIBS"/lib/libexpat.a 2>&1
           } > "$log" 2>&1
