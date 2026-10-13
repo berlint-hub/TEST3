@@ -1921,9 +1921,25 @@ int main(void) {
 #if defined(USE_VULKAN) && defined(NETHERSX2_VK_DIAGNOSTIC)
   unlink(DATA_ROOT "/nethersx2-exception.log");
   unlink(DATA_ROOT "/nethersx2-mesa.log");
+  unlink(DATA_ROOT "/nethersx2-mesa-stderr.log");
   setenv("MESA_LOG_FILE", DATA_ROOT "/nethersx2-mesa.log", 1);
-  vk_diag_reset();
-  vk_diag_note("host main entered renderer=%d", GS_RENDERER);
+  // Mesa only honours MESA_LOG_FILE when both __normal_user() and fopen()
+  // succeed (src/util/log.c); otherwise mesa_log_file stays stderr, and on
+  // Horizon stderr goes nowhere. That is why nvkmd's own explanation of the
+  // zero-physical-device result never reached a file. Capture stderr into the
+  // directory the Vulkan diagnostic already writes to, so the text survives
+  // whichever path Mesa takes. stderr only: fatal_error() prints its console
+  // screen through stdout and that must stay on screen.
+  {
+    FILE *mesa_err = fopen(DATA_ROOT "/nethersx2-mesa-stderr.log", "w");
+    if (mesa_err) {
+      setvbuf(mesa_err, NULL, _IOLBF, 0);
+      stderr = mesa_err;
+    }
+    vk_diag_reset();
+    vk_diag_note("host main entered renderer=%d", GS_RENDERER);
+    vk_diag_note("mesa stderr capture %s", mesa_err ? "active" : "FAILED to open");
+  }
 #endif
   // Boot with the CPU boosted: core load, relocation and the GameIndex parse
   // are all CPU-bound. x1_perf_init() keeps or drops it for gameplay according
