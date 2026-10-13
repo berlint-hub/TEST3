@@ -1,0 +1,1201 @@
+==== build environment ====
+DEVKITPRO=/opt/devkitpro  PORTLIBS=/opt/devkitpro/portlibs/switch  CORES_DIR=/__w/TEST3/TEST3/cores
+CORES=4248  RENDERERS=VK  MESA_FLAVOR=nxvk  JOBS=4
+cmake                    /usr/bin/cmake
+ninja                    /usr/bin/ninja
+pkg-config               /usr/bin/pkg-config
+aarch64-none-elf-gcc     MISSING
+-- nxvk portlib --
+-rw-r--r-- 1 root root  5314016 Oct 13 03:25 /opt/devkitpro/portlibs/switch/lib/libnvk.a
+-rw-r--r-- 1 root root 43065254 Oct 13 03:25 /opt/devkitpro/portlibs/switch/lib/libnvk_support.a
+-rw-r--r-- 1 root root      460 Oct 13 03:25 /opt/devkitpro/portlibs/switch/lib/pkgconfig/nxvk.pc
+/__w/_temp/9ca4ba97-f511-4850-abaf-1b26aa8a4757.sh: line 14: aarch64-none-elf-pkg-config: command not found
+-- expat --
+-rw-r--r-- 1 root root 251018 Jun 16  2024 /opt/devkitpro/portlibs/switch/lib/libexpat.a
+==== job: build (Vulkan) ====
+run 14 on arena/105445b2-test3 @ 6ced5883ee15ef548e44ce2588ee0947bcb4de9c
+Tue Oct 13 03:25:30 AM UTC 2026
+DEVKITPRO=/opt/devkitpro PORTLIBS=/opt/devkitpro/portlibs/switch
+overlay         145G   62G   84G  43% /
+Reading package lists...
+Building dependency tree...
+Reading state information...
+cmake is already the newest version (3.31.6-2~bpo12+1).
+ninja-build is already the newest version (1.11.1-2~deb12u1).
+The following packages will be upgraded:
+  ca-certificates curl libcurl3-gnutls libcurl4 unzip
+5 upgraded, 0 newly installed, 0 to remove and 72 not upgraded.
+Need to get 1,422 kB of archives.
+After this operation, 4,096 B of additional disk space will be used.
+Get:1 http://deb.debian.org/debian-security bookworm-security/main amd64 ca-certificates all 20250419~deb12u1 [162 kB]
+Get:2 http://deb.debian.org/debian bookworm/main amd64 curl amd64 7.88.1-10+deb12u15 [316 kB]
+Get:3 http://deb.debian.org/debian bookworm/main amd64 libcurl4 amd64 7.88.1-10+deb12u15 [392 kB]
+Get:4 http://deb.debian.org/debian bookworm/main amd64 libcurl3-gnutls amd64 7.88.1-10+deb12u15 [386 kB]
+Get:5 http://deb.debian.org/debian-security bookworm-security/main amd64 unzip amd64 6.0-28+deb12u1 [167 kB]
+Preconfiguring packages ...
+Fetched 1,422 kB in 0s (58.1 MB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 21137 files and directories currently installed.)
+Preparing to unpack .../ca-certificates_20250419~deb12u1_all.deb ...
+Unpacking ca-certificates (20250419~deb12u1) over (20230311+deb12u1) ...
+Preparing to unpack .../curl_7.88.1-10+deb12u15_amd64.deb ...
+Unpacking curl (7.88.1-10+deb12u15) over (7.88.1-10+deb12u12) ...
+Preparing to unpack .../libcurl4_7.88.1-10+deb12u15_amd64.deb ...
+Unpacking libcurl4:amd64 (7.88.1-10+deb12u15) over (7.88.1-10+deb12u12) ...
+Preparing to unpack .../libcurl3-gnutls_7.88.1-10+deb12u15_amd64.deb ...
+Unpacking libcurl3-gnutls:amd64 (7.88.1-10+deb12u15) over (7.88.1-10+deb12u12) ...
+Preparing to unpack .../unzip_6.0-28+deb12u1_amd64.deb ...
+Unpacking unzip (6.0-28+deb12u1) over (6.0-28) ...
+Setting up unzip (6.0-28+deb12u1) ...
+Setting up libcurl3-gnutls:amd64 (7.88.1-10+deb12u15) ...
+Setting up ca-certificates (20250419~deb12u1) ...
+Updating certificates in /etc/ssl/certs...
+rehash: warning: skipping ca-certificates.crt,it does not contain exactly one certificate or CRL
+21 added, 13 removed; done.
+Setting up libcurl4:amd64 (7.88.1-10+deb12u15) ...
+Setting up curl (7.88.1-10+deb12u15) ...
+Processing triggers for libc-bin (2.36-9+deb12u10) ...
+Processing triggers for ca-certificates (20250419~deb12u1) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
+no cached portlibs archive
+aarch64-none-elf-gcc (devkitA64) 15.2.0
+container toolchain OK
+missing:
+-rw-r--r-- 1 root root 92M Oct 13 03:25 /__w/TEST3/TEST3/dkp-portlibs.tar.gz
+-rw-r--r-- 1 root root  5314016 Oct 13 03:25 /opt/devkitpro/portlibs/switch/lib/libnvk.a
+-rw-r--r-- 1 root root 43065254 Oct 13 03:25 /opt/devkitpro/portlibs/switch/lib/libnvk_support.a
+/__w/_temp/852bf42f-c323-476f-b59c-02d7fdb0465b.sh: line 10: aarch64-none-elf-pkg-config: command not found
+switch-expat already present
+== core.apk: https://github.com/Trixarian/NetherSX2-patch/releases/download/2.2n/NetherSX2-v2.2n-4248.apk ==
+== sha256: 2029e30dcc1ba1ecb8d73313f18b429b40e6044c7785c52af08b948ef94b3ddf ==
+Archive:  core.apk
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+     7348  2025-12-24 20:51   AndroidManifest.xml
+  5374160  2025-12-24 20:51   classes.dex
+      388  2025-12-24 20:51   res/anim/abc_fade_in.xml
+      388  2025-12-24 20:51   res/anim/abc_fade_out.xml
+      852  2025-12-24 20:51   res/anim/abc_grow_fade_in_from_bottom.xml
+      508  2025-12-24 20:51   res/anim/abc_popup_enter.xml
+      508  2025-12-24 20:51   res/anim/abc_popup_exit.xml
+      852  2025-12-24 20:51   res/anim/abc_shrink_fade_out_from_bottom.xml
+      396  2025-12-24 20:51   res/anim/abc_slide_in_bottom.xml
+      396  2025-12-24 20:51   res/anim/abc_slide_in_top.xml
+      396  2025-12-24 20:51   res/anim/abc_slide_out_bottom.xml
+      396  2025-12-24 20:51   res/anim/abc_slide_out_top.xml
+      388  2025-12-24 20:51   res/anim/abc_tooltip_enter.xml
+      388  2025-12-24 20:51   res/anim/abc_tooltip_exit.xml
+     2124  2025-12-24 20:51   res/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml
+     2780  2025-12-24 20:51   res/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml
+     1196  2025-12-24 20:51   res/anim/btn_checkbox_to_checked_icon_null_animation.xml
+     2360  2025-12-24 20:51   res/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml
+     2520  2025-12-24 20:51   res/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml
+     1196  2025-12-24 20:51   res/anim/btn_checkbox_to_unchecked_icon_null_animation.xml
+     1656  2025-12-24 20:51   res/anim/btn_radio_to_off_mtrl_dot_group_animation.xml
+     1656  2025-12-24 20:51   res/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml
+     1028  2025-12-24 20:51   res/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml
+     1656  2025-12-24 20:51   res/anim/btn_radio_to_on_mtrl_dot_group_animation.xml
+     1656  2025-12-24 20:51   res/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml
+     1028  2025-12-24 20:51   res/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml
+      616  2025-12-24 20:51   res/anim/design_bottom_sheet_slide_in.xml
+      616  2025-12-24 20:51   res/anim/design_bottom_sheet_slide_out.xml
+      312  2025-12-24 20:51   res/anim/design_snackbar_in.xml
+      312  2025-12-24 20:51   res/anim/design_snackbar_out.xml
+      364  2025-12-24 20:51   res/anim/fragment_fast_out_extra_slow_in.xml
+      616  2025-12-24 20:51   res/anim/mtrl_bottom_sheet_slide_in.xml
+      616  2025-12-24 20:51   res/anim/mtrl_bottom_sheet_slide_out.xml
+      400  2025-12-24 20:51   res/anim/mtrl_card_lowers_interpolator.xml
+      388  2025-12-24 20:51   res/anim/nav_default_enter_anim.xml
+      388  2025-12-24 20:51   res/anim/nav_default_exit_anim.xml
+      388  2025-12-24 20:51   res/anim/nav_default_pop_enter_anim.xml
+      388  2025-12-24 20:51   res/anim/nav_default_pop_exit_anim.xml
+     1216  2025-12-24 20:51   res/animator/design_appbar_state_list_animator.xml
+      796  2025-12-24 20:51   res/animator/design_fab_hide_motion_spec.xml
+      796  2025-12-24 20:51   res/animator/design_fab_show_motion_spec.xml
+     1128  2025-12-24 20:51   res/animator/fragment_close_enter.xml
+     1128  2025-12-24 20:51   res/animator/fragment_close_exit.xml
+      452  2025-12-24 20:51   res/animator/fragment_fade_enter.xml
+      452  2025-12-24 20:51   res/animator/fragment_fade_exit.xml
+     1128  2025-12-24 20:51   res/animator/fragment_open_enter.xml
+     1128  2025-12-24 20:51   res/animator/fragment_open_exit.xml
+      400  2025-12-24 20:51   res/animator/linear_indeterminate_line1_head_interpolator.xml
+      400  2025-12-24 20:51   res/animator/linear_indeterminate_line1_tail_interpolator.xml
+      400  2025-12-24 20:51   res/animator/linear_indeterminate_line2_head_interpolator.xml
+      400  2025-12-24 20:51   res/animator/linear_indeterminate_line2_tail_interpolator.xml
+     1796  2025-12-24 20:51   res/animator/m3_btn_elevated_btn_state_list_anim.xml
+     1796  2025-12-24 20:51   res/animator/m3_btn_state_list_anim.xml
+     1632  2025-12-24 20:51   res/animator/m3_card_elevated_state_list_anim.xml
+     1584  2025-12-24 20:51   res/animator/m3_card_state_list_anim.xml
+     1180  2025-12-24 20:51   res/animator/m3_chip_state_list_anim.xml
+     1072  2025-12-24 20:51   res/animator/m3_elevated_chip_state_list_anim.xml
+     2664  2025-12-24 20:51   res/animator/mtrl_btn_state_list_anim.xml
+      120  2025-12-24 20:51   res/animator/mtrl_btn_unelevated_state_list_anim.xml
+     1208  2025-12-24 20:51   res/animator/mtrl_card_state_list_anim.xml
+     1072  2025-12-24 20:51   res/animator/mtrl_chip_state_list_anim.xml
+     1116  2025-12-24 20:51   res/animator/mtrl_extended_fab_change_size_collapse_motion_spec.xml
+     1116  2025-12-24 20:51   res/animator/mtrl_extended_fab_change_size_expand_motion_spec.xml
+      608  2025-12-24 20:51   res/animator/mtrl_extended_fab_hide_motion_spec.xml
+      820  2025-12-24 20:51   res/animator/mtrl_extended_fab_show_motion_spec.xml
+     2724  2025-12-24 20:51   res/animator/mtrl_extended_fab_state_list_animator.xml
+      796  2025-12-24 20:51   res/animator/mtrl_fab_hide_motion_spec.xml
+      796  2025-12-24 20:51   res/animator/mtrl_fab_show_motion_spec.xml
+     1888  2025-12-24 20:51   res/animator/mtrl_fab_transformation_sheet_collapse_spec.xml
+     1888  2025-12-24 20:51   res/animator/mtrl_fab_transformation_sheet_expand_spec.xml
+      452  2025-12-24 20:51   res/animator/nav_default_enter_anim.xml
+      452  2025-12-24 20:51   res/animator/nav_default_exit_anim.xml
+      452  2025-12-24 20:51   res/animator/nav_default_pop_enter_anim.xml
+      452  2025-12-24 20:51   res/animator/nav_default_pop_exit_anim.xml
+      468  2025-12-24 20:51   res/color/abc_background_cache_hint_selector_material_dark.xml
+      468  2025-12-24 20:51   res/color/abc_background_cache_hint_selector_material_light.xml
+      500  2025-12-24 20:51   res/color/abc_btn_colored_borderless_text_material.xml
+      500  2025-12-24 20:51   res/color/abc_btn_colored_text_material.xml
+      544  2025-12-24 20:51   res/color/abc_color_highlight_material.xml
+      564  2025-12-24 20:51   res/color/abc_hint_foreground_material_dark.xml
+      564  2025-12-24 20:51   res/color/abc_hint_foreground_material_light.xml
+      464  2025-12-24 20:51   res/color/abc_primary_text_disable_only_material_dark.xml
+      464  2025-12-24 20:51   res/color/abc_primary_text_disable_only_material_light.xml
+      464  2025-12-24 20:51   res/color/abc_primary_text_material_dark.xml
+      464  2025-12-24 20:51   res/color/abc_primary_text_material_light.xml
+      588  2025-12-24 20:51   res/color/abc_search_url_text.xml
+      464  2025-12-24 20:51   res/color/abc_secondary_text_material_dark.xml
+      464  2025-12-24 20:51   res/color/abc_secondary_text_material_light.xml
+      624  2025-12-24 20:51   res/color/abc_tint_btn_checkable.xml
+     1120  2025-12-24 20:51   res/color/abc_tint_default.xml
+      668  2025-12-24 20:51   res/color/abc_tint_edittext.xml
+      500  2025-12-24 20:51   res/color/abc_tint_seek_thumb.xml
+      668  2025-12-24 20:51   res/color/abc_tint_spinner.xml
+      664  2025-12-24 20:51   res/color/abc_tint_switch_track.xml
+      464  2025-12-24 20:51   res/color/checkbox_themeable_attribute_color.xml
+      712  2025-12-24 20:51   res/color/common_google_signin_btn_text_dark.xml
+      712  2025-12-24 20:51   res/color/common_google_signin_btn_text_light.xml
+      464  2025-12-24 20:51   res/color/common_google_signin_btn_tint.xml
+      712  2025-12-24 20:51   res/color/design_box_stroke_color.xml
+      464  2025-12-24 20:51   res/color/design_error.xml
+      376  2025-12-24 20:51   res/color/design_icon_tint.xml
+      376  2025-12-24 20:51   res/color/m3_appbar_overlay_color.xml
+      500  2025-12-24 20:51   res/color/m3_assist_chip_icon_tint_color.xml
+      872  2025-12-24 20:51   res/color/m3_assist_chip_stroke_color.xml
+      500  2025-12-24 20:51   res/color/m3_button_background_color_selector.xml
+      500  2025-12-24 20:51   res/color/m3_button_foreground_color_selector.xml
+      500  2025-12-24 20:51   res/color/m3_button_outline_color_selector.xml
+      808  2025-12-24 20:51   res/color/m3_button_ripple_color.xml
+      808  2025-12-24 20:51   res/color/m3_button_ripple_color_selector.xml
+      376  2025-12-24 20:51   res/color/m3_calendar_item_disabled_text.xml
+      712  2025-12-24 20:51   res/color/m3_calendar_item_stroke_color.xml
+      768  2025-12-24 20:51   res/color/m3_card_foreground_color.xml
+     1556  2025-12-24 20:51   res/color/m3_card_ripple_color.xml
+      464  2025-12-24 20:51   res/color/m3_card_stroke_color.xml
+      500  2025-12-24 20:51   res/color/m3_chip_assist_text_color.xml
+      712  2025-12-24 20:51   res/color/m3_chip_background_color.xml
+     1556  2025-12-24 20:51   res/color/m3_chip_ripple_color.xml
+      872  2025-12-24 20:51   res/color/m3_chip_stroke_color.xml
+      624  2025-12-24 20:51   res/color/m3_chip_text_color.xml
+      500  2025-12-24 20:51   res/color/m3_dark_default_color_primary_text.xml
+      500  2025-12-24 20:51   res/color/m3_dark_default_color_secondary_text.xml
+      376  2025-12-24 20:51   res/color/m3_dark_highlighted_text.xml
+      564  2025-12-24 20:51   res/color/m3_dark_hint_foreground.xml
+      500  2025-12-24 20:51   res/color/m3_dark_primary_text_disable_only.xml
+      500  2025-12-24 20:51   res/color/m3_default_color_primary_text.xml
+... [239 lines trimmed] ...
+      896  2025-12-24 20:51   res/drawable/ic_baseline_help_24.xml
+      900  2025-12-24 20:51   res/drawable/ic_baseline_help_outline_24.xml
+      720  2025-12-24 20:51   res/drawable/ic_baseline_image_24.xml
+      664  2025-12-24 20:51   res/drawable/ic_baseline_import_export_24.xml
+      688  2025-12-24 20:51   res/drawable/ic_baseline_info_24.xml
+      684  2025-12-24 20:51   res/drawable/ic_baseline_keyboard_arrow_left_24.xml
+      684  2025-12-24 20:51   res/drawable/ic_baseline_keyboard_arrow_right_24.xml
+      832  2025-12-24 20:51   res/drawable/ic_baseline_layers_clear_24.xml
+      860  2025-12-24 20:51   res/drawable/ic_baseline_lock_24.xml
+      864  2025-12-24 20:51   res/drawable/ic_baseline_lock_open_24.xml
+      640  2025-12-24 20:51   res/drawable/ic_baseline_menu_24.xml
+      804  2025-12-24 20:51   res/drawable/ic_baseline_newspaper_24.xml
+      736  2025-12-24 20:51   res/drawable/ic_baseline_open_in_browser_24.xml
+      644  2025-12-24 20:51   res/drawable/ic_baseline_playlist_play_24.xml
+      596  2025-12-24 20:51   res/drawable/ic_baseline_play_arrow_24.xml
+      812  2025-12-24 20:51   res/drawable/ic_baseline_power_settings_new_24.xml
+      888  2025-12-24 20:51   res/drawable/ic_baseline_query_builder_24.xml
+      788  2025-12-24 20:51   res/drawable/ic_baseline_radio_button_checked_24.xml
+      720  2025-12-24 20:51   res/drawable/ic_baseline_radio_button_unchecked_24.xml
+      804  2025-12-24 20:51   res/drawable/ic_baseline_refresh_24.xml
+      600  2025-12-24 20:51   res/drawable/ic_baseline_remove_24.xml
+      928  2025-12-24 20:51   res/drawable/ic_baseline_restart_alt_24.xml
+      720  2025-12-24 20:51   res/drawable/ic_baseline_save_24.xml
+      724  2025-12-24 20:51   res/drawable/ic_baseline_sd_card_24.xml
+      832  2025-12-24 20:51   res/drawable/ic_baseline_search_24.xml
+     1488  2025-12-24 20:51   res/drawable/ic_baseline_settings_24.xml
+      824  2025-12-24 20:51   res/drawable/ic_baseline_speed_24.xml
+      656  2025-12-24 20:51   res/drawable/ic_baseline_swap_horiz_24.xml
+      860  2025-12-24 20:51   res/drawable/ic_baseline_timer_24.xml
+      896  2025-12-24 20:51   res/drawable/ic_baseline_tips_and_updates_24.xml
+     1068  2025-12-24 20:51   res/drawable/ic_baseline_touch_app_24.xml
+      848  2025-12-24 20:51   res/drawable/ic_baseline_trophy_24.xml
+      800  2025-12-24 20:51   res/drawable/ic_baseline_vibration_24.xml
+      692  2025-12-24 20:51   res/drawable/ic_baseline_view_list_24.xml
+      876  2025-12-24 20:51   res/drawable/ic_baseline_wallpaper_24.xml
+     3488  2025-12-24 20:51   res/drawable/ic_chip_24.xml
+      752  2025-12-24 20:51   res/drawable/ic_clock_black_24dp.xml
+      728  2025-12-24 20:51   res/drawable/ic_controller_analog_base.xml
+      792  2025-12-24 20:51   res/drawable/ic_controller_analog_button.xml
+     1076  2025-12-24 20:51   res/drawable/ic_controller_analog_stick.xml
+     1092  2025-12-24 20:51   res/drawable/ic_controller_a_button.xml
+     1516  2025-12-24 20:51   res/drawable/ic_controller_b_button.xml
+     2684  2025-12-24 20:51   res/drawable/ic_controller_calibrate_button.xml
+     1160  2025-12-24 20:51   res/drawable/ic_controller_circle_button.xml
+     1416  2025-12-24 20:51   res/drawable/ic_controller_cross_button.xml
+     1364  2025-12-24 20:51   res/drawable/ic_controller_c_button.xml
+      832  2025-12-24 20:51   res/drawable/ic_controller_down_button.xml
+     1536  2025-12-24 20:51   res/drawable/ic_controller_l1_button.xml
+     1732  2025-12-24 20:51   res/drawable/ic_controller_l2_button.xml
+     1836  2025-12-24 20:51   res/drawable/ic_controller_l3_button.xml
+      832  2025-12-24 20:51   res/drawable/ic_controller_left_button.xml
+     1420  2025-12-24 20:51   res/drawable/ic_controller_m1_button.xml
+     1828  2025-12-24 20:51   res/drawable/ic_controller_m2_button.xml
+     2400  2025-12-24 20:51   res/drawable/ic_controller_m3_button.xml
+     1348  2025-12-24 20:51   res/drawable/ic_controller_m4_button.xml
+      588  2025-12-24 20:51   res/drawable/ic_controller_pause_button.xml
+     1300  2025-12-24 20:51   res/drawable/ic_controller_pressure_modifier.xml
+      804  2025-12-24 20:51   res/drawable/ic_controller_quick_load_button.xml
+      720  2025-12-24 20:51   res/drawable/ic_controller_quick_save_button.xml
+     1792  2025-12-24 20:51   res/drawable/ic_controller_r1_button.xml
+     1988  2025-12-24 20:51   res/drawable/ic_controller_r2_button.xml
+     2120  2025-12-24 20:51   res/drawable/ic_controller_r3_button.xml
+      832  2025-12-24 20:51   res/drawable/ic_controller_right_button.xml
+      812  2025-12-24 20:51   res/drawable/ic_controller_select_button.xml
+     1128  2025-12-24 20:51   res/drawable/ic_controller_square_button.xml
+      804  2025-12-24 20:51   res/drawable/ic_controller_start_button.xml
+     1148  2025-12-24 20:51   res/drawable/ic_controller_toggle_slowmo.xml
+      788  2025-12-24 20:51   res/drawable/ic_controller_toggle_speed_limit.xml
+      588  2025-12-24 20:51   res/drawable/ic_controller_toggle_turbo.xml
+     1156  2025-12-24 20:51   res/drawable/ic_controller_triangle_button.xml
+      840  2025-12-24 20:51   res/drawable/ic_controller_up_button.xml
+     4432  2025-12-24 20:51   res/drawable/ic_emblem_system.xml
+      852  2025-12-24 20:51   res/drawable/ic_keyboard_black_24dp.xml
+     5924  2025-12-24 20:51   res/drawable/ic_launcher_background.xml
+      704  2025-12-24 20:51   res/drawable/ic_m3_chip_check.xml
+      900  2025-12-24 20:51   res/drawable/ic_m3_chip_checked_circle.xml
+      648  2025-12-24 20:51   res/drawable/ic_m3_chip_close.xml
+     4536  2025-12-24 20:51   res/drawable/ic_media_cdrom.xml
+     3176  2025-12-24 20:51   res/drawable/ic_media_cdrom_case.xml
+      672  2025-12-24 20:51   res/drawable/ic_mtrl_checked_circle.xml
+      600  2025-12-24 20:51   res/drawable/ic_mtrl_chip_checked_black.xml
+      940  2025-12-24 20:51   res/drawable/ic_mtrl_chip_checked_circle.xml
+      808  2025-12-24 20:51   res/drawable/ic_mtrl_chip_close_circle.xml
+      684  2025-12-24 20:51   res/drawable/ic_outline_cross_red_24.xml
+     1232  2025-12-24 20:51   res/drawable/ic_placeholder.xml
+      684  2025-12-24 20:51   res/drawable/m3_appbar_background.xml
+     1228  2025-12-24 20:51   res/drawable/m3_popupmenu_background_overlay.xml
+      304  2025-12-24 20:51   res/drawable/m3_radiobutton_ripple.xml
+      304  2025-12-24 20:51   res/drawable/m3_selection_control_ripple.xml
+      868  2025-12-24 20:51   res/drawable/m3_tabs_background.xml
+      480  2025-12-24 20:51   res/drawable/m3_tabs_line_indicator.xml
+      956  2025-12-24 20:51   res/drawable/m3_tabs_rounded_line_indicator.xml
+      632  2025-12-24 20:51   res/drawable/m3_tabs_transparent_background.xml
+      588  2025-12-24 20:51   res/drawable/material_cursor_drawable.xml
+      696  2025-12-24 20:51   res/drawable/material_ic_calendar_black_24dp.xml
+      752  2025-12-24 20:51   res/drawable/material_ic_clear_black_24dp.xml
+      716  2025-12-24 20:51   res/drawable/material_ic_edit_black_24dp.xml
+      712  2025-12-24 20:51   res/drawable/material_ic_keyboard_arrow_left_black_24dp.xml
+      700  2025-12-24 20:51   res/drawable/material_ic_keyboard_arrow_right_black_24dp.xml
+      648  2025-12-24 20:51   res/drawable/material_ic_menu_arrow_down_black_24dp.xml
+      648  2025-12-24 20:51   res/drawable/material_ic_menu_arrow_up_black_24dp.xml
+      716  2025-12-24 20:51   res/drawable/mtrl_dialog_background.xml
+      464  2025-12-24 20:51   res/drawable/mtrl_dropdown_arrow.xml
+      564  2025-12-24 20:51   res/drawable/mtrl_ic_arrow_drop_down.xml
+      564  2025-12-24 20:51   res/drawable/mtrl_ic_arrow_drop_up.xml
+      724  2025-12-24 20:51   res/drawable/mtrl_ic_cancel.xml
+      644  2025-12-24 20:51   res/drawable/mtrl_ic_error.xml
+      264  2025-12-24 20:51   res/drawable/mtrl_navigation_bar_item_background.xml
+      740  2025-12-24 20:51   res/drawable/mtrl_popupmenu_background.xml
+     1228  2025-12-24 20:51   res/drawable/mtrl_popupmenu_background_overlay.xml
+      628  2025-12-24 20:51   res/drawable/mtrl_tabs_default_indicator.xml
+      516  2025-12-24 20:51   res/drawable/navigation_empty_icon.xml
+     1180  2025-12-24 20:51   res/drawable/notification_action_background.xml
+      532  2025-12-24 20:51   res/drawable/notification_bg.xml
+      532  2025-12-24 20:51   res/drawable/notification_bg_low.xml
+      372  2025-12-24 20:51   res/drawable/notification_icon_background.xml
+      304  2025-12-24 20:51   res/drawable/notification_tile_bg.xml
+      516  2025-12-24 20:51   res/drawable/preference_list_divider_material.xml
+      336  2025-12-24 20:51   res/drawable/test_custom_background.xml
+      448  2025-12-24 20:51   res/drawable/test_level_drawable.xml
+      484  2025-12-24 20:51   res/drawable/tooltip_frame_dark.xml
+      484  2025-12-24 20:51   res/drawable/tooltip_frame_light.xml
+      552  2025-12-24 20:51   res/drawable/tristate_preference_background.xml
+      776  2025-12-24 20:51   res/drawable/tristate_preference_background_shape.xml
+     1016  2025-12-24 20:51   res/drawable/tristate_preference_button_background.xml
+      272  2025-12-24 20:51   res/drawable-hdpi/abc_ab_share_pack_mtrl_alpha.9.png
+      227  2025-12-24 20:51   res/drawable-hdpi/abc_btn_check_to_on_mtrl_000.png
+      404  2025-12-24 20:51   res/drawable-hdpi/abc_btn_check_to_on_mtrl_015.png
+      464  2025-12-24 20:51   res/drawable-hdpi/abc_btn_radio_to_on_mtrl_000.png
+      563  2025-12-24 20:51   res/drawable-hdpi/abc_btn_radio_to_on_mtrl_015.png
+     1096  2025-12-24 20:51   res/drawable-hdpi/abc_btn_switch_to_on_mtrl_00001.9.png
+     1243  2025-12-24 20:51   res/drawable-hdpi/abc_btn_switch_to_on_mtrl_00012.9.png
+      226  2025-12-24 20:51   res/drawable-hdpi/abc_cab_background_top_mtrl_alpha.9.png
+      171  2025-12-24 20:51   res/drawable-hdpi/abc_ic_commit_search_api_mtrl_alpha.png
+      167  2025-12-24 20:51   res/drawable-hdpi/abc_list_divider_mtrl_alpha.9.png
+      258  2025-12-24 20:51   res/drawable-hdpi/abc_list_focused_holo.9.png
+      212  2025-12-24 20:51   res/drawable-hdpi/abc_list_longpressed_holo.9.png
+      208  2025-12-24 20:51   res/drawable-hdpi/abc_list_pressed_holo_dark.9.png
+      208  2025-12-24 20:51   res/drawable-hdpi/abc_list_pressed_holo_light.9.png
+      228  2025-12-24 20:51   res/drawable-hdpi/abc_list_selector_disabled_holo_dark.9.png
+      229  2025-12-24 20:51   res/drawable-hdpi/abc_list_selector_disabled_holo_light.9.png
+      738  2025-12-24 20:51   res/drawable-hdpi/abc_menu_hardkey_panel_mtrl_mult.9.png
+     1098  2025-12-24 20:51   res/drawable-hdpi/abc_popup_background_mtrl_mult.9.png
+      201  2025-12-24 20:51   res/drawable-hdpi/abc_scrubber_control_off_mtrl_alpha.png
+      196  2025-12-24 20:51   res/drawable-hdpi/abc_scrubber_control_to_pressed_mtrl_000.png
+      272  2025-12-24 20:51   res/drawable-hdpi/abc_scrubber_control_to_pressed_mtrl_005.png
+      205  2025-12-24 20:51   res/drawable-hdpi/abc_scrubber_primary_mtrl_alpha.9.png
+      196  2025-12-24 20:51   res/drawable-hdpi/abc_scrubber_track_mtrl_alpha.9.png
+      345  2025-12-24 20:51   res/drawable-hdpi/abc_spinner_mtrl_am_alpha.9.png
+      484  2025-12-24 20:51   res/drawable-hdpi/abc_switch_track_mtrl_alpha.9.png
+      190  2025-12-24 20:51   res/drawable-hdpi/abc_tab_indicator_mtrl_alpha.9.png
+      186  2025-12-24 20:51   res/drawable-hdpi/abc_textfield_activated_mtrl_alpha.9.png
+      192  2025-12-24 20:51   res/drawable-hdpi/abc_textfield_default_mtrl_alpha.9.png
+      178  2025-12-24 20:51   res/drawable-hdpi/abc_textfield_search_activated_mtrl_alpha.9.png
+      178  2025-12-24 20:51   res/drawable-hdpi/abc_textfield_search_default_mtrl_alpha.9.png
+      278  2025-12-24 20:51   res/drawable-hdpi/abc_text_select_handle_left_mtrl.png
+      396  2025-12-24 20:51   res/drawable-hdpi/abc_text_select_handle_middle_mtrl.png
+      262  2025-12-24 20:51   res/drawable-hdpi/abc_text_select_handle_right_mtrl.png
+      681  2025-12-24 20:51   res/drawable-hdpi/common_full_open_on_phone.png
+      897  2025-12-24 20:51   res/drawable-hdpi/common_google_signin_btn_icon_dark_normal_background.9.png
+      683  2025-12-24 20:51   res/drawable-hdpi/common_google_signin_btn_icon_light_normal_background.9.png
+      960  2025-12-24 20:51   res/drawable-hdpi/common_google_signin_btn_text_dark_normal_background.9.png
+      694  2025-12-24 20:51   res/drawable-hdpi/common_google_signin_btn_text_light_normal_background.9.png
+      410  2025-12-24 20:51   res/drawable-hdpi/googleg_disabled_color_18.png
+      808  2025-12-24 20:51   res/drawable-hdpi/googleg_standard_color_18.png
+      212  2025-12-24 20:51   res/drawable-hdpi/notification_bg_low_normal.9.png
+      225  2025-12-24 20:51   res/drawable-hdpi/notification_bg_low_pressed.9.png
+      212  2025-12-24 20:51   res/drawable-hdpi/notification_bg_normal.9.png
+      225  2025-12-24 20:51   res/drawable-hdpi/notification_bg_normal_pressed.9.png
+      107  2025-12-24 20:51   res/drawable-hdpi/notify_panel_notification_icon_bg.png
+      345  2025-12-24 20:51   res/drawable-ldrtl-hdpi/abc_spinner_mtrl_am_alpha.9.png
+      318  2025-12-24 20:51   res/drawable-ldrtl-mdpi/abc_spinner_mtrl_am_alpha.9.png
+      417  2025-12-24 20:51   res/drawable-ldrtl-xhdpi/abc_spinner_mtrl_am_alpha.9.png
+      525  2025-12-24 20:51   res/drawable-ldrtl-xxhdpi/abc_spinner_mtrl_am_alpha.9.png
+      437  2025-12-24 20:51   res/drawable-ldrtl-xxxhdpi/abc_spinner_mtrl_am_alpha.9.png
+      267  2025-12-24 20:51   res/drawable-mdpi/abc_ab_share_pack_mtrl_alpha.9.png
+      214  2025-12-24 20:51   res/drawable-mdpi/abc_btn_check_to_on_mtrl_000.png
+      321  2025-12-24 20:51   res/drawable-mdpi/abc_btn_check_to_on_mtrl_015.png
+      324  2025-12-24 20:51   res/drawable-mdpi/abc_btn_radio_to_on_mtrl_000.png
+      356  2025-12-24 20:51   res/drawable-mdpi/abc_btn_radio_to_on_mtrl_015.png
+      754  2025-12-24 20:51   res/drawable-mdpi/abc_btn_switch_to_on_mtrl_00001.9.png
+      825  2025-12-24 20:51   res/drawable-mdpi/abc_btn_switch_to_on_mtrl_00012.9.png
+      216  2025-12-24 20:51   res/drawable-mdpi/abc_cab_background_top_mtrl_alpha.9.png
+      173  2025-12-24 20:51   res/drawable-mdpi/abc_ic_commit_search_api_mtrl_alpha.png
+      167  2025-12-24 20:51   res/drawable-mdpi/abc_list_divider_mtrl_alpha.9.png
+      228  2025-12-24 20:51   res/drawable-mdpi/abc_list_focused_holo.9.png
+      211  2025-12-24 20:51   res/drawable-mdpi/abc_list_longpressed_holo.9.png
+      207  2025-12-24 20:51   res/drawable-mdpi/abc_list_pressed_holo_dark.9.png
+      207  2025-12-24 20:51   res/drawable-mdpi/abc_list_pressed_holo_light.9.png
+      217  2025-12-24 20:51   res/drawable-mdpi/abc_list_selector_disabled_holo_dark.9.png
+      217  2025-12-24 20:51   res/drawable-mdpi/abc_list_selector_disabled_holo_light.9.png
+      541  2025-12-24 20:51   res/drawable-mdpi/abc_menu_hardkey_panel_mtrl_mult.9.png
+      776  2025-12-24 20:51   res/drawable-mdpi/abc_popup_background_mtrl_mult.9.png
+      159  2025-12-24 20:51   res/drawable-mdpi/abc_scrubber_control_off_mtrl_alpha.png
+      145  2025-12-24 20:51   res/drawable-mdpi/abc_scrubber_control_to_pressed_mtrl_000.png
+      197  2025-12-24 20:51   res/drawable-mdpi/abc_scrubber_control_to_pressed_mtrl_005.png
+      203  2025-12-24 20:51   res/drawable-mdpi/abc_scrubber_primary_mtrl_alpha.9.png
+      194  2025-12-24 20:51   res/drawable-mdpi/abc_scrubber_track_mtrl_alpha.9.png
+      327  2025-12-24 20:51   res/drawable-mdpi/abc_spinner_mtrl_am_alpha.9.png
+      395  2025-12-24 20:51   res/drawable-mdpi/abc_switch_track_mtrl_alpha.9.png
+      186  2025-12-24 20:51   res/drawable-mdpi/abc_tab_indicator_mtrl_alpha.9.png
+      181  2025-12-24 20:51   res/drawable-mdpi/abc_textfield_activated_mtrl_alpha.9.png
+      178  2025-12-24 20:51   res/drawable-mdpi/abc_textfield_default_mtrl_alpha.9.png
+      178  2025-12-24 20:51   res/drawable-mdpi/abc_textfield_search_activated_mtrl_alpha.9.png
+      178  2025-12-24 20:51   res/drawable-mdpi/abc_textfield_search_default_mtrl_alpha.9.png
+      203  2025-12-24 20:51   res/drawable-mdpi/abc_text_select_handle_left_mtrl.png
+      310  2025-12-24 20:51   res/drawable-mdpi/abc_text_select_handle_middle_mtrl.png
+      186  2025-12-24 20:51   res/drawable-mdpi/abc_text_select_handle_right_mtrl.png
+      609  2025-12-24 20:51   res/drawable-mdpi/common_google_signin_btn_icon_dark_normal_background.9.png
+      500  2025-12-24 20:51   res/drawable-mdpi/common_google_signin_btn_icon_light_normal_background.9.png
+      614  2025-12-24 20:51   res/drawable-mdpi/common_google_signin_btn_text_dark_normal_background.9.png
+      465  2025-12-24 20:51   res/drawable-mdpi/common_google_signin_btn_text_light_normal_background.9.png
+      281  2025-12-24 20:51   res/drawable-mdpi/googleg_disabled_color_18.png
+      562  2025-12-24 20:51   res/drawable-mdpi/googleg_standard_color_18.png
+      215  2025-12-24 20:51   res/drawable-mdpi/notification_bg_low_normal.9.png
+      223  2025-12-24 20:51   res/drawable-mdpi/notification_bg_low_pressed.9.png
+      215  2025-12-24 20:51   res/drawable-mdpi/notification_bg_normal.9.png
+      223  2025-12-24 20:51   res/drawable-mdpi/notification_bg_normal_pressed.9.png
+       98  2025-12-24 20:51   res/drawable-mdpi/notify_panel_notification_icon_bg.png
+      372  2025-12-24 20:51   res/drawable-watch/abc_dialog_material_background.xml
+      280  2025-12-24 20:51   res/drawable-xhdpi/abc_ab_share_pack_mtrl_alpha.9.png
+      281  2025-12-24 20:51   res/drawable-xhdpi/abc_btn_check_to_on_mtrl_000.png
+      432  2025-12-24 20:51   res/drawable-xhdpi/abc_btn_check_to_on_mtrl_015.png
+      651  2025-12-24 20:51   res/drawable-xhdpi/abc_btn_radio_to_on_mtrl_000.png
+      785  2025-12-24 20:51   res/drawable-xhdpi/abc_btn_radio_to_on_mtrl_015.png
+     1526  2025-12-24 20:51   res/drawable-xhdpi/abc_btn_switch_to_on_mtrl_00001.9.png
+     1731  2025-12-24 20:51   res/drawable-xhdpi/abc_btn_switch_to_on_mtrl_00012.9.png
+      229  2025-12-24 20:51   res/drawable-xhdpi/abc_cab_background_top_mtrl_alpha.9.png
+      228  2025-12-24 20:51   res/drawable-xhdpi/abc_ic_commit_search_api_mtrl_alpha.png
+      167  2025-12-24 20:51   res/drawable-xhdpi/abc_list_divider_mtrl_alpha.9.png
+      261  2025-12-24 20:51   res/drawable-xhdpi/abc_list_focused_holo.9.png
+      214  2025-12-24 20:51   res/drawable-xhdpi/abc_list_longpressed_holo.9.png
+      209  2025-12-24 20:51   res/drawable-xhdpi/abc_list_pressed_holo_dark.9.png
+      209  2025-12-24 20:51   res/drawable-xhdpi/abc_list_pressed_holo_light.9.png
+      236  2025-12-24 20:51   res/drawable-xhdpi/abc_list_selector_disabled_holo_dark.9.png
+      235  2025-12-24 20:51   res/drawable-xhdpi/abc_list_selector_disabled_holo_light.9.png
+      966  2025-12-24 20:51   res/drawable-xhdpi/abc_menu_hardkey_panel_mtrl_mult.9.png
+     1544  2025-12-24 20:51   res/drawable-xhdpi/abc_popup_background_mtrl_mult.9.png
+      267  2025-12-24 20:51   res/drawable-xhdpi/abc_scrubber_control_off_mtrl_alpha.png
+      267  2025-12-24 20:51   res/drawable-xhdpi/abc_scrubber_control_to_pressed_mtrl_000.png
+      391  2025-12-24 20:51   res/drawable-xhdpi/abc_scrubber_control_to_pressed_mtrl_005.png
+      208  2025-12-24 20:51   res/drawable-xhdpi/abc_scrubber_primary_mtrl_alpha.9.png
+      198  2025-12-24 20:51   res/drawable-xhdpi/abc_scrubber_track_mtrl_alpha.9.png
+      448  2025-12-24 20:51   res/drawable-xhdpi/abc_spinner_mtrl_am_alpha.9.png
+      618  2025-12-24 20:51   res/drawable-xhdpi/abc_switch_track_mtrl_alpha.9.png
+      194  2025-12-24 20:51   res/drawable-xhdpi/abc_tab_indicator_mtrl_alpha.9.png
+      189  2025-12-24 20:51   res/drawable-xhdpi/abc_textfield_activated_mtrl_alpha.9.png
+      187  2025-12-24 20:51   res/drawable-xhdpi/abc_textfield_default_mtrl_alpha.9.png
+      184  2025-12-24 20:51   res/drawable-xhdpi/abc_textfield_search_activated_mtrl_alpha.9.png
+      182  2025-12-24 20:51   res/drawable-xhdpi/abc_textfield_search_default_mtrl_alpha.9.png
+      335  2025-12-24 20:51   res/drawable-xhdpi/abc_text_select_handle_left_mtrl.png
+      585  2025-12-24 20:51   res/drawable-xhdpi/abc_text_select_handle_middle_mtrl.png
+      318  2025-12-24 20:51   res/drawable-xhdpi/abc_text_select_handle_right_mtrl.png
+      489  2025-12-24 20:51   res/drawable-xhdpi/common_full_open_on_phone.png
+     1032  2025-12-24 20:51   res/drawable-xhdpi/common_google_signin_btn_icon_dark_normal_background.9.png
+      776  2025-12-24 20:51   res/drawable-xhdpi/common_google_signin_btn_icon_light_normal_background.9.png
+     1086  2025-12-24 20:51   res/drawable-xhdpi/common_google_signin_btn_text_dark_normal_background.9.png
+      808  2025-12-24 20:51   res/drawable-xhdpi/common_google_signin_btn_text_light_normal_background.9.png
+      516  2025-12-24 20:51   res/drawable-xhdpi/googleg_disabled_color_18.png
+      982  2025-12-24 20:51   res/drawable-xhdpi/googleg_standard_color_18.png
+      221  2025-12-24 20:51   res/drawable-xhdpi/notification_bg_low_normal.9.png
+      252  2025-12-24 20:51   res/drawable-xhdpi/notification_bg_low_pressed.9.png
+      221  2025-12-24 20:51   res/drawable-xhdpi/notification_bg_normal.9.png
+      247  2025-12-24 20:51   res/drawable-xhdpi/notification_bg_normal_pressed.9.png
+      138  2025-12-24 20:51   res/drawable-xhdpi/notify_panel_notification_icon_bg.png
+      286  2025-12-24 20:51   res/drawable-xxhdpi/abc_ab_share_pack_mtrl_alpha.9.png
+      307  2025-12-24 20:51   res/drawable-xxhdpi/abc_btn_check_to_on_mtrl_000.png
+      593  2025-12-24 20:51   res/drawable-xxhdpi/abc_btn_check_to_on_mtrl_015.png
+      984  2025-12-24 20:51   res/drawable-xxhdpi/abc_btn_radio_to_on_mtrl_000.png
+     1208  2025-12-24 20:51   res/drawable-xxhdpi/abc_btn_radio_to_on_mtrl_015.png
+     2463  2025-12-24 20:51   res/drawable-xxhdpi/abc_btn_switch_to_on_mtrl_00001.9.png
+     2834  2025-12-24 20:51   res/drawable-xxhdpi/abc_btn_switch_to_on_mtrl_00012.9.png
+      237  2025-12-24 20:51   res/drawable-xxhdpi/abc_cab_background_top_mtrl_alpha.9.png
+      224  2025-12-24 20:51   res/drawable-xxhdpi/abc_ic_commit_search_api_mtrl_alpha.png
+      171  2025-12-24 20:51   res/drawable-xxhdpi/abc_list_divider_mtrl_alpha.9.png
+      257  2025-12-24 20:51   res/drawable-xxhdpi/abc_list_focused_holo.9.png
+      221  2025-12-24 20:51   res/drawable-xxhdpi/abc_list_longpressed_holo.9.png
+      212  2025-12-24 20:51   res/drawable-xxhdpi/abc_list_pressed_holo_dark.9.png
+      212  2025-12-24 20:51   res/drawable-xxhdpi/abc_list_pressed_holo_light.9.png
+      260  2025-12-24 20:51   res/drawable-xxhdpi/abc_list_selector_disabled_holo_dark.9.png
+      258  2025-12-24 20:51   res/drawable-xxhdpi/abc_list_selector_disabled_holo_light.9.png
+     1781  2025-12-24 20:51   res/drawable-xxhdpi/abc_menu_hardkey_panel_mtrl_mult.9.png
+     2305  2025-12-24 20:51   res/drawable-xxhdpi/abc_popup_background_mtrl_mult.9.png
+      322  2025-12-24 20:51   res/drawable-xxhdpi/abc_scrubber_control_off_mtrl_alpha.png
+      403  2025-12-24 20:51   res/drawable-xxhdpi/abc_scrubber_control_to_pressed_mtrl_000.png
+      595  2025-12-24 20:51   res/drawable-xxhdpi/abc_scrubber_control_to_pressed_mtrl_005.png
+      210  2025-12-24 20:51   res/drawable-xxhdpi/abc_scrubber_primary_mtrl_alpha.9.png
+      207  2025-12-24 20:51   res/drawable-xxhdpi/abc_scrubber_track_mtrl_alpha.9.png
+      524  2025-12-24 20:51   res/drawable-xxhdpi/abc_spinner_mtrl_am_alpha.9.png
+      851  2025-12-24 20:51   res/drawable-xxhdpi/abc_switch_track_mtrl_alpha.9.png
+      204  2025-12-24 20:51   res/drawable-xxhdpi/abc_tab_indicator_mtrl_alpha.9.png
+      199  2025-12-24 20:51   res/drawable-xxhdpi/abc_textfield_activated_mtrl_alpha.9.png
+      200  2025-12-24 20:51   res/drawable-xxhdpi/abc_textfield_default_mtrl_alpha.9.png
+      187  2025-12-24 20:51   res/drawable-xxhdpi/abc_textfield_search_activated_mtrl_alpha.9.png
+      186  2025-12-24 20:51   res/drawable-xxhdpi/abc_textfield_search_default_mtrl_alpha.9.png
+      420  2025-12-24 20:51   res/drawable-xxhdpi/abc_text_select_handle_left_mtrl.png
+      753  2025-12-24 20:51   res/drawable-xxhdpi/abc_text_select_handle_middle_mtrl.png
+      422  2025-12-24 20:51   res/drawable-xxhdpi/abc_text_select_handle_right_mtrl.png
+     1510  2025-12-24 20:51   res/drawable-xxhdpi/common_google_signin_btn_icon_dark_normal_background.9.png
+     1138  2025-12-24 20:51   res/drawable-xxhdpi/common_google_signin_btn_icon_light_normal_background.9.png
+     1638  2025-12-24 20:51   res/drawable-xxhdpi/common_google_signin_btn_text_dark_normal_background.9.png
+     1255  2025-12-24 20:51   res/drawable-xxhdpi/common_google_signin_btn_text_light_normal_background.9.png
+      727  2025-12-24 20:51   res/drawable-xxhdpi/googleg_disabled_color_18.png
+     1441  2025-12-24 20:51   res/drawable-xxhdpi/googleg_standard_color_18.png
+      275  2025-12-24 20:51   res/drawable-xxxhdpi/abc_btn_check_to_on_mtrl_000.png
+      476  2025-12-24 20:51   res/drawable-xxxhdpi/abc_btn_check_to_on_mtrl_015.png
+      785  2025-12-24 20:51   res/drawable-xxxhdpi/abc_btn_radio_to_on_mtrl_000.png
+      946  2025-12-24 20:51   res/drawable-xxxhdpi/abc_btn_radio_to_on_mtrl_015.png
+     2505  2025-12-24 20:51   res/drawable-xxxhdpi/abc_btn_switch_to_on_mtrl_00001.9.png
+     2816  2025-12-24 20:51   res/drawable-xxxhdpi/abc_btn_switch_to_on_mtrl_00012.9.png
+      415  2025-12-24 20:51   res/drawable-xxxhdpi/abc_scrubber_control_to_pressed_mtrl_000.png
+      631  2025-12-24 20:51   res/drawable-xxxhdpi/abc_scrubber_control_to_pressed_mtrl_005.png
+      430  2025-12-24 20:51   res/drawable-xxxhdpi/abc_spinner_mtrl_am_alpha.9.png
+      813  2025-12-24 20:51   res/drawable-xxxhdpi/abc_switch_track_mtrl_alpha.9.png
+      202  2025-12-24 20:51   res/drawable-xxxhdpi/abc_tab_indicator_mtrl_alpha.9.png
+      513  2025-12-24 20:51   res/drawable-xxxhdpi/abc_text_select_handle_left_mtrl.png
+      513  2025-12-24 20:51   res/drawable-xxxhdpi/abc_text_select_handle_right_mtrl.png
+      316  2025-12-24 20:51   res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml
+      328  2025-12-24 20:51   res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml
+      316  2025-12-24 20:51   res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml
+      328  2025-12-24 20:51   res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml
+      320  2025-12-24 20:51   res/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml
+      320  2025-12-24 20:51   res/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml
+      400  2025-12-24 20:51   res/interpolator/fast_out_slow_in.xml
+      400  2025-12-24 20:51   res/interpolator/mtrl_fast_out_linear_in.xml
+      400  2025-12-24 20:51   res/interpolator/mtrl_fast_out_slow_in.xml
+      132  2025-12-24 20:51   res/interpolator/mtrl_linear.xml
+      400  2025-12-24 20:51   res/interpolator/mtrl_linear_out_slow_in.xml
+      872  2025-12-24 20:51   res/layout/abc_action_bar_title_item.xml
+      440  2025-12-24 20:51   res/layout/abc_action_bar_up_container.xml
+      768  2025-12-24 20:51   res/layout/abc_action_menu_item_layout.xml
+      576  2025-12-24 20:51   res/layout/abc_action_menu_layout.xml
+      464  2025-12-24 20:51   res/layout/abc_action_mode_bar.xml
+      840  2025-12-24 20:51   res/layout/abc_action_mode_close_item_material.xml
+     1684  2025-12-24 20:51   res/layout/abc_activity_chooser_view.xml
+     1304  2025-12-24 20:51   res/layout/abc_activity_chooser_view_list_item.xml
+     1584  2025-12-24 20:51   res/layout/abc_alert_dialog_button_bar_material.xml
+     2476  2025-12-24 20:51   res/layout/abc_alert_dialog_material.xml
+     1560  2025-12-24 20:51   res/layout/abc_alert_dialog_title_material.xml
+     1868  2025-12-24 20:51   res/layout/abc_cascading_menu_item_layout.xml
+     1116  2025-12-24 20:51   res/layout/abc_dialog_title_material.xml
+      388  2025-12-24 20:51   res/layout/abc_expanded_menu_layout.xml
+      528  2025-12-24 20:51   res/layout/abc_list_menu_item_checkbox.xml
+      780  2025-12-24 20:51   res/layout/abc_list_menu_item_icon.xml
+     1396  2025-12-24 20:51   res/layout/abc_list_menu_item_layout.xml
+      532  2025-12-24 20:51   res/layout/abc_list_menu_item_radio.xml
+      848  2025-12-24 20:51   res/layout/abc_popup_menu_header_item_layout.xml
+     2072  2025-12-24 20:51   res/layout/abc_popup_menu_item_layout.xml
+      548  2025-12-24 20:51   res/layout/abc_screen_content_include.xml
+      832  2025-12-24 20:51   res/layout/abc_screen_simple.xml
+      792  2025-12-24 20:51   res/layout/abc_screen_simple_overlay_action_mode.xml
+     1560  2025-12-24 20:51   res/layout/abc_screen_toolbar.xml
+     1916  2025-12-24 20:51   res/layout/abc_search_dropdown_item_icons_2line.xml
+     3472  2025-12-24 20:51   res/layout/abc_search_view.xml
+     1020  2025-12-24 20:51   res/layout/abc_select_dialog_material.xml
+     1056  2025-12-24 20:51   res/layout/abc_tooltip.xml
+     3756  2025-12-24 20:51   res/layout/activity_create_memory_card.xml
+      692  2025-12-24 20:51   res/layout/activity_emulation.xml
+      692  2025-12-24 20:51   res/layout/activity_file_editor.xml
+     2356  2025-12-24 20:51   res/layout/activity_main.xml
+      692  2025-12-24 20:51   res/layout/activity_save_state_manager.xml
+     1900  2025-12-24 20:51   res/layout/activity_setup_wizard.xml
+      396  2025-12-24 20:51   res/layout/admob_empty_layout.xml
+     1660  2025-12-24 20:51   res/layout/browser_actions_context_menu_page.xml
+     1212  2025-12-24 20:51   res/layout/browser_actions_context_menu_row.xml
+      612  2025-12-24 20:51   res/layout/custom_dialog.xml
+     1860  2025-12-24 20:51   res/layout/design_bottom_navigation_item.xml
+     1224  2025-12-24 20:51   res/layout/design_bottom_sheet_dialog.xml
+      528  2025-12-24 20:51   res/layout/design_layout_snackbar.xml
+     1444  2025-12-24 20:51   res/layout/design_layout_snackbar_include.xml
+      408  2025-12-24 20:51   res/layout/design_layout_tab_icon.xml
+      436  2025-12-24 20:51   res/layout/design_layout_tab_text.xml
+      320  2025-12-24 20:51   res/layout/design_menu_item_action_area.xml
+      636  2025-12-24 20:51   res/layout/design_navigation_item.xml
+      440  2025-12-24 20:51   res/layout/design_navigation_item_header.xml
+      472  2025-12-24 20:51   res/layout/design_navigation_item_separator.xml
+      564  2025-12-24 20:51   res/layout/design_navigation_item_subheader.xml
+      528  2025-12-24 20:51   res/layout/design_navigation_menu.xml
+      856  2025-12-24 20:51   res/layout/design_navigation_menu_item.xml
+      656  2025-12-24 20:51   res/layout/design_text_input_end_icon.xml
+      652  2025-12-24 20:51   res/layout/design_text_input_start_icon.xml
+     1720  2025-12-24 20:51   res/layout/expand_button.xml
+     3840  2025-12-24 20:51   res/layout/fragment_achievements_login.xml
+     3160  2025-12-24 20:51   res/layout/fragment_achievement_list.xml
+     3372  2025-12-24 20:51   res/layout/fragment_add_patch_code.xml
+     1032  2025-12-24 20:51   res/layout/fragment_controller_settings.xml
+     3336  2025-12-24 20:51   res/layout/fragment_download_covers.xml
+     1788  2025-12-24 20:51   res/layout/fragment_empty_game_list.xml
+     3860  2025-12-24 20:51   res/layout/fragment_emulation_activity_overlay.xml
+     1112  2025-12-24 20:51   res/layout/fragment_game_grid.xml
+     1112  2025-12-24 20:51   res/layout/fragment_game_list.xml
+     1012  2025-12-24 20:51   res/layout/fragment_game_list_settings.xml
+     3016  2025-12-24 20:51   res/layout/fragment_leaderboard_list.xml
+     1452  2025-12-24 20:51   res/layout/fragment_rect_preference_editor.xml
+     1936  2025-12-24 20:51   res/layout/fragment_save_state_grid.xml
+     1032  2025-12-24 20:51   res/layout/fragment_settings_collection.xml
+     1872  2025-12-24 20:51   res/layout/fragment_setup_wizard_bios.xml
+     1584  2025-12-24 20:51   res/layout/fragment_setup_wizard_done.xml
+     1856  2025-12-24 20:51   res/layout/fragment_setup_wizard_faq.xml
+     1872  2025-12-24 20:51   res/layout/fragment_setup_wizard_game_directories.xml
+     1872  2025-12-24 20:51   res/layout/fragment_setup_wizard_settings.xml
+     1764  2025-12-24 20:51   res/layout/fragment_setup_wizard_welcome.xml
+     1088  2025-12-24 20:51   res/layout/image_frame.xml
+      844  2025-12-24 20:51   res/layout/include_progress_overlay.xml
+     2544  2025-12-24 20:51   res/layout/layout_achievement_entry.xml
+     1428  2025-12-24 20:51   res/layout/layout_controller_binding_preference.xml
+      864  2025-12-24 20:51   res/layout/layout_data_importer_overwrite.xml
+     4328  2025-12-24 20:51   res/layout/layout_edit_macro_button.xml
+      740  2025-12-24 20:51   res/layout/layout_float_seek_bar_preference.xml
+     1200  2025-12-24 20:51   res/layout/layout_float_spin_box_preference.xml
+     1900  2025-12-24 20:51   res/layout/layout_game_directory_entry.xml
+      736  2025-12-24 20:51   res/layout/layout_game_grid_entry.xml
+     2516  2025-12-24 20:51   res/layout/layout_game_list_entry.xml
+      504  2025-12-24 20:51   res/layout/layout_game_properties_summary.xml
+     1600  2025-12-24 20:51   res/layout/layout_game_property_entry.xml
+     1200  2025-12-24 20:51   res/layout/layout_int_spin_box_preference.xml
+     1684  2025-12-24 20:51   res/layout/layout_leaderboard_entry.xml
+      480  2025-12-24 20:51   res/layout/layout_radio_button_preference.xml
+     1544  2025-12-24 20:51   res/layout/layout_save_state_grid_entry.xml
+     3048  2025-12-24 20:51   res/layout/layout_save_state_manager_item.xml
+     7544  2025-12-24 20:51   res/layout/layout_touchscreen_controller_analog_stick.xml
+     7820  2025-12-24 20:51   res/layout/layout_touchscreen_controller_analog_sticks.xml
+     6892  2025-12-24 20:51   res/layout/layout_touchscreen_controller_digital.xml
+      936  2025-12-24 20:51   res/layout/layout_touchscreen_controller_edit.xml
+     4516  2025-12-24 20:51   res/layout/layout_touchscreen_controller_lightgun.xml
+     1600  2025-12-24 20:51   res/layout/layout_tri_state_preference.xml
+     2720  2025-12-24 20:51   res/layout/m3_alert_dialog.xml
+     1584  2025-12-24 20:51   res/layout/m3_alert_dialog_actions.xml
+      956  2025-12-24 20:51   res/layout/m3_alert_dialog_title.xml
+      612  2025-12-24 20:51   res/layout/m3_auto_complete_simple_item.xml
+      372  2025-12-24 20:51   res/layout/material_chip_input_combo.xml
+      476  2025-12-24 20:51   res/layout/material_clockface_textview.xml
+     1012  2025-12-24 20:51   res/layout/material_clockface_view.xml
+     1132  2025-12-24 20:51   res/layout/material_clock_display.xml
+      492  2025-12-24 20:51   res/layout/material_clock_display_divider.xml
+     1464  2025-12-24 20:51   res/layout/material_clock_period_toggle.xml
+      768  2025-12-24 20:51   res/layout/material_radial_view_group.xml
+     1052  2025-12-24 20:51   res/layout/material_textinput_timepicker.xml
+     1136  2025-12-24 20:51   res/layout/material_timepicker.xml
+     3184  2025-12-24 20:51   res/layout/material_timepicker_dialog.xml
+      684  2025-12-24 20:51   res/layout/material_timepicker_textinput_display.xml
+      380  2025-12-24 20:51   res/layout/material_time_chip.xml
+     1160  2025-12-24 20:51   res/layout/material_time_input.xml
+     2476  2025-12-24 20:51   res/layout/mtrl_alert_dialog.xml
+     1676  2025-12-24 20:51   res/layout/mtrl_alert_dialog_actions.xml
+      956  2025-12-24 20:51   res/layout/mtrl_alert_dialog_title.xml
+      588  2025-12-24 20:51   res/layout/mtrl_alert_select_dialog_item.xml
+      940  2025-12-24 20:51   res/layout/mtrl_alert_select_dialog_multichoice.xml
+      940  2025-12-24 20:51   res/layout/mtrl_alert_select_dialog_singlechoice.xml
+      612  2025-12-24 20:51   res/layout/mtrl_auto_complete_simple_item.xml
+      352  2025-12-24 20:51   res/layout/mtrl_calendar_day.xml
+      436  2025-12-24 20:51   res/layout/mtrl_calendar_days_of_week.xml
+      352  2025-12-24 20:51   res/layout/mtrl_calendar_day_of_week.xml
+     1176  2025-12-24 20:51   res/layout/mtrl_calendar_horizontal.xml
+      744  2025-12-24 20:51   res/layout/mtrl_calendar_month.xml
+      428  2025-12-24 20:51   res/layout/mtrl_calendar_months.xml
+      728  2025-12-24 20:51   res/layout/mtrl_calendar_month_labeled.xml
+     1748  2025-12-24 20:51   res/layout/mtrl_calendar_month_navigation.xml
+      740  2025-12-24 20:51   res/layout/mtrl_calendar_vertical.xml
+      352  2025-12-24 20:51   res/layout/mtrl_calendar_year.xml
+      492  2025-12-24 20:51   res/layout/mtrl_layout_snackbar.xml
+      952  2025-12-24 20:51   res/layout/mtrl_layout_snackbar_include.xml
+     1860  2025-12-24 20:51   res/layout/mtrl_navigation_rail_item.xml
+      984  2025-12-24 20:51   res/layout/mtrl_picker_actions.xml
+     1172  2025-12-24 20:51   res/layout/mtrl_picker_dialog.xml
+      880  2025-12-24 20:51   res/layout/mtrl_picker_fullscreen.xml
+     1532  2025-12-24 20:51   res/layout/mtrl_picker_header_dialog.xml
+     2800  2025-12-24 20:51   res/layout/mtrl_picker_header_fullscreen.xml
+      712  2025-12-24 20:51   res/layout/mtrl_picker_header_selection_text.xml
+      624  2025-12-24 20:51   res/layout/mtrl_picker_header_title_text.xml
+      528  2025-12-24 20:51   res/layout/mtrl_picker_header_toggle.xml
+      984  2025-12-24 20:51   res/layout/mtrl_picker_text_input_date.xml
+     1580  2025-12-24 20:51   res/layout/mtrl_picker_text_input_date_range.xml
+     1052  2025-12-24 20:51   res/layout/notification_action.xml
+     1228  2025-12-24 20:51   res/layout/notification_action_tombstone.xml
+      564  2025-12-24 20:51   res/layout/notification_media_action.xml
+      744  2025-12-24 20:51   res/layout/notification_media_cancel_action.xml
+     1696  2025-12-24 20:51   res/layout/notification_template_big_media.xml
+     3044  2025-12-24 20:51   res/layout/notification_template_big_media_custom.xml
+     1824  2025-12-24 20:51   res/layout/notification_template_big_media_narrow.xml
+     3216  2025-12-24 20:51   res/layout/notification_template_big_media_narrow_custom.xml
+     2456  2025-12-24 20:51   res/layout/notification_template_custom_big.xml
+      988  2025-12-24 20:51   res/layout/notification_template_icon_group.xml
+     2872  2025-12-24 20:51   res/layout/notification_template_lines_media.xml
+     1292  2025-12-24 20:51   res/layout/notification_template_media.xml
+     2756  2025-12-24 20:51   res/layout/notification_template_media_custom.xml
+      440  2025-12-24 20:51   res/layout/notification_template_part_chronometer.xml
+      440  2025-12-24 20:51   res/layout/notification_template_part_time.xml
+     2352  2025-12-24 20:51   res/layout/preference.xml
+      384  2025-12-24 20:51   res/layout/preference_category.xml
+     1768  2025-12-24 20:51   res/layout/preference_category_material.xml
+     1312  2025-12-24 20:51   res/layout/preference_dialog_edittext.xml
+     2544  2025-12-24 20:51   res/layout/preference_dropdown.xml
+      712  2025-12-24 20:51   res/layout/preference_dropdown_material.xml
+     1732  2025-12-24 20:51   res/layout/preference_information.xml
+     2056  2025-12-24 20:51   res/layout/preference_information_material.xml
+      812  2025-12-24 20:51   res/layout/preference_list_fragment.xml
+     2052  2025-12-24 20:51   res/layout/preference_material.xml
+      544  2025-12-24 20:51   res/layout/preference_recyclerview.xml
+      472  2025-12-24 20:51   res/layout/preference_widget_checkbox.xml
+     2896  2025-12-24 20:51   res/layout/preference_widget_seekbar.xml
+     3096  2025-12-24 20:51   res/layout/preference_widget_seekbar_material.xml
+      472  2025-12-24 20:51   res/layout/preference_widget_switch.xml
+      504  2025-12-24 20:51   res/layout/preference_widget_switch_compat.xml
+      640  2025-12-24 20:51   res/layout/select_dialog_item_material.xml
+      864  2025-12-24 20:51   res/layout/select_dialog_multichoice_material.xml
+      864  2025-12-24 20:51   res/layout/select_dialog_singlechoice_material.xml
+      472  2025-12-24 20:51   res/layout/settings_activity.xml
+      464  2025-12-24 20:51   res/layout/support_simple_spinner_dropdown_item.xml
+      488  2025-12-24 20:51   res/layout/test_action_chip.xml
+      640  2025-12-24 20:51   res/layout/test_chip_zero_corner_radius.xml
+      836  2025-12-24 20:51   res/layout/test_design_checkbox.xml
+      840  2025-12-24 20:51   res/layout/test_design_radiobutton.xml
+     1320  2025-12-24 20:51   res/layout/test_exposed_dropdown_menu.xml
+     1528  2025-12-24 20:51   res/layout/test_navigation_bar_item_layout.xml
+     1060  2025-12-24 20:51   res/layout/test_reflow_chipgroup.xml
+      360  2025-12-24 20:51   res/layout/test_toolbar.xml
+      400  2025-12-24 20:51   res/layout/test_toolbar_custom_background.xml
+      400  2025-12-24 20:51   res/layout/test_toolbar_elevation.xml
+      392  2025-12-24 20:51   res/layout/test_toolbar_surface.xml
+      364  2025-12-24 20:51   res/layout/text_view_without_line_height.xml
+      408  2025-12-24 20:51   res/layout/text_view_with_line_height_from_appearance.xml
+      552  2025-12-24 20:51   res/layout/text_view_with_line_height_from_layout.xml
+      396  2025-12-24 20:51   res/layout/text_view_with_line_height_from_style.xml
+      408  2025-12-24 20:51   res/layout/text_view_with_theme_line_height.xml
+     1232  2025-12-24 20:51   res/layout-land/material_clock_period_toggle_land.xml
+     1884  2025-12-24 20:51   res/layout-land/material_timepicker.xml
+     1532  2025-12-24 20:51   res/layout-land/mtrl_picker_header_dialog.xml
+     1100  2025-12-24 20:51   res/layout-ldrtl/material_textinput_timepicker.xml
+      528  2025-12-24 20:51   res/layout-sw600dp/design_layout_snackbar.xml
+      492  2025-12-24 20:51   res/layout-sw600dp/mtrl_layout_snackbar.xml
+     1208  2025-12-24 20:51   res/layout-watch/abc_alert_dialog_button_bar_material.xml
+     1352  2025-12-24 20:51   res/layout-watch/abc_alert_dialog_title_material.xml
+      548  2025-12-24 20:51   res/menu/menu_file_editor.xml
+      972  2025-12-24 20:51   res/menu/menu_game_list_entry.xml
+      792  2025-12-24 20:51   res/menu/menu_main.xml
+     3060  2025-12-24 20:51   res/menu/menu_main_navigation.xml
+      468  2025-12-24 20:51   res/menu/menu_save_state_grid.xml
+      368  2025-12-24 20:51   res/menu/menu_save_state_manager.xml
+      672  2025-12-24 20:51   res/menu/menu_settings_activity.xml
+   384621  2025-12-24 20:51   res/mipmap/cover_placeholder.png
+    13333  2025-12-24 20:51   res/mipmap/logo.png
+      448  2025-12-24 20:51   res/mipmap-anydpi/ic_launcher.xml
+      448  2025-12-24 20:51   res/mipmap-anydpi/ic_launcher_round.xml
+     1730  2025-12-24 20:51   res/mipmap-hdpi/ic_launcher.png
+     2766  2025-12-24 20:51   res/mipmap-hdpi/ic_launcher_foreground.png
+     4104  2025-12-24 20:51   res/mipmap-hdpi/ic_launcher_round.png
+     1341  2025-12-24 20:51   res/mipmap-mdpi/ic_launcher.png
+     1772  2025-12-24 20:51   res/mipmap-mdpi/ic_launcher_foreground.png
+     2586  2025-12-24 20:51   res/mipmap-mdpi/ic_launcher_round.png
+     2650  2025-12-24 20:51   res/mipmap-xhdpi/ic_launcher.png
+     3858  2025-12-24 20:51   res/mipmap-xhdpi/ic_launcher_foreground.png
+     5679  2025-12-24 20:51   res/mipmap-xhdpi/ic_launcher_round.png
+     3996  2025-12-24 20:51   res/mipmap-xxhdpi/ic_launcher.png
+     6382  2025-12-24 20:51   res/mipmap-xxhdpi/ic_launcher_foreground.png
+     8516  2025-12-24 20:51   res/mipmap-xxhdpi/ic_launcher_round.png
+     5394  2025-12-24 20:51   res/mipmap-xxxhdpi/ic_launcher.png
+     9193  2025-12-24 20:51   res/mipmap-xxxhdpi/ic_launcher_foreground.png
+    11820  2025-12-24 20:51   res/mipmap-xxxhdpi/ic_launcher_round.png
+     2484  2025-12-24 20:51   res/xml/achievements_game_settings_preferences.xml
+     3756  2025-12-24 20:51   res/xml/achievements_preferences.xml
+    14720  2025-12-24 20:51   res/xml/advanced_game_settings_preferences.xml
+     9820  2025-12-24 20:51   res/xml/advanced_preferences.xml
+     1804  2025-12-24 20:51   res/xml/audio_game_settings_preferences.xml
+     1848  2025-12-24 20:51   res/xml/audio_preferences.xml
+     2328  2025-12-24 20:51   res/xml/controller_preferences.xml
+     3520  2025-12-24 20:51   res/xml/game_fix_preferences.xml
+     2292  2025-12-24 20:51   res/xml/game_summary_preferences.xml
+     5768  2025-12-24 20:51   res/xml/general_game_settings_preferences.xml
+     5524  2025-12-24 20:51   res/xml/general_preferences.xml
+     7468  2025-12-24 20:51   res/xml/graphics_game_settings_preferences.xml
+     7868  2025-12-24 20:51   res/xml/graphics_preferences.xml
+      308  2025-12-24 20:51   res/xml/image_share_filepaths.xml
+     1348  2025-12-24 20:51   res/xml/memory_card_preferences.xml
+     8624  2025-12-24 20:51   res/xml/splits0.xml
+      268  2025-12-24 20:51   res/xml/standalone_badge.xml
+      312  2025-12-24 20:51   res/xml/standalone_badge_gravity_bottom_end.xml
+      312  2025-12-24 20:51   res/xml/standalone_badge_gravity_bottom_start.xml
+      312  2025-12-24 20:51   res/xml/standalone_badge_gravity_top_start.xml
+      360  2025-12-24 20:51   res/xml/standalone_badge_offset.xml
+     5852  2025-12-24 20:51   res/xml/system_game_settings_preferences.xml
+     6180  2025-12-24 20:51   res/xml/system_preferences.xml
+     4824  2025-12-24 20:51   res/xml/touchscreen_controller_preferences.xml
+  2483172  2025-12-24 20:51   resources.arsc
+    90296  2025-12-24 20:51   assets/3rdparty.html
+   223122  2025-12-24 20:51   assets/cheats_ni.zip
+  1694454  2025-12-24 20:51   assets/cheats_ws.zip
+    83189  2025-12-24 20:51   assets/cover-placeholder.png
+      774  2025-12-24 20:51   assets/dexopt/baseline.prof
+      127  2025-12-24 20:51   assets/dexopt/baseline.profm
+    14048  2025-12-24 20:51   assets/faq.html
+   204528  2025-12-24 20:51   assets/fonts/fa-solid-900.ttf
+     1276  2025-12-24 20:51   assets/fonts/Roboto-Regular-copyright
+   305608  2025-12-24 20:51   assets/fonts/Roboto-Regular.ttf
+    86820  2025-12-24 20:51   assets/fonts/RobotoMono-Medium.ttf
+  1850565  2025-12-24 20:51   assets/GameIndex.yaml
+   586439  2025-12-24 20:51   assets/game_controller_db.txt
+    14292  2025-12-24 20:51   assets/icons/AppIconLarge.png
+    10285  2025-12-24 20:51   assets/icons/flags/NTSC-B.png
+     2614  2025-12-24 20:51   assets/icons/flags/NTSC-C.png
+     6007  2025-12-24 20:51   assets/icons/flags/NTSC-HK.png
+     1248  2025-12-24 20:51   assets/icons/flags/NTSC-J.png
+    13557  2025-12-24 20:51   assets/icons/flags/NTSC-K.png
+     4809  2025-12-24 20:51   assets/icons/flags/NTSC-T.png
+     9006  2025-12-24 20:51   assets/icons/flags/NTSC-U.png
+     9805  2025-12-24 20:51   assets/icons/flags/Other.png
+     9294  2025-12-24 20:51   assets/icons/flags/PAL-A.png
+     9088  2025-12-24 20:51   assets/icons/flags/PAL-AF.png
+      608  2025-12-24 20:51   assets/icons/flags/PAL-AU.png
+     1289  2025-12-24 20:51   assets/icons/flags/PAL-BE.png
+     4061  2025-12-24 20:51   assets/icons/flags/PAL-E.png
+     1338  2025-12-24 20:51   assets/icons/flags/PAL-F.png
+     2202  2025-12-24 20:51   assets/icons/flags/PAL-FI.png
+     1446  2025-12-24 20:51   assets/icons/flags/PAL-G.png
+     2457  2025-12-24 20:51   assets/icons/flags/PAL-GR.png
+     1092  2025-12-24 20:51   assets/icons/flags/PAL-I.png
+     6219  2025-12-24 20:51   assets/icons/flags/PAL-IN.png
+     4061  2025-12-24 20:51   assets/icons/flags/PAL-M.png
+     1811  2025-12-24 20:51   assets/icons/flags/PAL-NL.png
+     2786  2025-12-24 20:51   assets/icons/flags/PAL-NO.png
+     2633  2025-12-24 20:51   assets/icons/flags/PAL-P.png
+      487  2025-12-24 20:51   assets/icons/flags/PAL-PL.png
+     1807  2025-12-24 20:51   assets/icons/flags/PAL-R.png
+    14346  2025-12-24 20:51   assets/icons/flags/PAL-S.png
+      959  2025-12-24 20:51   assets/icons/flags/PAL-SC.png
+      581  2025-12-24 20:51   assets/icons/flags/PAL-SW.png
+     2084  2025-12-24 20:51   assets/icons/flags/PAL-SWI.png
+     5761  2025-12-24 20:51   assets/icons/flags/PAL-UK.png
+      307  2025-12-24 20:51   assets/icons/star-0.png
+      473  2025-12-24 20:51   assets/icons/star-1.png
+      544  2025-12-24 20:51   assets/icons/star-2.png
+      531  2025-12-24 20:51   assets/icons/star-3.png
+      462  2025-12-24 20:51   assets/icons/star-4.png
+      305  2025-12-24 20:51   assets/icons/star-5.png
+     2762  2025-12-24 20:51   assets/placeholder.png
+   161481  2025-12-24 20:51   assets/shaders/common/ffx_a.h
+    63512  2025-12-24 20:51   assets/shaders/common/ffx_cas.h
+    19420  2025-12-24 20:51   assets/shaders/common/fxaa.fx
+     2582  2025-12-24 20:51   assets/shaders/dx11/cas.hlsl
+     9358  2025-12-24 20:51   assets/shaders/dx11/convert.fx
+     6691  2025-12-24 20:51   assets/shaders/dx11/interlace.fx
+      539  2025-12-24 20:51   assets/shaders/dx11/merge.fx
+     8767  2025-12-24 20:51   assets/shaders/dx11/present.fx
+     1233  2025-12-24 20:51   assets/shaders/dx11/shadeboost.fx
+    27240  2025-12-24 20:51   assets/shaders/dx11/tfx.fx
+     2448  2025-12-24 20:51   assets/shaders/opengl/cas.glsl
+     1863  2025-12-24 20:51   assets/shaders/opengl/common_header.glsl
+    11276  2025-12-24 20:51   assets/shaders/opengl/convert.glsl
+     6246  2025-12-24 20:51   assets/shaders/opengl/interlace.glsl
+      455  2025-12-24 20:51   assets/shaders/opengl/merge.glsl
+     9458  2025-12-24 20:51   assets/shaders/opengl/present.glsl
+     1457  2025-12-24 20:51   assets/shaders/opengl/shadeboost.glsl
+    26680  2025-12-24 20:51   assets/shaders/opengl/tfx_fs.glsl
+     5756  2025-12-24 20:51   assets/shaders/opengl/tfx_vgs.glsl
+     2624  2025-12-24 20:51   assets/shaders/vulkan/cas.glsl
+     9354  2025-12-24 20:51   assets/shaders/vulkan/convert.glsl
+     6707  2025-12-24 20:51   assets/shaders/vulkan/interlace.glsl
+      669  2025-12-24 20:51   assets/shaders/vulkan/merge.glsl
+     8177  2025-12-24 20:51   assets/shaders/vulkan/present.glsl
+     1741  2025-12-24 20:51   assets/shaders/vulkan/shadeboost.glsl
+    29540  2025-12-24 20:51   assets/shaders/vulkan/tfx.glsl
+    82096  2025-12-24 20:51   assets/sounds/achievements/lbsubmit.wav
+    15696  2025-12-24 20:51   assets/sounds/achievements/message.wav
+      149  2025-12-24 20:51   assets/sounds/achievements/README.txt
+    87714  2025-12-24 20:51   assets/sounds/achievements/unlock.wav
+ 12162984  2025-12-24 20:51   lib/arm64-v8a/libemucore.so
+   120034  2025-12-24 20:51   META-INF/ANDROID_.SF
+     1367  2025-12-24 20:51   META-INF/ANDROID_.RSA
+   119907  2025-12-24 20:51   META-INF/MANIFEST.MF
+---------                     -------
+ 27540434                     1033 files
+== assets entries ==
+assets/3rdparty.html
+assets/cheats_ni.zip
+assets/cheats_ws.zip
+assets/cover-placeholder.png
+assets/dexopt/baseline.prof
+assets/dexopt/baseline.profm
+assets/faq.html
+assets/fonts/fa-solid-900.ttf
+assets/fonts/Roboto-Regular-copyright
+assets/fonts/Roboto-Regular.ttf
+assets/fonts/RobotoMono-Medium.ttf
+assets/GameIndex.yaml
+assets/game_controller_db.txt
+assets/icons/AppIconLarge.png
+assets/icons/flags/NTSC-B.png
+assets/icons/flags/NTSC-C.png
+assets/icons/flags/NTSC-HK.png
+assets/icons/flags/NTSC-J.png
+assets/icons/flags/NTSC-K.png
+assets/icons/flags/NTSC-T.png
+assets/icons/flags/NTSC-U.png
+assets/icons/flags/Other.png
+assets/icons/flags/PAL-A.png
+assets/icons/flags/PAL-AF.png
+assets/icons/flags/PAL-AU.png
+assets/icons/flags/PAL-BE.png
+assets/icons/flags/PAL-E.png
+assets/icons/flags/PAL-F.png
+assets/icons/flags/PAL-FI.png
+assets/icons/flags/PAL-G.png
+assets/icons/flags/PAL-GR.png
+assets/icons/flags/PAL-I.png
+assets/icons/flags/PAL-IN.png
+assets/icons/flags/PAL-M.png
+assets/icons/flags/PAL-NL.png
+assets/icons/flags/PAL-NO.png
+assets/icons/flags/PAL-P.png
+assets/icons/flags/PAL-PL.png
+assets/icons/flags/PAL-R.png
+assets/icons/flags/PAL-S.png
+assets/icons/flags/PAL-SC.png
+assets/icons/flags/PAL-SW.png
+assets/icons/flags/PAL-SWI.png
+assets/icons/flags/PAL-UK.png
+assets/icons/star-0.png
+assets/icons/star-1.png
+assets/icons/star-2.png
+assets/icons/star-3.png
+assets/icons/star-4.png
+assets/icons/star-5.png
+assets/placeholder.png
+assets/shaders/common/ffx_a.h
+assets/shaders/common/ffx_cas.h
+assets/shaders/common/fxaa.fx
+assets/shaders/dx11/cas.hlsl
+assets/shaders/dx11/convert.fx
+assets/shaders/dx11/interlace.fx
+assets/shaders/dx11/merge.fx
+assets/shaders/dx11/present.fx
+assets/shaders/dx11/shadeboost.fx
+assets/shaders/dx11/tfx.fx
+assets/shaders/opengl/cas.glsl
+assets/shaders/opengl/common_header.glsl
+assets/shaders/opengl/convert.glsl
+assets/shaders/opengl/interlace.glsl
+assets/shaders/opengl/merge.glsl
+assets/shaders/opengl/present.glsl
+assets/shaders/opengl/shadeboost.glsl
+assets/shaders/opengl/tfx_fs.glsl
+assets/shaders/opengl/tfx_vgs.glsl
+assets/shaders/vulkan/cas.glsl
+assets/shaders/vulkan/convert.glsl
+assets/shaders/vulkan/interlace.glsl
+assets/shaders/vulkan/merge.glsl
+assets/shaders/vulkan/present.glsl
+assets/shaders/vulkan/shadeboost.glsl
+assets/shaders/vulkan/tfx.glsl
+assets/sounds/achievements/lbsubmit.wav
+assets/sounds/achievements/message.wav
+assets/sounds/achievements/README.txt
+== extracted tree ==
+/__w/TEST3/TEST3/cores
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/3rdparty.html
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/cheats_ni.zip
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/cheats_ws.zip
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/cover-placeholder.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/dexopt
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/dexopt/baseline.prof
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/dexopt/baseline.profm
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/faq.html
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts/fa-solid-900.ttf
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts/RobotoMono-Medium.ttf
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts/Roboto-Regular-copyright
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts/Roboto-Regular.ttf
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/game_controller_db.txt
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/GameIndex.yaml
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/AppIconLarge.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/flags
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-0.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-1.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-2.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-3.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-4.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-5.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/placeholder.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders/common
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders/dx11
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders/opengl
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders/vulkan
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/sounds
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/sounds/achievements
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/lib
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/lib/arm64-v8a
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/lib/arm64-v8a/libemucore.so
+==== build_all.sh ====
+==== launcher storage dependencies ====
+-- The C compiler identification is GNU 15.2.0
+-- The CXX compiler identification is GNU 15.2.0
+-- Detected multilib folder: pic
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for arpa/inet.h
+-- Looking for arpa/inet.h - found
+-- Looking for dlfcn.h
+-- Looking for dlfcn.h - not found
+-- Looking for fcntl.h
+-- Looking for fcntl.h - found
+-- Looking for inttypes.h
+-- Looking for inttypes.h - found
+-- Looking for netdb.h
+-- Looking for netdb.h - found
+-- Looking for netinet/in.h
+-- Looking for netinet/in.h - found
+-- Looking for include files sys/types.h, netinet/tcp.h
+-- Looking for include files sys/types.h, netinet/tcp.h - found
+-- Looking for poll.h
+-- Looking for poll.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stdio.h
+-- Looking for stdio.h - found
+-- Looking for stdlib.h
+-- Looking for stdlib.h - found
+-- Looking for strings.h
+-- Looking for strings.h - found
+-- Looking for string.h
+-- Looking for string.h - found
+-- Looking for sys/ioctl.h
+-- Looking for sys/ioctl.h - found
+-- Looking for sys/poll.h
+-- Looking for sys/poll.h - found
+-- Looking for sys/socket.h
+-- Looking for sys/socket.h - found
+-- Looking for sys/stat.h
+-- Looking for sys/stat.h - found
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for sys/uio.h
+-- Looking for sys/uio.h - not found
+-- Looking for sys/_iovec.h
+-- Looking for sys/_iovec.h - found
+-- Looking for sys/time.h
+-- Looking for sys/time.h - found
+-- Looking for sys/unistd.h
+-- Looking for sys/unistd.h - found
+-- Looking for sys/errno.h
+-- Looking for sys/errno.h - found
+-- Looking for time.h
+-- Looking for time.h - found
+-- Looking for unistd.h
+-- Looking for unistd.h - found
+-- Looking for errno.h
+-- Looking for errno.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Performing Test HAVE_SOCKADDR_LEN
+-- Performing Test HAVE_SOCKADDR_LEN - Success
+-- Performing Test HAVE_SOCKADDR_STORAGE
+-- Performing Test HAVE_SOCKADDR_STORAGE - Success
+-- Performing Test HAVE_LINGER
+-- Performing Test HAVE_LINGER - Success
+-- Performing Test C_ACCEPTS_WALL
+-- Performing Test C_ACCEPTS_WALL - Success
+-- LIBUSBHSFS_VERSION 0.2.9
+-- Found Git: /usr/bin/git (found version "2.39.5")
+-- Configuring done (5.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /__w/TEST3/TEST3/launcher/dependencies/build
+[1/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/aes_apple.o
+[2/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/aes.o
+[3/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/alloc.o
+[4/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/compat.o
+[5/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/aes128ccm.o
+[6/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/aes_reference.o
+[7/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/dcerpc-lsa.o
+[8/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/asn1-ber.o
+[9/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/dcerpc-srvsvc.o
+[10/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/hmac.o
+[11/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/hmac-md5.o
+[12/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/errors.o
+[13/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/md4c.o
+[14/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/dcerpc.o
+[15/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/init.o
+[16/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/md5.o
+[17/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/sha1.o
+[18/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/sha224-256.o
+[19/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/pdu.o
+[20/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/ntlmssp.o
+[21/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/sha384-512.o
+[22/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-close.o
+[23/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-error.o
+[24/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-echo.o
+[25/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-create.o
+[26/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-flush.o
+[27/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-ioctl.o
+[28/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-logoff.o
+[29/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-lock.o
+[30/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-notify-change.o
+[31/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-oplock-break.o
+[32/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-negotiate.o
+[33/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/libsmb2.o
+[34/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-query-directory.o
+[35/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-read.o
+[36/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-session-setup.o
+[37/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-query-info.o
+[38/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-tree-disconnect.o
+[39/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-tree-connect.o
+[40/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-set-info.o
+[41/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-write.o
+[42/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-data-reparse-point.o
+[43/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-data-filesystem-info.o
+[44/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-data-security-descriptor.o
+[45/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-data-file-info.o
+[46/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-share-enum.o
+[47/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb3-seal.o
+[48/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-signing.o
+[49/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/timestamps.o
+[50/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/spnego-wrapper.o
+[51/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/unicode.o
+[52/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/sync.o
+[53/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_log.o
+[54/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/usha.o
+[55/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/socket.o
+[56/72] Linking C static library _deps/libsmb2-build/lib/libsmb2.a
+[57/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_drive.o
+[58/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_mount.o
+[59/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_manager.o
+[60/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_request.o
+[61/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/diskio.o
+[62/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_scsi.o
+[63/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_utils.o
+[64/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/ffsystem.o
+[65/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/ffunicode.o
+[66/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/ff_dev.o
+[67/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/ntfs-3g/ntfs.o
+[68/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/ntfs-3g/ntfs_disk_io.o
+[69/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/ntfs-3g/ntfs_dev.o
+[70/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/__/__/__/usbhsfs_uasp.o
+[71/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/ff.o
+[72/72] Linking C static library _deps/libusbhsfs-build/liblibusbhsfs.a
+==== emulator binaries (VK, MESA_FLAVOR=nxvk) ====
+---- renderer: VK ----
+CheatManager.cpp
+SwitchPosixCompat.cpp
+SwitchStorageBridge.cpp
+SwitchStorage.cpp
+lsfg_bridge.cpp
+errors.cpp
+buffer.cpp
+command_buffer.cpp
+descriptor_pool.cpp
+descriptor_set.cpp
+fence.cpp
+image.cpp
+sampler.cpp
+semaphore.cpp
+shader.cpp
+timeline_semaphore.cpp
+vulkan.cpp
+lsfgvk.cpp
+dll_reader.cpp
+shader_registry.cpp
+limits.cpp
+managed_shader.cpp
+utils.cpp
+alpha0.cpp
+alpha1.cpp
+beta0.cpp
+beta1.cpp
+delta0.cpp
+delta1.cpp
+gamma0.cpp
+gamma1.cpp
+generate.cpp
+mipmaps.cpp
+aaudio.c
+config.c
+crash.c
+dl_emu.c
+egl_vk_stubs.c
+error.c
+filehelper.c
+imports.c
+jni_fake.c
+libc_shim.c
+main.c
+nxvk_libc.c
+/__w/TEST3/TEST3/source/nxvk_libc.c:43:10: fatal error: sys/uio.h: No such file or directory
+   43 | #include <sys/uio.h>
+      |          ^~~~~~~~~~~
+compilation terminated.
+make[1]: *** [/opt/devkitpro/devkitA64/base_rules:22: nxvk_libc.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:235: build] Error 2
+==== build_all.sh exit code: 2 ====
