@@ -70,6 +70,12 @@ ifeq ($(strip $(MESA_FLAVOR)),nxvk)
 NXVK_LIBDIR	:= $(if $(strip $(NXVK_ROOT)),$(NXVK_ROOT)/lib,$(PORTLIBS)/lib)
 NXVK_INCDIR	:= $(if $(strip $(NXVK_ROOT)),$(NXVK_ROOT)/include,$(PORTLIBS)/include)
 INCLUDES	+=	$(NXVK_INCDIR)
+# nxvk configures Mesa with -Dvulkan-drivers=nouveau and -Degl=disabled, so it
+# ships the NVK ICD but no Vulkan loader and no EGL. The egl*/vk*/POSIX symbols
+# that path leaves unresolved are provided in-tree; see source/vk_icd_shim.c,
+# source/egl_vk_stubs.c and source/nxvk_libc.c. Not set for the vendored/sdk
+# flavors, which link archives that do define them.
+DEFINES		+=	-DNETHERSX2_VK_ICD_ONLY
 # Let nxvk.pc drive the link line when pkg-config is available. The fallback
 # mirrors that .pc exactly: nxvk merges the 23 vendored archives into two, so
 # the long -l:lib*.a group is neither valid nor needed here.
