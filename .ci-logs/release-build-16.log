@@ -1,0 +1,493 @@
+==== build environment ====
+DEVKITPRO=/opt/devkitpro  PORTLIBS=/opt/devkitpro/portlibs/switch  CORES_DIR=/__w/TEST3/TEST3/cores
+CORES=4248  RENDERERS=VK  MESA_FLAVOR=nxvk  JOBS=4
+cmake                    /usr/bin/cmake
+ninja                    /usr/bin/ninja
+pkg-config               /usr/bin/pkg-config
+aarch64-none-elf-gcc     MISSING
+-- nxvk portlib --
+-rw-r--r-- 1 root root  5314016 Oct 13 03:57 /opt/devkitpro/portlibs/switch/lib/libnvk.a
+-rw-r--r-- 1 root root 43065254 Oct 13 03:57 /opt/devkitpro/portlibs/switch/lib/libnvk_support.a
+-rw-r--r-- 1 root root      460 Oct 13 03:57 /opt/devkitpro/portlibs/switch/lib/pkgconfig/nxvk.pc
+/__w/_temp/bde2c035-8fd5-45b1-946c-096a8a011091.sh: line 14: aarch64-none-elf-pkg-config: command not found
+-- expat --
+-rw-r--r-- 1 root root 251018 Jun 16  2024 /opt/devkitpro/portlibs/switch/lib/libexpat.a
+==== job: build (Vulkan) ====
+run 16 on arena/105445b2-test3 @ 8dfb58dcb4919abc2c435003118bf39689236844
+Tue Oct 13 03:56:54 AM UTC 2026
+DEVKITPRO=/opt/devkitpro PORTLIBS=/opt/devkitpro/portlibs/switch
+overlay         145G   62G   84G  43% /
+Reading package lists...
+Building dependency tree...
+Reading state information...
+cmake is already the newest version (3.31.6-2~bpo12+1).
+ninja-build is already the newest version (1.11.1-2~deb12u1).
+The following packages will be upgraded:
+  ca-certificates curl libcurl3-gnutls libcurl4 unzip
+5 upgraded, 0 newly installed, 0 to remove and 72 not upgraded.
+Need to get 1,422 kB of archives.
+After this operation, 4,096 B of additional disk space will be used.
+Get:1 http://deb.debian.org/debian-security bookworm-security/main amd64 ca-certificates all 20250419~deb12u1 [162 kB]
+Get:2 http://deb.debian.org/debian bookworm/main amd64 curl amd64 7.88.1-10+deb12u15 [316 kB]
+Get:3 http://deb.debian.org/debian bookworm/main amd64 libcurl4 amd64 7.88.1-10+deb12u15 [392 kB]
+Get:4 http://deb.debian.org/debian bookworm/main amd64 libcurl3-gnutls amd64 7.88.1-10+deb12u15 [386 kB]
+Get:5 http://deb.debian.org/debian-security bookworm-security/main amd64 unzip amd64 6.0-28+deb12u1 [167 kB]
+Preconfiguring packages ...
+Fetched 1,422 kB in 0s (14.0 MB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 21137 files and directories currently installed.)
+Preparing to unpack .../ca-certificates_20250419~deb12u1_all.deb ...
+Unpacking ca-certificates (20250419~deb12u1) over (20230311+deb12u1) ...
+Preparing to unpack .../curl_7.88.1-10+deb12u15_amd64.deb ...
+Unpacking curl (7.88.1-10+deb12u15) over (7.88.1-10+deb12u12) ...
+Preparing to unpack .../libcurl4_7.88.1-10+deb12u15_amd64.deb ...
+Unpacking libcurl4:amd64 (7.88.1-10+deb12u15) over (7.88.1-10+deb12u12) ...
+Preparing to unpack .../libcurl3-gnutls_7.88.1-10+deb12u15_amd64.deb ...
+Unpacking libcurl3-gnutls:amd64 (7.88.1-10+deb12u15) over (7.88.1-10+deb12u12) ...
+Preparing to unpack .../unzip_6.0-28+deb12u1_amd64.deb ...
+Unpacking unzip (6.0-28+deb12u1) over (6.0-28) ...
+Setting up unzip (6.0-28+deb12u1) ...
+Setting up libcurl3-gnutls:amd64 (7.88.1-10+deb12u15) ...
+Setting up ca-certificates (20250419~deb12u1) ...
+Updating certificates in /etc/ssl/certs...
+rehash: warning: skipping ca-certificates.crt,it does not contain exactly one certificate or CRL
+21 added, 13 removed; done.
+Setting up libcurl4:amd64 (7.88.1-10+deb12u15) ...
+Setting up curl (7.88.1-10+deb12u15) ...
+Processing triggers for libc-bin (2.36-9+deb12u10) ...
+Processing triggers for ca-certificates (20250419~deb12u1) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
+no cached portlibs archive
+aarch64-none-elf-gcc (devkitA64) 15.2.0
+container toolchain OK
+missing:
+-rw-r--r-- 1 root root 92M Oct 13 03:57 /__w/TEST3/TEST3/dkp-portlibs.tar.gz
+-rw-r--r-- 1 root root  5314016 Oct 13 03:57 /opt/devkitpro/portlibs/switch/lib/libnvk.a
+-rw-r--r-- 1 root root 43065254 Oct 13 03:57 /opt/devkitpro/portlibs/switch/lib/libnvk_support.a
+/__w/_temp/3a38b681-0c68-485a-8286-c33de243f3da.sh: line 10: aarch64-none-elf-pkg-config: command not found
+switch-expat already present
+== core.apk: https://github.com/Trixarian/NetherSX2-patch/releases/download/2.2n/NetherSX2-v2.2n-4248.apk ==
+== sha256: 2029e30dcc1ba1ecb8d73313f18b429b40e6044c7785c52af08b948ef94b3ddf ==
+== entries that matter (lib/, assets/, top level) ==
+AndroidManifest.xml
+classes.dex
+resources.arsc
+assets/3rdparty.html
+assets/cheats_ni.zip
+assets/cheats_ws.zip
+assets/cover-placeholder.png
+assets/dexopt/baseline.prof
+assets/dexopt/baseline.profm
+assets/faq.html
+assets/fonts/fa-solid-900.ttf
+assets/fonts/Roboto-Regular-copyright
+assets/fonts/Roboto-Regular.ttf
+assets/fonts/RobotoMono-Medium.ttf
+assets/GameIndex.yaml
+assets/game_controller_db.txt
+assets/icons/AppIconLarge.png
+assets/icons/flags/NTSC-B.png
+assets/icons/flags/NTSC-C.png
+assets/icons/flags/NTSC-HK.png
+assets/icons/flags/NTSC-J.png
+assets/icons/flags/NTSC-K.png
+assets/icons/flags/NTSC-T.png
+assets/icons/flags/NTSC-U.png
+assets/icons/flags/Other.png
+assets/icons/flags/PAL-A.png
+assets/icons/flags/PAL-AF.png
+assets/icons/flags/PAL-AU.png
+assets/icons/flags/PAL-BE.png
+assets/icons/flags/PAL-E.png
+assets/icons/flags/PAL-F.png
+assets/icons/flags/PAL-FI.png
+assets/icons/flags/PAL-G.png
+assets/icons/flags/PAL-GR.png
+assets/icons/flags/PAL-I.png
+assets/icons/flags/PAL-IN.png
+assets/icons/flags/PAL-M.png
+assets/icons/flags/PAL-NL.png
+assets/icons/flags/PAL-NO.png
+assets/icons/flags/PAL-P.png
+assets/icons/flags/PAL-PL.png
+assets/icons/flags/PAL-R.png
+assets/icons/flags/PAL-S.png
+assets/icons/flags/PAL-SC.png
+assets/icons/flags/PAL-SW.png
+assets/icons/flags/PAL-SWI.png
+assets/icons/flags/PAL-UK.png
+assets/icons/star-0.png
+assets/icons/star-1.png
+assets/icons/star-2.png
+assets/icons/star-3.png
+assets/icons/star-4.png
+assets/icons/star-5.png
+assets/placeholder.png
+assets/shaders/common/ffx_a.h
+assets/shaders/common/ffx_cas.h
+assets/shaders/common/fxaa.fx
+assets/shaders/dx11/cas.hlsl
+assets/shaders/dx11/convert.fx
+assets/shaders/dx11/interlace.fx
+assets/shaders/dx11/merge.fx
+assets/shaders/dx11/present.fx
+assets/shaders/dx11/shadeboost.fx
+assets/shaders/dx11/tfx.fx
+assets/shaders/opengl/cas.glsl
+assets/shaders/opengl/common_header.glsl
+assets/shaders/opengl/convert.glsl
+assets/shaders/opengl/interlace.glsl
+assets/shaders/opengl/merge.glsl
+assets/shaders/opengl/present.glsl
+assets/shaders/opengl/shadeboost.glsl
+assets/shaders/opengl/tfx_fs.glsl
+assets/shaders/opengl/tfx_vgs.glsl
+assets/shaders/vulkan/cas.glsl
+assets/shaders/vulkan/convert.glsl
+assets/shaders/vulkan/interlace.glsl
+assets/shaders/vulkan/merge.glsl
+assets/shaders/vulkan/present.glsl
+assets/shaders/vulkan/shadeboost.glsl
+assets/shaders/vulkan/tfx.glsl
+== assets entries ==
+assets/3rdparty.html
+assets/cheats_ni.zip
+assets/cheats_ws.zip
+assets/cover-placeholder.png
+assets/dexopt/baseline.prof
+assets/dexopt/baseline.profm
+assets/faq.html
+assets/fonts/fa-solid-900.ttf
+assets/fonts/Roboto-Regular-copyright
+assets/fonts/Roboto-Regular.ttf
+assets/fonts/RobotoMono-Medium.ttf
+assets/GameIndex.yaml
+assets/game_controller_db.txt
+assets/icons/AppIconLarge.png
+assets/icons/flags/NTSC-B.png
+assets/icons/flags/NTSC-C.png
+assets/icons/flags/NTSC-HK.png
+assets/icons/flags/NTSC-J.png
+assets/icons/flags/NTSC-K.png
+assets/icons/flags/NTSC-T.png
+assets/icons/flags/NTSC-U.png
+assets/icons/flags/Other.png
+assets/icons/flags/PAL-A.png
+assets/icons/flags/PAL-AF.png
+assets/icons/flags/PAL-AU.png
+assets/icons/flags/PAL-BE.png
+assets/icons/flags/PAL-E.png
+assets/icons/flags/PAL-F.png
+assets/icons/flags/PAL-FI.png
+assets/icons/flags/PAL-G.png
+assets/icons/flags/PAL-GR.png
+assets/icons/flags/PAL-I.png
+assets/icons/flags/PAL-IN.png
+assets/icons/flags/PAL-M.png
+assets/icons/flags/PAL-NL.png
+assets/icons/flags/PAL-NO.png
+assets/icons/flags/PAL-P.png
+assets/icons/flags/PAL-PL.png
+assets/icons/flags/PAL-R.png
+assets/icons/flags/PAL-S.png
+assets/icons/flags/PAL-SC.png
+assets/icons/flags/PAL-SW.png
+assets/icons/flags/PAL-SWI.png
+assets/icons/flags/PAL-UK.png
+assets/icons/star-0.png
+assets/icons/star-1.png
+assets/icons/star-2.png
+assets/icons/star-3.png
+assets/icons/star-4.png
+assets/icons/star-5.png
+assets/placeholder.png
+assets/shaders/common/ffx_a.h
+assets/shaders/common/ffx_cas.h
+assets/shaders/common/fxaa.fx
+assets/shaders/dx11/cas.hlsl
+assets/shaders/dx11/convert.fx
+assets/shaders/dx11/interlace.fx
+assets/shaders/dx11/merge.fx
+assets/shaders/dx11/present.fx
+assets/shaders/dx11/shadeboost.fx
+assets/shaders/dx11/tfx.fx
+assets/shaders/opengl/cas.glsl
+assets/shaders/opengl/common_header.glsl
+assets/shaders/opengl/convert.glsl
+assets/shaders/opengl/interlace.glsl
+assets/shaders/opengl/merge.glsl
+assets/shaders/opengl/present.glsl
+assets/shaders/opengl/shadeboost.glsl
+assets/shaders/opengl/tfx_fs.glsl
+assets/shaders/opengl/tfx_vgs.glsl
+assets/shaders/vulkan/cas.glsl
+assets/shaders/vulkan/convert.glsl
+assets/shaders/vulkan/interlace.glsl
+assets/shaders/vulkan/merge.glsl
+assets/shaders/vulkan/present.glsl
+assets/shaders/vulkan/shadeboost.glsl
+assets/shaders/vulkan/tfx.glsl
+assets/sounds/achievements/lbsubmit.wav
+assets/sounds/achievements/message.wav
+assets/sounds/achievements/README.txt
+== extracted tree ==
+/__w/TEST3/TEST3/cores
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/3rdparty.html
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/cheats_ni.zip
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/cheats_ws.zip
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/cover-placeholder.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/dexopt
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/dexopt/baseline.prof
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/dexopt/baseline.profm
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/faq.html
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts/fa-solid-900.ttf
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts/RobotoMono-Medium.ttf
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts/Roboto-Regular-copyright
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/fonts/Roboto-Regular.ttf
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/game_controller_db.txt
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/GameIndex.yaml
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/AppIconLarge.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/flags
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-0.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-1.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-2.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-3.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-4.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/icons/star-5.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/placeholder.png
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders/common
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders/dx11
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders/opengl
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/shaders/vulkan
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/sounds
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/assets/sounds/achievements
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/lib
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/lib/arm64-v8a
+/__w/TEST3/TEST3/cores/NetherSX2-v2.2n-4248/lib/arm64-v8a/libemucore.so
+==== build_all.sh ====
+==== launcher storage dependencies ====
+-- The C compiler identification is GNU 15.2.0
+-- The CXX compiler identification is GNU 15.2.0
+-- Detected multilib folder: pic
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for arpa/inet.h
+-- Looking for arpa/inet.h - found
+-- Looking for dlfcn.h
+-- Looking for dlfcn.h - not found
+-- Looking for fcntl.h
+-- Looking for fcntl.h - found
+-- Looking for inttypes.h
+-- Looking for inttypes.h - found
+-- Looking for netdb.h
+-- Looking for netdb.h - found
+-- Looking for netinet/in.h
+-- Looking for netinet/in.h - found
+-- Looking for include files sys/types.h, netinet/tcp.h
+-- Looking for include files sys/types.h, netinet/tcp.h - found
+-- Looking for poll.h
+-- Looking for poll.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stdio.h
+-- Looking for stdio.h - found
+-- Looking for stdlib.h
+-- Looking for stdlib.h - found
+-- Looking for strings.h
+-- Looking for strings.h - found
+-- Looking for string.h
+-- Looking for string.h - found
+-- Looking for sys/ioctl.h
+-- Looking for sys/ioctl.h - found
+-- Looking for sys/poll.h
+-- Looking for sys/poll.h - found
+-- Looking for sys/socket.h
+-- Looking for sys/socket.h - found
+-- Looking for sys/stat.h
+-- Looking for sys/stat.h - found
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for sys/uio.h
+-- Looking for sys/uio.h - not found
+-- Looking for sys/_iovec.h
+-- Looking for sys/_iovec.h - found
+-- Looking for sys/time.h
+-- Looking for sys/time.h - found
+-- Looking for sys/unistd.h
+-- Looking for sys/unistd.h - found
+-- Looking for sys/errno.h
+-- Looking for sys/errno.h - found
+-- Looking for time.h
+-- Looking for time.h - found
+-- Looking for unistd.h
+-- Looking for unistd.h - found
+-- Looking for errno.h
+-- Looking for errno.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Performing Test HAVE_SOCKADDR_LEN
+-- Performing Test HAVE_SOCKADDR_LEN - Success
+-- Performing Test HAVE_SOCKADDR_STORAGE
+-- Performing Test HAVE_SOCKADDR_STORAGE - Success
+-- Performing Test HAVE_LINGER
+-- Performing Test HAVE_LINGER - Success
+-- Performing Test C_ACCEPTS_WALL
+-- Performing Test C_ACCEPTS_WALL - Success
+-- LIBUSBHSFS_VERSION 0.2.9
+-- Found Git: /usr/bin/git (found version "2.39.5")
+-- Configuring done (5.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /__w/TEST3/TEST3/launcher/dependencies/build
+[1/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/aes_apple.o
+[2/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/aes.o
+[3/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/alloc.o
+[4/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/aes128ccm.o
+[5/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/compat.o
+[6/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/aes_reference.o
+[7/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/dcerpc-lsa.o
+[8/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/asn1-ber.o
+[9/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/dcerpc-srvsvc.o
+[10/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/hmac-md5.o
+[11/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/hmac.o
+[12/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/errors.o
+[13/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/md4c.o
+[14/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/dcerpc.o
+[15/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/init.o
+[16/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/md5.o
+[17/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/sha1.o
+[18/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/sha224-256.o
+[19/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/pdu.o
+[20/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/ntlmssp.o
+[21/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-close.o
+[22/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/sha384-512.o
+[23/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-echo.o
+[24/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-error.o
+[25/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-create.o
+[26/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-flush.o
+[27/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-ioctl.o
+[28/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-logoff.o
+[29/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-lock.o
+[30/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-notify-change.o
+[31/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-negotiate.o
+[32/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-oplock-break.o
+[33/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/libsmb2.o
+[34/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-session-setup.o
+[35/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-query-directory.o
+[36/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-read.o
+[37/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-query-info.o
+[38/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-set-info.o
+[39/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-tree-connect.o
+[40/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-tree-disconnect.o
+[41/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-cmd-write.o
+[42/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-data-reparse-point.o
+[43/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-data-filesystem-info.o
+[44/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-data-security-descriptor.o
+[45/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-share-enum.o
+[46/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-data-file-info.o
+[47/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb3-seal.o
+[48/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/smb2-signing.o
+[49/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/timestamps.o
+[50/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/spnego-wrapper.o
+[51/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/unicode.o
+[52/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/sync.o
+[53/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/usha.o
+[54/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_log.o
+[55/72] Building C object _deps/libsmb2-build/lib/CMakeFiles/smb2.dir/socket.o
+[56/72] Linking C static library _deps/libsmb2-build/lib/libsmb2.a
+[57/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_drive.o
+[58/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_mount.o
+[59/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_manager.o
+[60/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_request.o
+[61/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/diskio.o
+[62/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_scsi.o
+[63/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/usbhsfs_utils.o
+[64/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/ffsystem.o
+[65/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/ff_dev.o
+[66/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/ffunicode.o
+[67/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/ntfs-3g/ntfs.o
+[68/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/ntfs-3g/ntfs_disk_io.o
+[69/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/ntfs-3g/ntfs_dev.o
+[70/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/__/__/__/usbhsfs_uasp.o
+[71/72] Building C object _deps/libusbhsfs-build/CMakeFiles/libusbhsfs.dir/source/fatfs/ff.o
+[72/72] Linking C static library _deps/libusbhsfs-build/liblibusbhsfs.a
+==== emulator binaries (VK, MESA_FLAVOR=nxvk) ====
+---- renderer: VK ----
+CheatManager.cpp
+SwitchPosixCompat.cpp
+SwitchStorageBridge.cpp
+SwitchStorage.cpp
+lsfg_bridge.cpp
+errors.cpp
+buffer.cpp
+command_buffer.cpp
+descriptor_pool.cpp
+descriptor_set.cpp
+fence.cpp
+image.cpp
+sampler.cpp
+semaphore.cpp
+shader.cpp
+timeline_semaphore.cpp
+vulkan.cpp
+lsfgvk.cpp
+dll_reader.cpp
+shader_registry.cpp
+limits.cpp
+managed_shader.cpp
+utils.cpp
+alpha0.cpp
+alpha1.cpp
+beta0.cpp
+beta1.cpp
+delta0.cpp
+delta1.cpp
+gamma0.cpp
+gamma1.cpp
+generate.cpp
+mipmaps.cpp
+aaudio.c
+config.c
+crash.c
+dl_emu.c
+egl_vk_stubs.c
+error.c
+filehelper.c
+imports.c
+jni_fake.c
+libc_shim.c
+main.c
+nxvk_libc.c
+/__w/TEST3/TEST3/source/nxvk_libc.c:136:5: error: conflicting types for 'pthread_sigmask'; have 'int(int,  const void *, void *)'
+  136 | int pthread_sigmask(int how, const void *set, void *oldset) {
+      |     ^~~~~~~~~~~~~~~
+In file included from /opt/devkitpro/devkitA64/aarch64-none-elf/include/signal.h:6,
+                 from /opt/devkitpro/devkitA64/aarch64-none-elf/include/time.h:163,
+                 from /opt/devkitpro/devkitA64/aarch64-none-elf/include/sys/stat.h:9,
+                 from /opt/devkitpro/devkitA64/aarch64-none-elf/include/sys/_default_fcntl.h:218,
+                 from /opt/devkitpro/devkitA64/aarch64-none-elf/include/sys/fcntl.h:4,
+                 from /opt/devkitpro/devkitA64/aarch64-none-elf/include/fcntl.h:1,
+                 from /__w/TEST3/TEST3/source/nxvk_libc.c:38:
+/opt/devkitpro/devkitA64/aarch64-none-elf/include/sys/signal.h:169:5: note: previous declaration of 'pthread_sigmask' with type 'int(int,  const sigset_t *, sigset_t *)' {aka 'int(int,  const long unsigned int *, long unsigned int *)'}
+  169 | int pthread_sigmask (int, const sigset_t *, sigset_t *);
+      |     ^~~~~~~~~~~~~~~
+prefs.c
+pthr.c
+make[1]: *** [/opt/devkitpro/devkitA64/base_rules:22: nxvk_libc.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:235: build] Error 2
+==== build_all.sh exit code: 2 ====
