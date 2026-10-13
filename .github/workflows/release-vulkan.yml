@@ -139,24 +139,82 @@ jobs:
             nxvk/switch/rust/sysroot
           key: nxvk-${{ runner.os }}-${{ steps.nxvk.outputs.sha }}
 
-      - name: Build the nxvk portlib
+      - name: Free disk space
         if: needs.prep.outputs.nxvk_sdk_url == ''
+        run: |
+          # The nxvk toolchain image plus a Mesa cross build and a Rust sysroot
+          # do not fit next to the preinstalled runner toolchains.
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+                     /usr/local/share/powershell /usr/share/swift /usr/local/.ghcup \
+                     /opt/hostedtoolcache/CodeQL /usr/lib/jvm 2>/dev/null || true
+          df -h /
+          docker system df || true
+
+      - name: Build the nxvk toolchain image
+        id: image
+        if: needs.prep.outputs.nxvk_sdk_url == ''
+        continue-on-error: true
         working-directory: nxvk
         run: |
-          set -euo pipefail
-          docker build -t nxvk switch/docker
-          make CONTAINER=docker
+          set +e
+          docker build -t nxvk switch/docker 2>&1 | tee "$GITHUB_WORKSPACE/docker-build.log"
+          code=${PIPESTATUS[0]}
+          echo "docker build exit: $code"
+          exit $code
 
-      - name: Stage the portlib
-        if: needs.prep.outputs.nxvk_sdk_url == ''
+      - name: Cross-compile the NVK driver archives
+        id: driver
+        if: needs.prep.outputs.nxvk_sdk_url == '' && steps.image.outcome == 'success'
+        continue-on-error: true
+        working-directory: nxvk
+        run: |
+          set +e
+          make CONTAINER=docker 2>&1 | tee "$GITHUB_WORKSPACE/nxvk-build.log"
+          code=${PIPESTATUS[0]}
+          echo "make exit: $code"
+          exit $code
+
+      # The runner logs are not reachable from where this workflow is maintained,
+      # so the failing line is surfaced as (part of) an artifact name and the full
+      # log is uploaded for anyone who can open it.
+      - name: Encode the failure in an artifact name
+        if: steps.image.outcome == 'failure' || steps.driver.outcome == 'failure'
         run: |
           set -euo pipefail
-          mkdir -p nxvk-pkg/lib/pkgconfig nxvk-pkg/include
-          cp nxvk/switch/build/pkg/lib/libnvk.a nxvk-pkg/lib/
-          cp nxvk/switch/build/pkg/lib/libnvk_support.a nxvk-pkg/lib/
-          cp nxvk/switch/build/pkg/lib/pkgconfig/nxvk.pc nxvk-pkg/lib/pkgconfig/
-          cp -r nxvk/include/vulkan nxvk/include/vk_video nxvk-pkg/include/
-          find nxvk-pkg -type f | sort
+          if [ "${{ steps.image.outcome }}" = "failure" ]; then
+            phase=docker; log="$GITHUB_WORKSPACE/docker-build.log"
+          else
+            phase=make;   log="$GITHUB_WORKSPACE/nxvk-build.log"
+          fi
+          line=$(grep -aiE "error|failed|fatal|no space|not found|denied|returned|exit code" "$log" \
+                 | grep -av '^\+' | tail -1 | tr -cd '[:print:]' | cut -c1-100)
+          [ -n "$line" ] || line="no-error-line-found"
+          name="nxvk-$phase-fail-$(printf '%s' "$line" | tr -c 'A-Za-z0-9 ._' '-' | cut -c1-90)"
+          echo "diagnostic artifact: $name"
+          echo "ARTIFACT_NAME=$name" >> "$GITHUB_ENV"
+          mkdir -p diag && cp "$log" diag/
+
+      - name: Upload the nxvk failure diagnostic
+        if: steps.image.outcome == 'failure' || steps.driver.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: diag
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload the build log
+        if: steps.driver.outcome != 'skipped'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nxvk-build-log
+          path: ${{ github.workspace }}/*build.log
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Fail the job when the driver did not build
+        if: steps.image.outcome == 'failure' || steps.driver.outcome == 'failure'
+        run: exit 1
 
       - name: Upload the nxvk portlib
         uses: actions/upload-artifact@v4
