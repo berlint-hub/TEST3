@@ -50,8 +50,34 @@ endif
 #   make RENDERER=VK -> Vulkan (Mesa NVK, vendored flat under vulkan/)
 RENDERER ?= GL
 MESA_SDK_ROOT ?=
+# Which Vulkan driver archive set to link against:
+#   vendored (default): the 23 Mesa NVK archives staged under vulkan/lib. That
+#                       bundle is NaGaa95's private NVK build, so it is not in
+#                       this repository and CI cannot fetch it.
+#   nxvk:               the public NVK port -- PalindromicBreadLoaf/nxvk,
+#                       Mesa 26.2.2 for Tegra X1/GM20B. `make` there stages a
+#                       devkitPro-style portlib: libnvk.a + libnvk_support.a,
+#                       described by lib/pkgconfig/nxvk.pc.
+#   sdk:                the unified Mesa SDK pointed at by MESA_SDK_ROOT.
+MESA_FLAVOR ?= vendored
+# Staged nxvk package (nxvk/switch/build/pkg) when it is not installed into
+# $DEVKITPRO/portlibs/switch.
+NXVK_ROOT ?=
 ifneq ($(strip $(MESA_SDK_ROOT)),)
 DEFINES += -DUSE_UNIFIED_MESA
+endif
+ifeq ($(strip $(MESA_FLAVOR)),nxvk)
+NXVK_LIBDIR	:= $(if $(strip $(NXVK_ROOT)),$(NXVK_ROOT)/lib,$(PORTLIBS)/lib)
+NXVK_INCDIR	:= $(if $(strip $(NXVK_ROOT)),$(NXVK_ROOT)/include,$(PORTLIBS)/include)
+INCLUDES	+=	$(NXVK_INCDIR)
+# Let nxvk.pc drive the link line when pkg-config is available. The fallback
+# mirrors that .pc exactly: nxvk merges the 23 vendored archives into two, so
+# the long -l:lib*.a group is neither valid nor needed here.
+NXVK_PC	:= $(PREFIX)pkg-config --libs nxvk
+NXVK_LIBS	:= $(shell PKG_CONFIG_PATH="$(NXVK_LIBDIR)/pkgconfig$${PKG_CONFIG_PATH:+:$$PKG_CONFIG_PATH}" $(NXVK_PC) 2>/dev/null)
+ifeq ($(strip $(NXVK_LIBS)),)
+NXVK_LIBS	:= -Wl,--whole-archive -lnvk -Wl,--no-whole-archive -Wl,--start-group -lnvk_support -lz -lexpat -Wl,--end-group -Wl,-u,vk_icdGetInstanceProcAddr
+endif
 endif
 ifeq ($(RENDERER),VK)
 DEFINES	+=	-DUSE_VULKAN -DGS_RENDERER=14 -DVK_USE_PLATFORM_VI_NN
@@ -85,6 +111,14 @@ STORAGE_LIBS := $(TOPDIR)/launcher/dependencies/build/_deps/libsmb2-build/lib/li
 # nx: libnx (audren for the AAudio shim, HID, applet, fs). m: libm. No SDL2/
 # OpenSL ES -- audio is the in-tree AAudio->audren shim (source/aaudio.c).
 ifeq ($(RENDERER),VK)
+ifeq ($(strip $(MESA_FLAVOR)),nxvk)
+# nxvk: the public Mesa 26.2.2 NVK port for Horizon. It ships two archives
+# (libnvk.a + libnvk_support.a) and lib/pkgconfig/nxvk.pc, so the flags come
+# from pkg-config (NXVK_LIBS, above) instead of the 23 vendored -l:lib*.a
+# entries. -lexpat (driconf) replaces the vendored -lzstd.
+LIBDIRS	:= $(NXVK_LIBDIR) $(PORTLIBS) $(LIBNX)
+LIBS	:= $(NXVK_LIBS) $(STORAGE_LIBS) -lcurl -lz -lnx -lstdc++ -lm
+else
 ifneq ($(strip $(MESA_SDK_ROOT)),)
 # Unified Mesa SDK: the Vulkan driver and all private Mesa dependencies are
 # packaged in one archive. External dependencies stay in devkitPro portlibs.
@@ -110,6 +144,7 @@ LIBS	:= -Wl,--start-group \
 		-l:libnir.a -l:libcompiler.a -l:libcompiler_c_helpers.a \
 		-l:libmesa_util.a -l:libmesa_util_simd.a -l:libblake3.a -l:libmesa_util_c11.a \
 		-Wl,--end-group $(STORAGE_LIBS) -lcurl -lz -lzstd -lnx -lstdc++ -lm
+endif
 endif
 else
 ifneq ($(strip $(MESA_SDK_ROOT)),)

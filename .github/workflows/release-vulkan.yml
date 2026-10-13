@@ -1,0 +1,317 @@
+# ---------------------------------------------------------------------------
+# Vulkan-only release build.
+#
+#   * renderer: Vulkan (NVK) only -- NetherSX2_nx_vk.nro
+#   * core:     a single libemucore (4248 by default)
+#   * driver:   nxvk -- https://github.com/PalindromicBreadLoaf/nxvk, the public
+#               Mesa 26.2.2 NVK port for Tegra X1/GM20B. Upstream NetherSX2_nx
+#               links NaGaa95's private NVK bundle (23 archives under vulkan/),
+#               which is not in this repository, so a public build has to use
+#               nxvk instead (MESA_FLAVOR=nxvk in the Makefile).
+#
+# Never runs on push: building the driver takes a while and each run publishes
+# a release. Trigger it by hand (Actions -> Vulkan release -> Run workflow).
+#
+# Licensing: nxvk is GPL-2.0-or-later and is linked statically, so the produced
+# .nro is a combined work under the GPL. That is fine for a source-available
+# project like this one, but anyone shipping the binary has to offer the
+# corresponding source -- the release notes say so explicitly.
+# ---------------------------------------------------------------------------
+name: Vulkan release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to create
+        required: true
+        default: vk-4248
+      core:
+        description: Android core to bundle
+        required: true
+        default: "4248"
+        type: choice
+        options:
+          - "4248"
+          - "3668"
+      nxvk_ref:
+        description: nxvk git ref to build
+        required: false
+        default: switch
+      nxvk_sdk_url:
+        description: "Optional: URL of a prebuilt nxvk portlib tarball (skip the build)"
+        required: false
+        default: ""
+      prerelease:
+        description: Mark the release as a pre-release
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-vulkan
+  cancel-in-progress: false
+
+env:
+  DEVKITPRO: /opt/devkitpro
+  EMU_TARGET: NetherSX2_nx
+
+jobs:
+  # -------------------------------------------------------------------------
+  # Build the NVK driver. nxvk ships no prebuilt binaries, so the portlib is
+  # either downloaded (nxvk_sdk_url) or cross-compiled here and cached.
+  # -------------------------------------------------------------------------
+  nxvk:
+    name: nxvk NVK driver
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download a prebuilt nxvk portlib
+        if: inputs.nxvk_sdk_url != ''
+        run: |
+          set -euo pipefail
+          mkdir -p nxvk-pkg
+          curl -fsSL "${{ inputs.nxvk_sdk_url }}" -o nxvk.tar.gz
+          tar -xzf nxvk.tar.gz -C nxvk-pkg --strip-components=1
+          test -f nxvk-pkg/lib/libnvk.a
+          test -f nxvk-pkg/lib/libnvk_support.a
+
+      - name: Check out nxvk
+        if: inputs.nxvk_sdk_url == ''
+        uses: actions/checkout@v4
+        with:
+          repository: PalindromicBreadLoaf/nxvk
+          ref: ${{ inputs.nxvk_ref }}
+          fetch-depth: 1
+          path: nxvk
+
+      - name: Resolve the nxvk commit
+        if: inputs.nxvk_sdk_url == ''
+        id: nxvk
+        run: echo "sha=$(git -C nxvk rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache the nxvk build
+        if: inputs.nxvk_sdk_url == ''
+        uses: actions/cache@v4
+        with:
+          path: |
+            nxvk/switch/build
+            nxvk/switch/rust/sysroot
+          key: nxvk-${{ runner.os }}-${{ steps.nxvk.outputs.sha }}
+
+      - name: Build the nxvk portlib
+        if: inputs.nxvk_sdk_url == ''
+        working-directory: nxvk
+        run: |
+          set -euo pipefail
+          docker build -t nxvk switch/docker
+          make CONTAINER=docker
+
+      - name: Stage the portlib
+        if: inputs.nxvk_sdk_url == ''
+        run: |
+          set -euo pipefail
+          mkdir -p nxvk-pkg/lib/pkgconfig nxvk-pkg/include
+          cp nxvk/switch/build/pkg/lib/libnvk.a nxvk-pkg/lib/
+          cp nxvk/switch/build/pkg/lib/libnvk_support.a nxvk-pkg/lib/
+          cp nxvk/switch/build/pkg/lib/pkgconfig/nxvk.pc nxvk-pkg/lib/pkgconfig/
+          cp -r nxvk/include/vulkan nxvk/include/vk_video nxvk-pkg/include/
+          find nxvk-pkg -type f | sort
+
+      - name: Upload the nxvk portlib
+        uses: actions/upload-artifact@v4
+        with:
+          name: nxvk-portlib
+          path: nxvk-pkg
+          if-no-files-found: error
+          retention-days: 14
+
+  # -------------------------------------------------------------------------
+  # Build the emulator (Vulkan) + launcher with a single bundled core.
+  # -------------------------------------------------------------------------
+  build:
+    name: build (Vulkan, core ${{ inputs.core }})
+    needs: nxvk
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkita64:latest
+      options: --user root
+    defaults:
+      run:
+        shell: bash
+    env:
+      PORTLIBS: /opt/devkitpro/portlibs/switch
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install host tools (cmake, ninja, unzip)
+        run: |
+          set -euo pipefail
+          printf '%s\n' 'retry() { local n=1; until "$@"; do if [ "$n" -ge 5 ]; then echo "FAILED after 5 attempts: $*"; return 1; fi; echo "attempt $n failed; retrying"; n=$((n+1)); sleep $((n*10)); done; }' > /tmp/ci-retry.sh
+          . /tmp/ci-retry.sh
+          export DEBIAN_FRONTEND=noninteractive
+          retry apt-get update -qq
+          retry apt-get install -y --no-install-recommends cmake ninja-build unzip curl ca-certificates
+
+      - name: Refresh devkitPro package databases
+        run: |
+          set -euo pipefail
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -Sy --noconfirm
+
+      - name: Install devkitPro toolchain
+        run: |
+          set -euo pipefail
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed devkitA64 libnx switch-tools
+
+      - name: Install Switch portlibs
+        run: |
+          set -euo pipefail
+          . /tmp/ci-retry.sh
+          retry "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed \
+            switch-mesa switch-curl switch-zlib switch-ntfs-3g \
+            switch-sdl2 switch-sdl2_ttf switch-sdl2_image switch-libjpeg-turbo
+
+      - name: Install the nxvk portlib
+        uses: actions/download-artifact@v4
+        with:
+          name: nxvk-portlib
+          path: nxvk-pkg
+
+      - name: Place the nxvk portlib next to the other portlibs
+        run: |
+          set -euo pipefail
+          mkdir -p "$PORTLIBS/lib/pkgconfig" "$PORTLIBS/include"
+          cp nxvk-pkg/lib/libnvk.a nxvk-pkg/lib/libnvk_support.a "$PORTLIBS/lib/"
+          cp nxvk-pkg/lib/pkgconfig/nxvk.pc "$PORTLIBS/lib/pkgconfig/"
+          rm -rf "$PORTLIBS/include/vulkan" "$PORTLIBS/include/vk_video"
+          cp -r nxvk-pkg/include/vulkan nxvk-pkg/include/vk_video "$PORTLIBS/include/"
+          "$(command -v dkp-pacman || command -v pacman)" -Ql switch-mesa >/dev/null 2>&1 || true
+          ls -l "$PORTLIBS/lib/libnvk.a" "$PORTLIBS/lib/libnvk_support.a"
+          PATH="$(dirname "$(command -v aarch64-none-elf-pkg-config || echo /usr/bin/pkg-config)"):$PATH" \
+            aarch64-none-elf-pkg-config --libs nxvk || true
+
+      - name: Ensure libexpat (nxvk's driconf needs it)
+        run: |
+          set -euo pipefail
+          if [ -e "$PORTLIBS/lib/libexpat.a" ]; then echo "switch-expat already present"; exit 0; fi
+          if "$(command -v dkp-pacman || command -v pacman)" -S --noconfirm --needed switch-expat; then
+            echo "installed switch-expat"; exit 0
+          fi
+          echo "::warning::no switch-expat package; building expat from source"
+          curl -fsSL https://github.com/libexpat/libexpat/releases/download/R_2_7_1/expat-2.7.1.tar.gz -o expat.tar.gz
+          tar xzf expat.tar.gz
+          cd expat-2.7.1
+          ./configure --host=aarch64-none-elf --prefix="$PORTLIBS" \
+            --enable-static --disable-shared --without-docbook --without-tests --without-examples
+          make -j"$(nproc)"
+          make install
+
+      - name: Fetch the ${{ inputs.core }} Android core
+        env:
+          CORE: ${{ inputs.core }}
+        run: |
+          set -euo pipefail
+          case "$CORE" in
+            4248) url="https://github.com/Trixarian/NetherSX2-patch/releases/download/2.2n/NetherSX2-v2.2n-4248.apk" ;;
+            3668) url="https://github.com/Trixarian/NetherSX2-classic/releases/download/2.2n/NetherSX2-v2.2n-3668.apk" ;;
+            *) echo "unknown core: $CORE" >&2; exit 1 ;;
+          esac
+          mkdir -p "$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE"
+          curl -fsSL "$url" -o core.apk
+          unzip -q -o core.apk -d "$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE" \
+            "lib/arm64-v8a/libemucore.so" "assets/*"
+          ls -l "$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE/lib/arm64-v8a/libemucore.so"
+          sha256sum "$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE/lib/arm64-v8a/libemucore.so" | tee core.sha256
+
+      - name: Build (Vulkan only, single core)
+        env:
+          CORES_DIR: ${{ github.workspace }}/cores
+          CORES: ${{ inputs.core }}
+          RENDERERS: VK
+          MESA_FLAVOR: nxvk
+          JOBS: "4"
+        run: ./build_all.sh
+
+      - name: Upload the release .nro
+        uses: actions/upload-artifact@v4
+        with:
+          name: NetherSX2-VK-${{ inputs.core }}
+          path: NetherSX2.nro
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload the core checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-sha256
+          path: core.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+  # -------------------------------------------------------------------------
+  # Publish. `gh release create` keeps the job free of third-party actions.
+  # -------------------------------------------------------------------------
+  release:
+    name: publish release ${{ inputs.tag }}
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: NetherSX2-VK-${{ inputs.core }}
+          path: dist
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: core-sha256
+          path: dist
+
+      - name: Produce the release notes
+        run: |
+          set -euo pipefail
+          cd dist
+          sha256sum NetherSX2.nro | tee NetherSX2.nro.sha256
+          {
+            echo "Vulkan-only NetherSX2 for the Nintendo Switch, single core (${{ inputs.core }})."
+            echo
+            echo "* Renderer: Vulkan via NVK only (no OpenGL binary is bundled)."
+            echo "* Core: ${{ inputs.core }} (\`libemucore.so\` from the NetherSX2 ${{ inputs.core }} APK)."
+            echo "* Driver: nxvk (Mesa 26.2.2 NVK port for Tegra X1), ref \`${{ inputs.nxvk_ref }}\`."
+            echo
+            echo "## Install"
+            echo '```'
+            echo "sdmc:/switch/NetherSX2.nro"
+            echo "sdmc:/switch/nethersx2/     (BIOS, games, settings)"
+            echo '```'
+            echo "Run it with a full-memory game override (not applet mode)."
+            echo
+            echo "## Licence"
+            echo "The bundled NVK driver (nxvk) is GPL-2.0-or-later and is linked"
+            echo "statically, so this binary is a combined work under the GPL. The"
+            echo "corresponding source is this repository plus PalindromicBreadLoaf/nxvk."
+            echo
+            echo "## Hashes"
+            echo '```'
+            cat NetherSX2.nro.sha256
+            cat core.sha256
+            echo '```'
+          } > notes.md
+          cat notes.md
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          cd dist
+          args=(--title "NetherSX2 Vulkan (core ${{ inputs.core }})" --notes-file notes.md)
+          if [ "${{ inputs.prerelease }}" = "true" ]; then args+=(--prerelease); fi
+          gh release create "$TAG" NetherSX2.nro NetherSX2.nro.sha256 \
+            --repo "$GITHUB_REPOSITORY" "${args[@]}"

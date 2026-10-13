@@ -372,9 +372,19 @@ struct Opt {
 #define O_STATUS(l)            { l, nullptr, OT_STATUS, nullptr,0, 0,0,0, nullptr, 0, nullptr, nullptr, 1, nullptr }
 #define O_STATUSK(l,k)         { l, k, OT_STATUS, nullptr,0, 0,0,0, nullptr, 0, nullptr, nullptr, 1, nullptr }
 
+#ifdef VULKAN_ONLY
+// Vulkan-only build: only NetherSX2_nx_vk.nro is bundled in romfs.
+static const Choice C_backend[]  = { {"Vulkan (NVK)","14"} };
+#else
 static const Choice C_backend[]  = { {"Vulkan (NVK)","14"}, {"OpenGL (NVC0)","12"},
                                      {"OpenGL (Zink/NVK)","13"} };
+#endif
+#ifdef ONLY_CORE_4248
+// Single-core build: only emucore_4248.so is bundled in romfs.
+static const Choice C_build[]    = { {"Patched (4248)","4248"} };
+#else
 static const Choice C_build[]    = { {"Patched (4248)","4248"}, {"Classic (3668)","3668"} };
+#endif
 static const Choice C_fastmem[]  = { {"Off","off"}, {"On","hybrid"} };
 static const Choice C_upscale[]  = { {"0.25x","0.25"},{"0.5x","0.5"},{"0.75x","0.75"},
                                      {"1x (native ~480p)","1"},{"1.25x","1.25"},{"1.5x","1.5"},{"1.75x","1.75"},
@@ -7805,9 +7815,18 @@ int main(int argc, char **argv){
     removeLegacyCheatGate(effective);
     applyGlobalRetroAchievementsSettings(effective);
     std::string build=storeGet(effective,"Wrapper/CoreBuild","4248");
+#ifdef ONLY_CORE_4248
+    build="4248";                      // ignore a stored 3668 preference
+#else
     if(build!="4248"&&build!="3668") build="4248";
+#endif
     const std::string backend=storeGet(effective,"EmuCore/GS/Renderer","14");
+#ifdef VULKAN_ONLY
+    (void)backend;
+    const std::string renderer="vk";   // ignore a stored OpenGL preference
+#else
     const std::string renderer=backend=="14"?"vk":"gl";
+#endif
     storeSet(effective,"Wrapper/GLDriver",backend=="13"?"zink":"nvc0");
     // The Android core only knows its native renderer enum. Zink is selected by the host before
     // EGL initialization while the emulated GS still receives the OpenGL renderer value.

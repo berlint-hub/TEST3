@@ -33,6 +33,15 @@ LTOFLAGS := -flto=auto -fuse-linker-plugin
 
 PKGS	:=	sdl2 SDL2_ttf SDL2_image libcurl
 
+# Single-core / single-renderer release builds: hide the menu entries whose
+# payload is not bundled in romfs (see CORES= / RENDERERS= in build_all.sh).
+ifneq ($(strip $(ONLY_CORE_4248)),)
+DEFINES	+=	-DONLY_CORE_4248
+endif
+ifneq ($(strip $(VULKAN_ONLY)),)
+DEFINES	+=	-DVULKAN_ONLY
+endif
+
 CFLAGS	:=	`$(PREFIX)pkg-config --cflags $(PKGS)` -Wall -Wextra -O3 -DNDEBUG $(LTOFLAGS) \
 			-ffunction-sections -fdata-sections -fno-ident \
 			-ffile-prefix-map=$(CURDIR)=. -fmacro-prefix-map=$(CURDIR)=. \
