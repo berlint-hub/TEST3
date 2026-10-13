@@ -210,7 +210,13 @@ jobs:
         working-directory: nxvk
         run: |
           set +e
-          sudo env PATH="$PATH" HOME="$HOME" make CONTAINER=docker 2>&1 \
+          # AR: nxvk's `package` target merges the per-target archives with
+          # $(DEVKITPRO)/devkitA64/bin/aarch64-none-elf-ar on the host, which a
+          # plain runner does not have. Static archives are target-agnostic, so
+          # the host `ar` is enough. DEVKITPRO is pinned so nxvk.pc's prefix
+          # points at the portlib path the devkitPro container uses below.
+          sudo env PATH="$PATH" HOME="$HOME" make CONTAINER=docker AR=ar \
+            DEVKITPRO=/opt/devkitpro 2>&1 \
             | tee "$GITHUB_WORKSPACE/nxvk-build.log"
           code=${PIPESTATUS[0]}
           sudo chown -R "$(id -u):$(id -g)" nxvk
