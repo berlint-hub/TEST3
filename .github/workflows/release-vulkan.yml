@@ -25,7 +25,18 @@ on:
   # a release build from any branch.
   push:
     branches: ['arena/**']
-    paths: ['.github/workflows/release-vulkan.yml']
+    # The commit message must also carry [release-vk] (see the prep job's `if`),
+    # so widening the path filter cannot start a release by accident. Without
+    # these, a fix confined to the Makefile or source/ never reached this
+    # workflow at all and had to be disguised as a workflow edit.
+    paths:
+      - '.github/workflows/release-vulkan.yml'
+      - '.github/dkp-packages.txt'
+      - 'Makefile'
+      - 'build_all.sh'
+      - 'source/**'
+      - 'launcher/**'
+      - 'third_party/**'
   workflow_dispatch:
     inputs:
       tag:
