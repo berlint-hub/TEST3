@@ -117,7 +117,7 @@ jobs:
           fetch-depth: 1
 
       - name: Download a prebuilt nxvk portlib
-        if: needs.prep.outputs.nxvk_sdk_url == ''
+        if: needs.prep.outputs.nxvk_sdk_url != ''
         run: |
           set -euo pipefail
           mkdir -p nxvk-pkg
