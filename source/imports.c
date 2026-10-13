@@ -200,6 +200,30 @@ static int sched_setaffinity_fake(int pid, size_t sz, const void *mask) {
 
 static void abort_fake(void) {
   extern void NX_NORETURN __libnx_exit(int rc);
+#ifdef NETHERSX2_VK_DIAGNOSTIC
+  // The core reached abort(). In practice this is libc++'s std::terminate()
+  // after an uncaught exception -- which is what PCSX2 throws when the GS
+  // device cannot be created, e.g. when physical device enumeration comes back
+  // empty. __libnx_exit() below is silent: no exception handler runs and
+  // nothing is written, so the process just returns to the launcher. Record
+  // where the abort came from before that happens.
+  //
+  // Subtract the so_base printed by the "heap ready" note to turn these into
+  // offsets into libemucore_4248.so, then resolve them with addr2line against
+  // the baked core.
+  vk_diag_note("abort() called, returning to launcher; lr=%p",
+               __builtin_return_address(0));
+  uintptr_t fp = (uintptr_t)__builtin_frame_address(0);
+  for (int i = 0; i < 8 && fp && (fp & 15) == 0; ++i) {
+    const uintptr_t *frame = (const uintptr_t *)fp;
+    uintptr_t next = frame[0];
+    uintptr_t lr = frame[1];
+    if (!lr) break;
+    vk_diag_note("abort backtrace[%d] lr=%p", i, (void *)lr);
+    if (next <= fp) break;  // frames must walk upward; refuse to loop
+    fp = next;
+  }
+#endif
   __libnx_exit(134);
 }
 
