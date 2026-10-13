@@ -101,8 +101,11 @@ echo "==== emulator binaries ($RENDERERS, MESA_FLAVOR=$MESA_FLAVOR) ===="
 cd "$APP"
 for r in $RENDERERS; do
   echo "---- renderer: $r ----"
-  make clean >/dev/null 2>&1
-  make -j"$JOBS" RENDERER="$r"
+  # The Makefile defaults TARGET to $(notdir $(CURDIR)), so a checkout named
+  # anything other than NetherSX2_nx produced <dirname>.nro and the cp below
+  # failed. Pin it.
+  make clean TARGET=NetherSX2_nx >/dev/null 2>&1
+  make -j"$JOBS" RENDERER="$r" TARGET=NetherSX2_nx
   if [[ "$r" == "VK" ]]; then
     cp -f NetherSX2_nx.nro NetherSX2_nx_vk.nro
   else
