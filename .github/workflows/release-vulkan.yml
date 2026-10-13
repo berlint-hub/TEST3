@@ -83,11 +83,14 @@ jobs:
       - name: Resolve
         id: params
         run: |
-          core="${{ needs.prep.outputs.core }}";            core="${core:-4248}"
-          tag="${{ needs.prep.outputs.tag }}";              tag="${tag:-vk-$core-r$GITHUB_RUN_NUMBER}"
-          ref="${{ needs.prep.outputs.nxvk_ref }}";         ref="${ref:-switch}"
-          url="${{ needs.prep.outputs.nxvk_sdk_url }}";     url="${url:-}"
-          pre="${{ needs.prep.outputs.prerelease }}";       pre="${pre:-false}"
+          # Dispatch inputs, not needs.prep.outputs.*: this job has no `needs`,
+          # so those expressions always rendered empty and a manual dispatch
+          # silently got the defaults instead of the values typed in.
+          core="${{ github.event.inputs.core }}";           core="${core:-4248}"
+          tag="${{ github.event.inputs.tag }}";             tag="${tag:-vk-$core-r$GITHUB_RUN_NUMBER}"
+          ref="${{ github.event.inputs.nxvk_ref }}";        ref="${ref:-switch}"
+          url="${{ github.event.inputs.nxvk_sdk_url }}";    url="${url:-}"
+          pre="${{ github.event.inputs.prerelease }}";      pre="${pre:-false}"
           {
             echo "tag=$tag"
             echo "core=$core"
@@ -295,6 +298,11 @@ jobs:
     needs: [prep, nxvk]
     if: needs.nxvk.outputs.built == 'true'
     runs-on: ubuntu-latest
+    # contents: write -- the "Publish the build log" step pushes the log to the
+    # branch. The workflow-wide default is contents: read, which made that push
+    # fail silently (`|| true`) and left the log only in an unreachable artifact.
+    permissions:
+      contents: write
     container:
       image: devkitpro/devkita64:latest
       options: --user root
@@ -374,18 +382,65 @@ jobs:
         env:
           CORE: ${{ needs.prep.outputs.core }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
           case "$CORE" in
             4248) url="https://github.com/Trixarian/NetherSX2-patch/releases/download/2.2n/NetherSX2-v2.2n-4248.apk" ;;
             3668) url="https://github.com/Trixarian/NetherSX2-classic/releases/download/2.2n/NetherSX2-v2.2n-3668.apk" ;;
             *) echo "unknown core: $CORE" >&2; exit 1 ;;
           esac
-          mkdir -p "$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE"
-          curl -fsSL "$url" -o core.apk
-          unzip -q -o core.apk -d "$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE" \
-            "lib/arm64-v8a/libemucore.so" "assets/*"
-          ls -l "$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE/lib/arm64-v8a/libemucore.so"
-          sha256sum "$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE/lib/arm64-v8a/libemucore.so" | tee core.sha256
+          dir="$GITHUB_WORKSPACE/cores/NetherSX2-v2.2n-$CORE"
+          mkdir -p "$dir/assets"
+          curl -fsSL "$url" -o core.apk || exit 1
+
+          # The runner log is not reachable from where this workflow is
+          # maintained, so the archive's real contents are written to a file
+          # that the build step folds into the committed build log. Guessing at
+          # the APK layout from here is what this replaces.
+          { echo "== core.apk: $url =="
+            echo "== sha256: $(sha256sum core.apk | cut -d' ' -f1) =="
+            unzip -l core.apk
+            echo "== assets entries =="
+            unzip -Z1 core.apk | grep -i '^assets/' | head -80
+          } > "$GITHUB_WORKSPACE/apk-listing.txt" 2>&1
+
+          # Extract the two patterns separately: unzip exits 0 when *any*
+          # pattern matched, so a silently unmatched "assets/*" used to hide
+          # behind a successful libemucore.so extraction.
+          unzip -q -o core.apk -d "$dir" "lib/arm64-v8a/libemucore.so" || true
+          unzip -q -o core.apk -d "$dir" "assets/*" || true
+
+          test -f "$dir/lib/arm64-v8a/libemucore.so" || {
+            echo "::error::libemucore.so missing from the APK" >&2; exit 1; }
+
+          # build_all.sh requires assets/GameIndex.yaml and source/main.c reads
+          # it at runtime. Recover it wherever the APK stores it, and fall back
+          # to the upstream game database if the archive does not carry one.
+          if [ ! -f "$dir/assets/GameIndex.yaml" ]; then
+            echo "::warning::assets/GameIndex.yaml not extracted; searching the archive"
+            hit=$(unzip -Z1 core.apk | grep -iE 'gameindex[^/]*\.ya?ml$' | head -1 || true)
+            if [ -n "$hit" ]; then
+              echo "found in archive: $hit"
+              unzip -q -o core.apk -d "$dir" "$hit" || true
+              find "$dir" -ipath '*gameindex*.ya*ml' -exec cp -f {} "$dir/assets/GameIndex.yaml" \;
+            fi
+          fi
+          if [ ! -f "$dir/assets/GameIndex.yaml" ]; then
+            case "$CORE" in
+              4248) repo="Trixarian/NetherSX2-patch" ;;
+              3668) repo="Trixarian/NetherSX2-classic" ;;
+            esac
+            echo "::warning::falling back to $repo GameIndex[merged].yaml"
+            curl -fsSL "https://raw.githubusercontent.com/$repo/main/GameIndex%5Bmerged%5D.yaml" \
+              -o "$dir/assets/GameIndex.yaml" || true
+          fi
+
+          { echo "== extracted tree =="
+            find "$GITHUB_WORKSPACE/cores" -maxdepth 4 | sort | head -120
+          } >> "$GITHUB_WORKSPACE/apk-listing.txt" 2>&1
+
+          ls -l "$dir/lib/arm64-v8a/libemucore.so"
+          ls -l "$dir/assets/GameIndex.yaml" || echo "::error::GameIndex.yaml still missing"
+          sha256sum "$dir/lib/arm64-v8a/libemucore.so" | tee core.sha256
 
       - name: Build (Vulkan only, single core)
         id: build
@@ -398,8 +453,31 @@ jobs:
           JOBS: "4"
         run: |
           set +e
-          ./build_all.sh 2>&1 | tee "$GITHUB_WORKSPACE/release-build.log"
-          code=${PIPESTATUS[0]}
+          log="$GITHUB_WORKSPACE/release-build.log"
+          # Header first: build_all.sh prints nothing before its input check, so
+          # a one-line "Missing build input" used to be the whole log and said
+          # nothing about what *was* available.
+          { echo "==== build environment ===="
+            echo "DEVKITPRO=$DEVKITPRO  PORTLIBS=$PORTLIBS  CORES_DIR=$CORES_DIR"
+            echo "CORES=$CORES  RENDERERS=$RENDERERS  MESA_FLAVOR=$MESA_FLAVOR  JOBS=$JOBS"
+            for t in cmake ninja pkg-config aarch64-none-elf-gcc; do
+              printf '%-24s %s\n' "$t" "$(command -v "$t" || echo MISSING)"
+            done
+            echo "-- nxvk portlib --"
+            ls -l "$PORTLIBS"/lib/libnvk*.a "$PORTLIBS"/lib/pkgconfig/nxvk.pc 2>&1
+            PATH="$(dirname "$(command -v aarch64-none-elf-pkg-config || echo /usr/bin/pkg-config)"):$PATH" \
+              aarch64-none-elf-pkg-config --libs nxvk 2>&1
+            echo "-- expat --"
+            ls -l "$PORTLIBS"/lib/libexpat.a 2>&1
+          } > "$log" 2>&1
+          cat "$GITHUB_WORKSPACE/apk-listing.txt" >> "$log" 2>&1
+          echo "==== build_all.sh ====" >> "$log"
+          # build_all.sh was committed 100644, so `./build_all.sh` died with
+          # "Permission denied" (exit 126) and produced a one-line log.
+          [ -x build_all.sh ] || { echo "::warning::build_all.sh is not executable"; chmod +x build_all.sh; }
+          ./build_all.sh >> "$log" 2>&1
+          code=$?
+          echo "==== build_all.sh exit code: $code ====" >> "$log"
           SUDO=""; command -v sudo >/dev/null && SUDO=sudo
           $SUDO chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE" 2>/dev/null || true
           exit $code
@@ -416,16 +494,31 @@ jobs:
           BRANCH: ${{ github.ref_name }}
         run: |
           set -uo pipefail
+          log="$GITHUB_WORKSPACE/release-build.log"
+          [ -f "$log" ] || { echo "::error::no build log at $log"; exit 0; }
+          # Keep the committed log bounded: the diagnostic header plus the head
+          # and tail of the build output is what gets read back from the branch.
           mkdir -p .ci-logs
-          cp "$GITHUB_WORKSPACE/release-build.log" \
-             ".ci-logs/release-build-${{ github.run_number }}.log" || exit 0
+          out=".ci-logs/release-build-${{ github.run_number }}.log"
+          if [ "$(wc -l < "$log")" -gt 1200 ]; then
+            { head -200 "$log"; echo "... [$(($(wc -l < "$log") - 1200)) lines trimmed] ..."
+              tail -1000 "$log"; } > "$out"
+          else
+            cp "$log" "$out" || exit 0
+          fi
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase --autostash origin "$BRANCH" || true
           git add .ci-logs
           git commit -m "ci: release build log for run ${{ github.run_number }} [skip ci]" || exit 0
-          git push origin "HEAD:$BRANCH" || true
+          # The job needs contents: write for this to land; without it the push
+          # failed silently and the log stayed in an unreachable artifact.
+          if git push origin "HEAD:$BRANCH"; then
+            echo "build log committed to $BRANCH as $out"
+          else
+            echo "::error::could not push the build log to $BRANCH"
+          fi
 
       - name: Collect the build diagnostic
         id: bdiag
@@ -433,8 +526,10 @@ jobs:
         run: |
           set -uo pipefail
           log="$GITHUB_WORKSPACE/release-build.log"
-          line=$( { grep -aiE "error|undefined reference|cannot find|not found|No such file|No rule|Killed" "$log" \
-                    | grep -av '^\+' | tail -1; } || true )
+          # "Missing build input" matched none of the old keywords, so a missing
+          # input reported as exit-non-zero-no-error-line and said nothing.
+          line=$( { grep -aiE "Missing build input|is required\.|error:|Error [0-9]+|undefined reference|cannot find|not found|No such file|No rule|No space|Killed|fatal" "$log" \
+                    | grep -avE '^\+|Werror|-Wno-error|Compiler for .* supports' | tail -1; } || true )
           line=$(printf '%s' "$line" | tr -cd '[:print:]' | cut -c1-100)
           [ -n "$line" ] || line="exit-non-zero-no-error-line"
           name="build-fail-$(printf '%s' "$line" | tr -c 'A-Za-z0-9 ._' '-' | cut -c1-90)"
@@ -475,7 +570,9 @@ jobs:
   # -------------------------------------------------------------------------
   release:
     name: publish release ${{ needs.prep.outputs.tag }}
-    needs: [prep, build]
+    # nxvk is listed because the `if` below reads needs.nxvk.outputs.built, and
+    # a job may only read outputs from the jobs named in its own `needs`.
+    needs: [prep, build, nxvk]
     if: needs.nxvk.outputs.built == 'true'
     runs-on: ubuntu-latest
     permissions:

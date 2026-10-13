@@ -54,9 +54,23 @@ if [[ "$wants_vulkan" == yes ]]; then
       ;;
   esac
 fi
+missing=0
 for file in "${required[@]}"; do
-  [[ -f "$file" ]] || { echo "Missing build input: $file" >&2; exit 1; }
+  if [[ ! -f "$file" ]]; then
+    echo "Missing build input: $file" >&2
+    missing=1
+  fi
 done
+if (( missing )); then
+  # Naming the file alone is not enough to diagnose a bad core extraction, so
+  # show what the core folder actually holds next to it.
+  for b in $CORES; do
+    d="$CORES_DIR/NetherSX2-v2.2n-$b"
+    echo "--- contents of $d ---" >&2
+    if [[ -d "$d" ]]; then find "$d" -maxdepth 3 | sort | head -40 >&2; else echo "(absent)" >&2; fi
+  done
+  exit 1
+fi
 command -v cmake >/dev/null || { echo "cmake is required." >&2; exit 1; }
 command -v ninja >/dev/null || { echo "ninja is required." >&2; exit 1; }
 
