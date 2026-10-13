@@ -1,0 +1,1767 @@
+>> configuring Vulkan build
+DEPRECATION: "pkgconfig" entry is deprecated and should be replaced by "pkg-config"
+The Meson build system
+Version: 1.12.1
+Source dir: /work
+Build dir: /work/switch/build/cross
+Build type: cross build
+Project name: mesa
+Project version: 26.2.2
+C compiler for the host machine: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc (gcc 15.2.0 "aarch64-none-elf-gcc (devkitA64) 15.2.0")
+C linker for the host machine: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc ld.bfd 2.45.1
+C++ compiler for the host machine: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ (gcc 15.2.0 "aarch64-none-elf-g++ (devkitA64) 15.2.0")
+C++ linker for the host machine: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ ld.bfd 2.45.1
+C compiler for the build machine: cc (gcc 12.2.0 "cc (Debian 12.2.0-14+deb12u1) 12.2.0")
+C linker for the build machine: cc ld.bfd 2.40
+C++ compiler for the build machine: c++ (gcc 12.2.0 "c++ (Debian 12.2.0-14+deb12u1) 12.2.0")
+C++ linker for the build machine: c++ ld.bfd 2.40
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Host machine cpu family: aarch64
+Host machine cpu: cortex-a57
+Target machine cpu family: aarch64
+Target machine cpu: cortex-a57
+Checking for size of "void*" : 8 
+meson.build:645: WARNING: cannot auto-detect -mtls-dialect when cross-compiling, using compiler default
+Dependency libglvnd for host machine skipped: feature glvnd disabled
+Program glslangValidator found: YES (/usr/bin/glslangValidator)
+Dependency libva for host machine skipped: feature gallium-va disabled
+meson.build:878: WARNING: add_languages is missing native:, assuming languages are wanted for both host and build.
+Rust compiler for the host machine: /work/switch/rust/rustc-switch.sh -C linker=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc (rustc 1.98.0 "1.98.0-nightly")
+Rust linker for the host machine:  ld.bfd 2.45.1
+Rust compiler for the build machine: rustc -C linker=cc (rustc 1.98.0 "1.98.0-nightly")
+Rust linker for the build machine:  ld.bfd 2.40
+Program bindgen found: YES
+Program mesa_clc found: YES (/work/switch/build/native-tools/bin/mesa_clc)
+Program vtn_bindgen2 found: YES (/work/switch/build/native-tools/bin/vtn_bindgen2)
+Program python3.16 found: NO
+Program python3.15 found: NO
+Program python3.14 found: NO
+Program python3.13 found: NO
+Program python3.12 found: NO
+Program python3.11 found: YES 3.11.2 3.11.2 (/usr/bin/python3.11)
+Fetching value of define "ETIME" : 62 
+Compiler for C supports arguments -gsplit-dwarf: YES 
+Compiler for C supports link arguments -Wl,--gdb-index: NO 
+Checking for function "bswap32" : YES 
+Checking for function "bswap64" : YES 
+Checking for function "clz" : YES 
+Checking for function "clzll" : YES 
+Checking for function "ctz" : YES 
+Checking for function "expect" : YES 
+Checking for function "ffs" : YES 
+Checking for function "ffsll" : YES 
+Checking for function "popcount" : YES 
+Checking for function "popcountll" : YES 
+Checking for function "unreachable" : YES 
+Checking for function "types_compatible_p" : YES 
+Checking for function "__builtin_add_overflow" : YES 
+Checking for function "__builtin_add_overflow_p" : YES 
+Checking for function "__builtin_sub_overflow_p" : YES 
+Checking for function "__builtin_arm_get_fpscr" : NO 
+Checking for function "__builtin_arm_set_fpscr" : NO 
+Checking for function "__builtin_aarch64_get_fpcr" : YES 
+Checking for function "__builtin_aarch64_set_fpcr" : YES 
+Compiler for C supports function attribute const: YES 
+Compiler for C supports function attribute flatten: YES 
+Compiler for C supports function attribute malloc: YES 
+Compiler for C supports function attribute pure: YES 
+Compiler for C supports function attribute unused: YES 
+Compiler for C supports function attribute warn_unused_result: YES 
+Compiler for C supports function attribute weak: YES 
+Compiler for C supports function attribute format: YES 
+Compiler for C supports function attribute packed: YES 
+Compiler for C supports function attribute returns_nonnull: YES 
+Compiler for C supports function attribute alias: YES 
+Compiler for C supports function attribute noreturn: YES 
+Compiler for C supports function attribute optimize: YES 
+Compiler for C supports function attribute cold: YES 
+Compiler for C supports function attribute visibility:hidden: YES 
+Checking if "__uint128_t" compiles: YES 
+Checking for function "reallocarray" : YES 
+Checking for function "fmemopen" : YES 
+Checking if "gc-sections" links: YES 
+Compiler for C supports arguments -Werror=implicit-function-declaration: YES 
+Compiler for C supports arguments -Werror=missing-prototypes: YES 
+Compiler for C supports arguments -Werror=return-type: YES 
+Compiler for C supports arguments -Werror=empty-body: YES 
+Compiler for C supports arguments -Werror=incompatible-pointer-types: YES 
+Compiler for C supports arguments -Werror=int-conversion: YES 
+Compiler for C supports arguments -Wimplicit-fallthrough: YES 
+Compiler for C supports arguments -Wmisleading-indentation: YES 
+Compiler for C supports arguments -Wno-error=maybe-uninitialized: YES 
+Compiler for C supports arguments -Wno-missing-field-initializers: YES 
+Compiler for C supports arguments -Wno-format-truncation: YES 
+Compiler for C supports arguments -Wno-nonnull-compare: YES 
+Compiler for C supports arguments -fno-math-errno: YES 
+Compiler for C supports arguments -fno-trapping-math: YES 
+Compiler for C supports arguments -Qunused-arguments: NO 
+Compiler for C supports arguments -fno-common: YES 
+Compiler for C supports arguments -Wno-unknown-pragmas: YES 
+Compiler for C supports arguments -Wno-microsoft-enum-value: NO 
+Compiler for C supports arguments -Wno-unused-function: YES 
+Compiler for C supports arguments -Werror=format: YES 
+Compiler for C supports arguments -Wformat-security: YES 
+Compiler for C supports arguments -Werror=thread-safety: NO 
+Compiler for C supports arguments -ffunction-sections: YES 
+Compiler for C supports arguments -fdata-sections: YES 
+Compiler for C supports arguments -Wno-unused-variable: YES 
+Compiler for C supports arguments -Wno-unused-but-set-variable: YES 
+Compiler for C supports arguments /wd4189: NO 
+Compiler for C++ supports arguments -Werror=return-type: YES 
+Compiler for C++ supports arguments -Werror=empty-body: YES 
+Compiler for C++ supports arguments -Wmisleading-indentation: YES 
+Compiler for C++ supports arguments -Wno-error=maybe-uninitialized: YES 
+Compiler for C++ supports arguments -Wno-non-virtual-dtor: YES 
+Compiler for C++ supports arguments -Wno-missing-field-initializers: YES 
+Compiler for C++ supports arguments -Wno-format-truncation: YES 
+Compiler for C++ supports arguments -fno-math-errno: YES 
+Compiler for C++ supports arguments -fno-trapping-math: YES 
+Compiler for C++ supports arguments -Qunused-arguments: NO 
+Compiler for C++ supports arguments -flifetime-dse=1: YES 
+Compiler for C++ supports arguments -Wno-unknown-pragmas: YES 
+Compiler for C++ supports arguments -Wno-microsoft-enum-value: NO 
+Compiler for C++ supports arguments -Werror=format: YES 
+Compiler for C++ supports arguments -Wformat-security: YES 
+Compiler for C++ supports arguments -ffunction-sections: YES 
+Compiler for C++ supports arguments -fdata-sections: YES 
+Compiler for C++ supports arguments -Wno-unused-variable: YES 
+Compiler for C++ supports arguments -Wno-unused-but-set-variable: YES 
+Compiler for C++ supports arguments /wd4189: NO 
+Compiler for C supports arguments -Wno-override-init: YES 
+Compiler for C supports arguments -Wno-initializer-overrides: NO 
+Compiler for C supports arguments -Werror=pointer-arith: YES 
+Compiler for C supports arguments -Werror=vla: YES 
+Compiler for C supports arguments -Werror=gnu-empty-initializer: NO 
+Compiler for C supports arguments -Wgnu-pointer-arith: NO 
+Compiler for C++ supports arguments -Werror=pointer-arith: YES 
+Compiler for C++ supports arguments -Werror=vla: YES 
+Compiler for C++ supports arguments -Werror=gnu-empty-initializer: NO 
+Compiler for C++ supports arguments -Wgnu-pointer-arith: NO 
+Compiler for C supports arguments -Werror=date-time: YES 
+Compiler for C supports arguments -Werror=gnu-alignof-expression: NO 
+Compiler for C supports arguments -Werror=ignored-qualifiers: YES 
+Compiler for C supports arguments -Werror=implicit-fallthrough: YES 
+Compiler for C supports arguments -Werror=int-conversion: YES (cached)
+Compiler for C supports arguments -Werror=missing-prototypes: YES (cached)
+Compiler for C supports arguments -Werror=pragma-pack: NO 
+Compiler for C supports arguments -Werror=pragma-pack-suspicious-include: NO 
+Compiler for C supports arguments -Werror=sizeof-array-div: YES 
+Compiler for C supports arguments -Werror=string-plus-int: NO 
+Compiler for C supports arguments -Werror=unreachable-code-loop-increment: NO 
+Compiler for C++ supports arguments -D_LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS: YES 
+Compiler for C++ supports arguments -Werror=date-time: YES 
+Compiler for C++ supports arguments -Werror=gnu-alignof-expression: NO 
+Compiler for C++ supports arguments -Werror=ignored-qualifiers: YES 
+Compiler for C++ supports arguments -Werror=implicit-fallthrough: YES 
+Compiler for C++ supports arguments -Werror=pragma-pack: NO 
+Compiler for C++ supports arguments -Werror=pragma-pack-suspicious-include: NO 
+Compiler for C++ supports arguments -Werror=sizeof-array-div: YES 
+Compiler for C++ supports arguments -Werror=string-plus-int: NO 
+Compiler for C++ supports arguments -Werror=unreachable-code-loop-increment: NO 
+Compiler for C++ supports arguments -Werror=missing-declarations: YES 
+Checking for function "__builtin_ia32_clflushopt" : NO 
+Checking if "GCC atomic builtins" compiles: YES 
+Checking if "GCC atomic builtins required -latomic" links: YES 
+Checking if "GCC 64bit atomics" with dependency  links: YES 
+Library ws2_32 found: NO
+Header "sys/sysmacros.h" has symbol "major" : NO 
+Header "sys/mkdev.h" has symbol "major" : YES 
+Header "sys/mkdev.h" has symbol "minor" : YES 
+Header "sys/mkdev.h" has symbol "makedev" : NO 
+Check usable header "sched.h" : YES 
+Checking for function "sched_getaffinity" : NO 
+Check usable header "sys/sysctl.h" : YES 
+Check usable header "xlocale.h" : NO 
+Check usable header "linux/futex.h" : NO 
+Check usable header "endian.h" : NO 
+Check usable header "dlfcn.h" : YES 
+Check usable header "sys/shm.h" : NO 
+Check usable header "cet.h" : NO 
+Check usable header "pthread_np.h" : NO 
+Check usable header "poll.h" : YES 
+Check usable header "sys/inotify.h" : NO 
+Check usable header "linux/udmabuf.h" : NO 
+Checking for function "strtof" : YES 
+Checking for function "mkostemp" : YES 
+Checking for function "memfd_create" : NO 
+Checking for function "random_r" : NO 
+Checking for function "flock" : NO 
+Checking for function "strtok_r" : YES 
+Checking for function "getrandom" : NO 
+Checking for function "qsort_s" : NO 
+Checking for function "posix_fallocate" : NO 
+Checking for function "secure_getenv" : NO 
+Checking for function "sysconf" : NO 
+Checking if "GNU qsort_r" links: YES 
+Header "time.h" has symbol "struct timespec" : YES 
+Checking for function "thrd_create" : NO 
+Header "errno.h" has symbol "program_invocation_name" : NO 
+Header "math.h" has symbol "issignaling" : NO 
+Checking for function "posix_memalign" : YES 
+Checking whether type "struct dirent" has member "d_type" : YES 
+Checking if "strtod has locale support" links: YES 
+Checking if "Bsymbolic" links: YES 
+Checking if "version-script" links: YES 
+Checking if "dynamic-list" links: YES 
+Compiler for C supports link arguments -Wl,--build-id=sha1: YES 
+Checking for function "dlopen" : NO 
+Library dl found: YES
+Checking for function "dladdr" with dependency -ldl: NO 
+Checking for function "dl_iterate_phdr" : NO 
+Checking for function "clock_gettime" : YES 
+Found pkg-config: YES (/opt/devkitpro/portlibs/switch/bin/aarch64-none-elf-pkg-config) 1.8.1
+Run-time dependency zlib found: YES 1.3.1
+Found CMake: NO
+Run-time dependency libdisplay-info found: NO  (tried pkg-config and cmake)
+Dependency libzstd for host machine skipped: feature zstd disabled
+Run-time dependency threads found: YES
+Checking for function "pthread_setaffinity_np" with dependency threads: NO 
+Run-time dependency expat found: YES 2.2.5
+Library m found: YES
+Run-time dependency libudev found: NO  (tried pkg-config and cmake)
+Dependency llvm(modules: bitwriter, engine, mcdisassembler, mcjit, core, executionengine, scalaropts, transformutils, instcombine) for host machine skipped: feature llvm disabled
+Run-time dependency spirv-tools found: YES 2025.1.1
+Run-time dependency lua54 found: NO  (tried pkg-config and cmake)
+Run-time dependency lua5.4 found: NO  (tried pkg-config and cmake)
+Run-time dependency lua-5.4 found: NO  (tried pkg-config and cmake)
+Run-time dependency lua53 found: NO  (tried pkg-config and cmake)
+Run-time dependency lua5.3 found: NO  (tried pkg-config and cmake)
+Run-time dependency lua-5.3 found: NO  (tried pkg-config and cmake)
+Run-time dependency lua found: NO  (tried pkg-config and cmake)
+Run-time dependency libelf found: NO  (tried pkg-config and cmake)
+Library elf found: NO
+Dependency valgrind for host machine skipped: feature valgrind disabled
+Program bison found: YES (/usr/bin/bison)
+Program bison found: YES 3.8.2 3.8.2 (/usr/bin/bison)
+Program flex found: YES (/usr/bin/flex)
+Program ln found: YES (/usr/bin/ln)
+Dependency libunwind for host machine skipped: feature libunwind disabled
+Library sensors skipped: feature lmsensors disabled
+Program nm found: YES (/usr/bin/nm)
+Program symbols-check.py found: YES (/usr/bin/python3 /work/bin/symbols-check.py)
+Program install_megadrivers.py found: YES (/usr/bin/python3 /work/bin/install_megadrivers.py)
+Compiler for C supports arguments -Wno-error: YES 
+Compiler for C supports arguments -Wno-misleading-indentation: YES 
+Program decode.py found: YES (/work/src/compiler/isaspec/decode.py)
+Program encode.py found: YES (/work/src/compiler/isaspec/encode.py)
+Program bindgen found: YES
+Compiler for C supports arguments -Wno-missing-prototypes: YES 
+src/compiler/rust/meson.build:117: WARNING: include_directories sandbox violation!
+The project is trying to access the directory '../../../switch/build/cross' which belongs to a different
+subproject. This is a problem as it hardcodes the relative paths of these two projects.
+This makes it impossible to compile the project in any other directory layout and also
+prevents the subproject from changing its own directory layout.
+
+Instead of poking directly at the internals the subproject should be executed and
+it should set a variable that the caller can then use. Something like:
+
+# In subproject
+some_dep = declare_dependency(include_directories: include_directories('include'))
+
+# In subproject wrap file
+[provide]
+some = some_dep
+
+# In parent project
+some_dep = dependency('some')
+executable(..., dependencies: [some_dep])
+
+This warning will become a hard error in a future Meson release.
+
+Run-time dependency syn found: NO  (tried pkg-config and cmake)
+Looking for a fallback subproject for the dependency syn
+Downloading syn-2-rs source from https://static.crates.io/crates/syn/2.0.87/download
+
+Executing subproject syn-2-rs for machine: host 
+
+syn-2-rs| Project name: syn
+syn-2-rs| Project version: 2.0.87
+syn-2-rs| Rust compiler for the host machine: /work/switch/rust/rustc-switch.sh -C linker=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc (rustc 1.98.0 "1.98.0-nightly")
+syn-2-rs| Rust linker for the host machine:  ld.bfd 2.45.1
+syn-2-rs| Rust compiler for the build machine: rustc -C linker=cc (rustc 1.98.0 "1.98.0-nightly")
+syn-2-rs| Rust linker for the build machine:  ld.bfd 2.40
+syn-2-rs| Downloading unicode-ident-1-rs source from https://static.crates.io/crates/unicode-ident/1.0.12/download
+
+Executing subproject syn-2-rs:unicode-ident-1-rs for machine: host
+
+unicode-ident-1-rs| Project name: unicode-ident
+unicode-ident-1-rs| Project version: 1.0.12
+unicode-ident-1-rs| Rust compiler for the host machine: /work/switch/rust/rustc-switch.sh -C linker=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc (rustc 1.98.0 "1.98.0-nightly")
+unicode-ident-1-rs| Rust linker for the host machine:  ld.bfd 2.45.1
+unicode-ident-1-rs| Rust compiler for the build machine: rustc -C linker=cc (rustc 1.98.0 "1.98.0-nightly")
+unicode-ident-1-rs| Rust linker for the build machine:  ld.bfd 2.40
+unicode-ident-1-rs| Build targets in project: 39
+unicode-ident-1-rs| Subproject unicode-ident-1-rs finished.
+
+syn-2-rs| Downloading quote-1-rs source from https://static.crates.io/crates/quote/1.0.35/download
+
+Executing subproject syn-2-rs:quote-1-rs for machine: host
+
+quote-1-rs| Project name: quote
+quote-1-rs| Project version: 1.0.35
+quote-1-rs| Rust compiler for the host machine: /work/switch/rust/rustc-switch.sh -C linker=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc (rustc 1.98.0 "1.98.0-nightly")
+quote-1-rs| Rust linker for the host machine:  ld.bfd 2.45.1
+quote-1-rs| Rust compiler for the build machine: rustc -C linker=cc (rustc 1.98.0 "1.98.0-nightly")
+quote-1-rs| Rust linker for the build machine:  ld.bfd 2.40
+quote-1-rs| Downloading proc-macro2-1-rs source from https://static.crates.io/crates/proc-macro2/1.0.86/download
+
+Executing subproject syn-2-rs:quote-1-rs:proc-macro2-1-rs for machine: host
+
+proc-macro2-1-rs| Project name: proc-macro2
+proc-macro2-1-rs| Project version: 1.0.86
+proc-macro2-1-rs| Rust compiler for the host machine: /work/switch/rust/rustc-switch.sh -C linker=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc (rustc 1.98.0 "1.98.0-nightly")
+proc-macro2-1-rs| Rust linker for the host machine:  ld.bfd 2.45.1
+proc-macro2-1-rs| Rust compiler for the build machine: rustc -C linker=cc (rustc 1.98.0 "1.98.0-nightly")
+proc-macro2-1-rs| Rust linker for the build machine:  ld.bfd 2.40
+proc-macro2-1-rs| Build targets in project: 40
+proc-macro2-1-rs| Subproject proc-macro2-1-rs finished.
+
+quote-1-rs| Build targets in project: 41
+quote-1-rs| Subproject quote-1-rs finished.
+
+syn-2-rs| Build targets in project: 42
+syn-2-rs| Subproject syn-2-rs finished.
+
+Dependency syn for host machine from subproject subprojects/syn-2.0.87 found: YES 2.0.87
+Compiler for C supports arguments -Wno-gnu-variable-sized-type-not-at-end: NO 
+Program cbindgen found: YES 0.29.4 0.29.4 (/opt/rust/cargo/bin/cbindgen)
+Run-time dependency paste found: NO  (tried pkg-config and cmake)
+Looking for a fallback subproject for the dependency paste
+Downloading paste-1-rs source from https://static.crates.io/crates/paste/1.0.14/download
+
+Executing subproject paste-1-rs for machine: host 
+
+paste-1-rs| Project name: paste
+paste-1-rs| Project version: 1.0.14
+paste-1-rs| Rust compiler for the host machine: /work/switch/rust/rustc-switch.sh -C linker=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc (rustc 1.98.0 "1.98.0-nightly")
+paste-1-rs| Rust linker for the host machine:  ld.bfd 2.45.1
+paste-1-rs| Rust compiler for the build machine: rustc -C linker=cc (rustc 1.98.0 "1.98.0-nightly")
+paste-1-rs| Rust linker for the build machine:  ld.bfd 2.40
+paste-1-rs| Build targets in project: 307
+paste-1-rs| Subproject paste-1-rs finished.
+
+Dependency paste for host machine from subproject subprojects/paste-1.0.14 found: YES 1.0.14
+Dependency paste for host machine found: YES 1.0.14 (cached)
+Run-time dependency rustc-hash found: NO  (tried pkg-config and cmake)
+Looking for a fallback subproject for the dependency rustc-hash
+Downloading rustc-hash-2-rs source from https://static.crates.io/crates/rustc-hash/2.1.1/download
+
+Executing subproject rustc-hash-2-rs for machine: host 
+
+rustc-hash-2-rs| Project name: rustc_hash
+rustc-hash-2-rs| Project version: 2.1.1
+rustc-hash-2-rs| Rust compiler for the host machine: /work/switch/rust/rustc-switch.sh -C linker=/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc (rustc 1.98.0 "1.98.0-nightly")
+rustc-hash-2-rs| Rust linker for the host machine:  ld.bfd 2.45.1
+rustc-hash-2-rs| Rust compiler for the build machine: rustc -C linker=cc (rustc 1.98.0 "1.98.0-nightly")
+rustc-hash-2-rs| Rust linker for the build machine:  ld.bfd 2.40
+rustc-hash-2-rs| Build targets in project: 317
+rustc-hash-2-rs| Subproject rustc-hash-2-rs finished.
+
+Dependency rustc-hash for host machine from subproject subprojects/rustc-hash-2.1.1 found: YES 2.1.1
+Program sphinx-build skipped: feature html-docs disabled
+Build targets in project: 334
+
+mesa 26.2.2
+
+  Directories
+    prefix              : /usr/local
+    libdir              : lib
+    includedir          : include
+
+  Common C and C++ arguments
+    c_cpp_args          :
+
+  OpenGL
+    OpenGL              : NO
+    ES1                 : NO
+    ES2                 : NO
+    GLVND               : NO
+
+  DRI
+    Platform            : none
+    Driver dir          : /usr/local/lib/dri
+
+  GLX
+    Enabled             : NO
+    Provider            : None
+
+  EGL
+    Enabled             : NO
+
+  GBM
+    Enabled             : NO
+
+  Vulkan
+    Drivers             : nouveau
+    Platforms           :
+    ICD dir             : share/vulkan/icd.d
+    Intel Ray tracing   : NO
+
+  Video
+    Codecs              : NO
+    APIs                : vulkan
+    Encoding            : NO
+
+  LLVM
+    Required            : disabled
+
+  Gallium
+    Enabled             : NO
+
+  Perfetto
+    Enabled             : NO
+
+  Teflon (TensorFlow Lite delegate)
+    Enabled             : NO
+
+  Subprojects (for host machine)
+    paste-1-rs          : YES
+    proc-macro2-1-rs    : YES (from syn-2-rs => quote-1-rs)
+    quote-1-rs          : YES (from syn-2-rs)
+    rustc-hash-2-rs     : YES
+    syn-2-rs            : YES
+    unicode-ident-1-rs  : YES (from syn-2-rs)
+
+  User defined options
+    Cross files         : /work/switch/crossfiles/switch.cross
+                          /work/switch/crossfiles/rust.cross
+    Native files        : /work/switch/crossfiles/native.txt
+    android-libbacktrace: disabled
+    build-tests         : false
+    buildtype           : release
+    egl                 : disabled
+    gallium-drivers     : 
+    gbm                 : disabled
+    gles1               : disabled
+    gles2               : disabled
+    glx                 : disabled
+    libunwind           : disabled
+    llvm                : disabled
+    lmsensors           : disabled
+    mesa-clc            : system
+    opengl              : false
+    perfetto            : false
+    platforms           : 
+    precomp-compiler    : system
+    shader-cache        : enabled
+    valgrind            : disabled
+    video-codecs        : 
+    vulkan-beta         : false
+    vulkan-drivers      : nouveau
+    vulkan-layers       : 
+    zstd                : disabled
+
+Found ninja-1.11.1 at /usr/bin/ninja
+=== configured; building libnvk.a ===
+>> building driver archives
+ninja: Entering directory `switch/build/cross'
+[1/1230] Compiling C object src/c11/impl/libmesa_util_c11.a.p/time.c.o
+[2/1230] Compiling C object src/util/blake3/libblake3.a.p/blake3_dispatch.c.o
+[3/1230] Compiling C object src/c11/impl/libmesa_util_c11.a.p/threads_posix.c.o
+[4/1230] Linking static target src/c11/impl/libmesa_util_c11.a
+[5/1230] Generating src/util/driconf_static.h with a custom command
+[6/1230] Compiling C object src/util/blake3/libblake3.a.p/blake3_portable.c.o
+[7/1230] Compiling C object src/util/blake3/libblake3.a.p/blake3_neon.c.o
+[8/1230] Compiling C object src/util/blake3/libblake3.a.p/blake3.c.o
+In function 'compress_parents_parallel',
+    inlined from 'compress_subtree_to_parent_node' at ../../../src/util/blake3/blake3.c:377:9,
+    inlined from 'blake3_hasher_update_base' at ../../../src/util/blake3/blake3.c:562:7,
+    inlined from 'blake3_hasher_update.part.0' at ../../../src/util/blake3/blake3.c:589:3:
+../../../src/util/blake3/blake3.c:242:5: warning: 'memcpy' offset [64, 95] is out of the bounds [0, 64] of object 'out_array' with type 'uint8_t[64]' {aka 'unsigned char[64]'} [-Warray-bounds=]
+  242 |     memcpy(&out[parents_array_len * BLAKE3_OUT_LEN],
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  243 |            &child_chaining_values[2 * parents_array_len * BLAKE3_OUT_LEN],
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  244 |            BLAKE3_OUT_LEN);
+      |            ~~~~~~~~~~~~~~~
+../../../src/util/blake3/blake3.c: In function 'blake3_hasher_update.part.0':
+../../../src/util/blake3/blake3.c:374:11: note: 'out_array' declared here
+  374 |   uint8_t out_array[MAX_SIMD_DEGREE_OR_2 * BLAKE3_OUT_LEN / 2];
+      |           ^~~~~~~~~
+In function 'compress_subtree_to_parent_node',
+    inlined from 'blake3_hasher_update_base' at ../../../src/util/blake3/blake3.c:562:7,
+    inlined from 'blake3_hasher_update.part.0' at ../../../src/util/blake3/blake3.c:589:3:
+../../../src/util/blake3/blake3.c:378:5: warning: 'memcpy' forming offset [64, 95] is out of the bounds [0, 64] of object 'out_array' with type 'uint8_t[64]' {aka 'unsigned char[64]'} [-Warray-bounds=]
+  378 |     memcpy(cv_array, out_array, num_cvs * BLAKE3_OUT_LEN);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../src/util/blake3/blake3.c: In function 'blake3_hasher_update.part.0':
+../../../src/util/blake3/blake3.c:374:11: note: 'out_array' declared here
+  374 |   uint8_t out_array[MAX_SIMD_DEGREE_OR_2 * BLAKE3_OUT_LEN / 2];
+      |           ^~~~~~~~~
+[9/1230] Linking static target src/util/blake3/libblake3.a
+[10/1230] Generating src/util/shader_stats.h with a custom command (wrapped by meson to capture output)
+
+****
+lxml or rnc2rng missing, skipping validation
+If this script fails, install for diagnostics
+****
+
+
+[11/1230] Generating src/git_sha1.h with a custom command
+[12/1230] Compiling C object src/util/libmesa_util_simd.a.p/streaming-load-memcpy.c.o
+[13/1230] Linking static target src/util/libmesa_util_simd.a
+[14/1230] Generating src/compiler/builtin_types.c with a custom command
+[15/1230] Generating src/util/format/u_format_gen.h with a custom command (wrapped by meson to capture output)
+[16/1230] Generating src/compiler/ir_expression_operation.h with a custom command (wrapped by meson to capture output)
+[17/1230] Generating src/util/format/u_format_pack.h with a custom command (wrapped by meson to capture output)
+[18/1230] Generating src/compiler/nir/nir_builder_opcodes.h with a custom command (wrapped by meson to capture output)
+[19/1230] Compiling C object src/util/libmesa_util.a.p/bitscan.c.o
+[20/1230] Generating src/util/format/u_format_table.c with a custom command (wrapped by meson to capture output)
+[21/1230] Compiling C object src/util/libmesa_util.a.p/anon_file.c.o
+[22/1230] Generating src/compiler/builtin_types.h with a custom command
+[23/1230] Compiling C object src/util/libmesa_util.a.p/build_id.c.o
+[24/1230] Compiling C object src/util/libmesa_util.a.p/cnd_monotonic.c.o
+[25/1230] Compiling C object src/util/libmesa_util.a.p/compress.c.o
+[26/1230] Compiling C object src/util/libmesa_util.a.p/blob.c.o
+[27/1230] Compiling C object src/util/libmesa_util.a.p/crc32.c.o
+[28/1230] Compiling C object src/util/libmesa_util.a.p/thread_sched.c.o
+[29/1230] Compiling C object src/util/libmesa_util.a.p/dag.c.o
+[30/1230] Compiling C object src/util/libxmlconfig.a.p/xmlconfig.c.o
+[31/1230] Compiling C object src/util/libmesa_util.a.p/double.c.o
+[32/1230] Compiling C object src/util/libmesa_util.a.p/disk_cache.c.o
+[33/1230] Compiling C object src/util/libmesa_util.a.p/fast_idiv_by_const.c.o
+[34/1230] Compiling C object src/util/libmesa_util.a.p/futex.c.o
+[35/1230] Compiling C object src/util/libmesa_util.a.p/fossilize_db.c.o
+[36/1230] Compiling C object src/util/libmesa_util.a.p/float8.c.o
+[37/1230] Compiling C object src/util/libmesa_util.a.p/half_float.c.o
+[38/1230] Compiling C object src/util/libmesa_util.a.p/disk_cache_os.c.o
+[39/1230] Compiling C object src/util/libmesa_util.a.p/helpers.c.o
+[40/1230] Generating src/util/format_srgb with a custom command (wrapped by meson to capture output)
+[41/1230] Compiling C object src/util/libmesa_util.a.p/meson-generated_.._format_srgb.c.o
+[42/1230] Compiling C object src/util/libmesa_util.a.p/memstream.c.o
+[43/1230] Compiling C object src/util/libmesa_util.a.p/lut.c.o
+[44/1230] Compiling C object src/util/libmesa_util.a.p/log.c.o
+[45/1230] Compiling C object src/util/libmesa_util.a.p/os_time.c.o
+[46/1230] Compiling C object src/util/libmesa_util.a.p/os_file_notify.c.o
+[47/1230] Compiling C object src/util/libmesa_util.a.p/mesa-blake3.c.o
+[48/1230] Compiling C object src/util/libmesa_util.a.p/os_file.c.o
+[49/1230] Compiling C object src/util/libmesa_util.a.p/u_idalloc.c.o
+[50/1230] Compiling C object src/util/libmesa_util.a.p/os_socket.c.o
+[51/1230] Compiling C object src/util/libmesa_util.a.p/os_memory_fd.c.o
+[52/1230] Compiling C object src/util/libmesa_util.a.p/os_misc.c.o
+[53/1230] Compiling C object src/util/libmesa_util.a.p/u_process.c.o
+../../../src/util/u_process.c:186:9: note: '#pragma message: Warning: Per application configuration won't work with your OS version.'
+  186 | #pragma message ( "Warning: Per application configuration won't work with your OS version." )
+      |         ^~~~~~~
+[54/1230] Compiling C object src/util/libmesa_util.a.p/rwlock.c.o
+[55/1230] Compiling C++ object src/util/libmesa_util.a.p/u_qsort.cpp.o
+[56/1230] Compiling C object src/util/libmesa_util.a.p/pb_slab.c.o
+[57/1230] Compiling C object src/util/libmesa_util.a.p/rand_xor.c.o
+[58/1230] Compiling C object src/util/libmesa_util.a.p/range_minimum_query.c.o
+[59/1230] Compiling C object src/util/libmesa_util.a.p/hash_table.c.o
+[60/1230] Compiling C object src/util/libmesa_util.a.p/rb_tree.c.o
+[61/1230] Compiling C object src/util/libmesa_util.a.p/perf_u_trace.c.o
+[62/1230] Compiling C object src/util/libmesa_util.a.p/simple_mtx.c.o
+[63/1230] Compiling C object src/util/libmesa_util.a.p/register_allocate.c.o
+[64/1230] Compiling C object src/util/libmesa_util.a.p/slab.c.o
+[65/1230] Compiling C object src/util/libmesa_util.a.p/rgtc.c.o
+[66/1230] Compiling C object src/util/libmesa_util.a.p/sparse_array.c.o
+[67/1230] Compiling C object src/util/libmesa_util.a.p/set.c.o
+[68/1230] Compiling C object src/util/libmesa_util.a.p/string_buffer.c.o
+[69/1230] Compiling C object src/util/libmesa_util.a.p/strndup.c.o
+[70/1230] Compiling C object src/util/libmesa_util.a.p/ralloc.c.o
+[71/1230] Compiling C object src/util/libmesa_util.a.p/strtod.c.o
+[72/1230] Compiling C object src/util/libmesa_util.a.p/u_atomic.c.o
+[73/1230] Compiling C object src/util/libmesa_util.a.p/u_call_once.c.o
+[74/1230] Compiling C object src/util/libmesa_util.a.p/u_dl.c.o
+[75/1230] Compiling C object src/util/libmesa_util.a.p/softfloat.c.o
+[76/1230] Compiling C object src/util/libmesa_util.a.p/u_dynarray.c.o
+[77/1230] Compiling C++ object src/util/libmesa_util.a.p/texcompress_astc_luts_wrap.cpp.o
+[78/1230] Compiling C object src/util/libmesa_util.a.p/u_hash_table.c.o
+[79/1230] Compiling C object src/util/libmesa_util.a.p/u_range_remap.c.o
+[80/1230] Compiling C object src/util/libmesa_util.a.p/u_string.c.o
+[81/1230] Compiling C object src/util/libmesa_util.a.p/u_shader_variant_cache.c.o
+[82/1230] Compiling C object src/util/libmesa_util.a.p/u_thread.c.o
+../../../src/util/u_thread.c: In function 'u_thread_setname':
+../../../src/util/u_thread.c:118:2: warning: #warning Not sure how to call pthread_setname_np [-Wcpp]
+  118 | #warning Not sure how to call pthread_setname_np
+      |  ^~~~~~~
+[83/1230] Compiling C object src/util/libmesa_util.a.p/u_queue.c.o
+[84/1230] Compiling C object src/util/libmesa_util.a.p/u_vector.c.o
+[85/1230] Compiling C object src/util/libmesa_util.a.p/u_math.c.o
+[86/1230] Compiling C++ object src/util/libmesa_util.a.p/texcompress_astc_luts.cpp.o
+[87/1230] Compiling C object src/util/libmesa_util.a.p/u_mm.c.o
+[88/1230] Compiling C object src/util/libmesa_util.a.p/u_debug_memory.c.o
+[89/1230] Compiling C object src/util/libmesa_util.a.p/u_cpu_detect.c.o
+[90/1230] Compiling C object src/util/libmesa_util.a.p/u_worklist.c.o
+[91/1230] Compiling C object src/util/libmesa_util.a.p/vl_zscan_data.c.o
+[92/1230] Compiling C object src/util/libmesa_util.a.p/u_debug.c.o
+In file included from ../../../src/util/u_debug.c:38:
+../../../src/util/u_debug.c: In function 'str_has_option':
+../../../src/util/u_debug.c:324:33: warning: array subscript has type 'char' [-Wchar-subscripts]
+  324 |          if (!*str || !(isalnum(*str) || *str == '_')) {
+      |                                 ^~~~
+[93/1230] Compiling C++ object src/util/libmesa_util.a.p/texcompress_astc.cpp.o
+[94/1230] Compiling C object src/util/libmesa_util.a.p/vma.c.o
+[95/1230] Compiling C object src/util/libmesa_util.a.p/cache_ops_aarch64.c.o
+[96/1230] Compiling C object src/util/libmesa_util.a.p/mesa_cache_db_multipart.c.o
+[97/1230] Compiling C object src/util/libmesa_util.a.p/disk_cache_horizon.c.o
+[98/1230] Compiling C object src/util/libmesa_util.a.p/u_printf.c.o
+[99/1230] Compiling C object src/util/libmesa_util.a.p/mesa_cache_db.c.o
+[100/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_etc.c.o
+[101/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_latc.c.o
+[102/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format.c.o
+[103/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_fxt1.c.o
+[104/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_other.c.o
+[105/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_tests.c.o
+[106/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_rgtc.c.o
+[107/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_bptc.c.o
+[108/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_unpack_neon.c.o
+[109/1230] Compiling C object src/util/libmesa_util.a.p/u_debug_stack.c.o
+[110/1230] Linking static target src/util/libxmlconfig.a
+[111/1230] Compiling C object src/util/libmesa_util.a.p/u_debug_symbol.c.o
+[112/1230] Compiling C object src/compiler/libcompiler.a.p/meson-generated_.._builtin_types.c.o
+[113/1230] Compiling C object src/compiler/libcompiler.a.p/shader_enums.c.o
+[114/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_zs.c.o
+[115/1230] Generating src/compiler/nir/nir_constant_expressions.c with a custom command (wrapped by meson to capture output)
+[116/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_yuv.c.o
+[117/1230] Generating src/compiler/nir/nir_opcodes.c with a custom command (wrapped by meson to capture output)
+[118/1230] Generating src/compiler/nir/nir_opcodes.h with a custom command (wrapped by meson to capture output)
+[119/1230] Generating src/compiler/nir/nir_intrinsics.h with a custom command
+[120/1230] Generating src/compiler/nir/nir_intrinsics_indices.h with a custom command
+[121/1230] Compiling C object src/util/libmesa_util.a.p/format_u_format_s3tc.c.o
+[122/1230] Generating src/compiler/nir/nir_intrinsic.c with a custom command
+[123/1230] Compiling C object src/compiler/nir/libnir.a.p/meson-generated_.._nir_opcodes.c.o
+[124/1230] Compiling C object src/compiler/nir/libnir.a.p/meson-generated_.._nir_intrinsics.c.o
+[125/1230] Compiling C object src/compiler/libcompiler.a.p/glsl_types.c.o
+[126/1230] Linking static target src/compiler/libcompiler.a
+[127/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_builder.c.o
+[128/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_builtin_builder.c.o
+[129/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_convert_address_format.c.o
+[130/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_clip_cull_distance_io_utils.c.o
+[131/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_clone.c.o
+[132/1230] Compiling C object src/compiler/nir/libnir.a.p/nir.c.o
+[133/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_divergence_analysis.c.o
+[134/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_control_flow.c.o
+[135/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_dominance.c.o
+[136/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_dominance_lca.c.o
+[137/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_fixup_is_exported.c.o
+[138/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_downgrade_pls_vars.c.o
+[139/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_deref.c.o
+[140/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_functions.c.o
+[141/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_from_ssa.c.o
+[142/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_format_convert.c.o
+[143/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_gather_info.c.o
+[144/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_gather_output_deps.c.o
+[145/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_gather_types.c.o
+[146/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_group_loads.c.o
+[147/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_gather_tcs_info.c.o
+[148/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_gather_xfb_info.c.o
+[149/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_inline_sysval.c.o
+[150/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_gs_count_vertices.c.o
+[151/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_io_add_xfb_info.c.o
+[152/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_inline_uniforms.c.o
+[153/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_legacy.c.o
+[154/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_instr_set.c.o
+[155/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_liveness.c.o
+[156/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_linking_helpers.c.o
+[157/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_abort.c.o
+[158/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_alu.c.o
+[159/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_loop_analyze.c.o
+[160/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_alpha.c.o
+[161/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_alu_width.c.o
+[162/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_array_deref_of_vec.c.o
+[163/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_amul.c.o
+[164/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_atomics_to_ssbo.c.o
+[165/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_bitmap.c.o
+[166/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_bool_to_float.c.o
+[167/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_bool_to_int32.c.o
+[168/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_calls_to_builtins.c.o
+In file included from ../../../src/compiler/nir/nir_lower_calls_to_builtins.c:6:
+../../../src/compiler/nir/nir_lower_calls_to_builtins.c: In function 'lower':
+../../../src/compiler/nir/nir_lower_calls_to_builtins.c:107:68: warning: array subscript has type 'char' [-Wchar-subscripts]
+  107 |    if (!strncmp("_Z", intr_name, strlen("_Z")) && isdigit(intr_name[2])) {
+      |                                                           ~~~~~~~~~^~~
+[169/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_blend.c.o
+[170/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_cl_images.c.o
+[171/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_clamp_color_outputs.c.o
+[172/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_clip_disable.c.o
+[173/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_clip_halfz.c.o
+[174/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_const_arrays_to_uniforms.c.o
+[175/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_clip.c.o
+[176/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_continue_constructs.c.o
+[177/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_convert_alu_types.c.o
+[178/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_variable_initializers.c.o
+[179/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_cooperative_matrix.c.o
+[180/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_discard_if.c.o
+[181/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_fb_read.c.o
+[182/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_flatshade.c.o
+[183/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_floats.c.o
+[184/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_double_ops.c.o
+[185/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_flrp.c.o
+[186/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_explicit_io.c.o
+[187/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_fragcoord_wtrans.c.o
+[188/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_frag_coord_to_pixel_coord.c.o
+[189/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_fragcolor.c.o
+[190/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_frexp.c.o
+[191/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_fp16_conv.c.o
+[192/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_global_vars_to_local.c.o
+[193/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_halt_to_return.c.o
+[194/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_goto_ifs.c.o
+[195/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_helper_writes.c.o
+[196/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_gs_intrinsics.c.o
+[197/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_idiv.c.o
+[198/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_load_const_to_scalar.c.o
+[199/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_image_atomics_to_global.c.o
+[200/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_image.c.o
+[201/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_locals_to_regs.c.o
+[202/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_input_attachments.c.o
+[203/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_indirect_derefs_to_if_else_trees.c.o
+[204/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_interpolation.c.o
+[205/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_int_to_float.c.o
+[206/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_io_array_vars_to_elements.c.o
+[207/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_int64.c.o
+[208/1230] Compiling C object src/util/libmesa_util.a.p/meson-generated_.._format_u_format_table.c.o
+[209/1230] Linking static target src/util/libmesa_util.a
+[210/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_io.c.o
+[211/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_io_indirect_loads.c.o
+[212/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_io_vars_to_scalar.c.o
+[213/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_io_vars_to_temporaries.c.o
+[214/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_multiview.c.o
+[215/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_io_to_scalar.c.o
+[216/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_is_helper_invocation.c.o
+[217/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_memcpy.c.o
+[218/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_mediump.c.o
+[219/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_memory_model.c.o
+[220/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_packing.c.o
+[221/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_non_uniform_access.c.o
+[222/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_patch_vertices.c.o
+[223/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_passthrough_edgeflags.c.o
+[224/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_pntc_ytransform.c.o
+[225/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_point_size.c.o
+[226/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_phis_to_scalar.c.o
+[227/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_mem_access_bit_sizes.c.o
+[228/1230] Compiling C object src/compiler/nir/libnir.a.p/meson-generated_.._nir_constant_expressions.c.o
+[229/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_point_smooth.c.o
+[230/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_poly_line_smooth.c.o
+[231/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_reg_intrinsics_to_ssa.c.o
+[232/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_readonly_images_to_tex.c.o
+[233/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_printf.c.o
+[234/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_samplers.c.o
+[235/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_sample_shading.c.o
+[236/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_returns.c.o
+[237/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_robust_access.c.o
+[238/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_scratch.c.o
+[239/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_scratch_to_var.c.o
+[240/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_ssbo.c.o
+[241/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_single_sampled.c.o
+[242/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_terminate_to_demote.c.o
+[243/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_system_values.c.o
+[244/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_tess_coord_z.c.o
+[245/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_task_shader.c.o
+[246/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_tex_shadow.c.o
+[247/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_texcoord_replace.c.o
+[248/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_texcoord_replace_late.c.o
+[249/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_two_sided_color.c.o
+[250/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_undef_to_zero.c.o
+[251/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_subgroups.c.o
+[252/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_shader_calls.c.o
+[253/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_var_copies.c.o
+[254/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_view_index_to_device_index.c.o
+[255/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_vec_to_regs.c.o
+[256/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_wpos_center.c.o
+[257/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_vars_to_ssa.c.o
+[258/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_viewport_transform.c.o
+[259/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_vec3_to_vec4.c.o
+[260/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_tex.c.o
+[261/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_wrmasks.c.o
+[262/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_wpos_ytransform.c.o
+[263/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_bit_size.c.o
+[264/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_uniforms_to_ubo.c.o
+[265/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_metadata.c.o
+[266/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_sysvals_to_varyings.c.o
+[267/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_mod_analysis.c.o
+[268/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_ubo_vec4.c.o
+[269/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_workgroup_size.c.o
+[270/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_move_vec_src_uses_to_dest.c.o
+[271/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_move_output_stores_to_end.c.o
+[272/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_normalize_sin_cos.c.o
+[273/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_access.c.o
+[274/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_barriers.c.o
+[275/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_normalize_cubemap_coords.c.o
+[276/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_barycentric.c.o
+[277/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_comparison_pre.c.o
+[278/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_call.c.o
+[279/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_combine_stores.c.o
+[280/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_clip_cull_const.c.o
+[281/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_cse.c.o
+[282/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_copy_propagate.c.o
+[283/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_dce.c.o
+[284/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_constant_folding.c.o
+[285/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_dead_cf.c.o
+[286/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_fp_math_ctrl.c.o
+[287/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_fragdepth.c.o
+[288/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_dead_write_vars.c.o
+[289/1230] Generating src/compiler/nir/nir_opt_algebraic with a custom command
+[290/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_frag_coord_to_pixel_coord.c.o
+[291/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_generate_bfi.c.o
+[292/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_find_array_copies.c.o
+[293/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_copy_prop_vars.c.o
+[294/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_gcm.c.o
+[295/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_licm.c.o
+[296/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_idiv_const.c.o
+[297/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_load_skip_helpers.c.o
+[298/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_large_constants.c.o
+[299/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_if.c.o
+[300/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_loop.c.o
+[301/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_memcpy.c.o
+[302/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_intrinsics.c.o
+[303/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_move.c.o
+[304/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_loop_unroll.c.o
+[305/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_move_discards_to_top.c.o
+[306/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_mqsad.c.o
+[307/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_non_uniform_access.c.o
+[308/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_move_to_top.c.o
+[309/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_phi_precision.c.o
+[310/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_load_store_vectorize.c.o
+[311/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_phi_to_bool.c.o
+[312/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_offsets.c.o
+[313/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_peephole_select.c.o
+[314/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_ray_queries.c.o
+[315/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_reassociate_bfi.c.o
+[316/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_rematerialize_compares.c.o
+[317/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_reassociate.c.o
+[318/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_preamble.c.o
+[319/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_remove_phis.c.o
+[320/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_shrink_stores.c.o
+[321/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_undef.c.o
+[322/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_sink.c.o
+[323/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_shrink_vectors.c.o
+[324/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_uniform_atomics.c.o
+[325/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_uniform_subgroup.c.o
+[326/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_uub.c.o
+[327/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_shared_vars_to_subgroup.c.o
+[328/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_passthrough_gs.c.o
+[329/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_passthrough_tcs.c.o
+[330/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_vectorize_io.c.o
+[331/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_phi_builder.c.o
+[332/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_vectorize_io_vars.c.o
+[333/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_propagate_invariant.c.o
+[334/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_vectorize.c.o
+[335/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_recompute_io_bases.c.o
+[336/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_remove_dead_variables.c.o
+[337/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_remove_outputs.c.o
+[338/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_remove_tex_shadow.c.o
+[339/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_repair_ssa.c.o
+[340/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_scale_fdiv.c.o
+[341/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_print.c.o
+[342/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_opt_varyings.c.o
+[343/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_schedule.c.o
+[344/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_search.c.o
+[345/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_separate_merged_clip_cull_io.c.o
+[346/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_shader_bisect.c.o
+[347/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_range_analysis.c.o
+[348/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_split_var_copies.c.o
+[349/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_split_conversions.c.o
+[350/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_split_per_member_structs.c.o
+[351/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_sweep.c.o
+[352/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_split_64bit_vec3_and_vec4.c.o
+[353/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_to_lcssa.c.o
+[354/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_serialize.c.o
+[355/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_trivialize_registers.c.o
+[356/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_use_dominance.c.o
+[357/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_validate.c.o
+[358/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_worklist.c.o
+[359/1230] Generating src/compiler/spirv/vtn_gather_types.c with a custom command
+[360/1230] Generating src/compiler/spirv/spirv_info with a custom command
+[361/1230] Compiling C object src/compiler/rust/libcompiler_c_helpers.a.p/rust_helpers.c.o
+[362/1230] Linking static target src/compiler/rust/libcompiler_c_helpers.a
+[363/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_split_vars.c.o
+[364/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_lower_atomics.c.o
+[365/1230] Generating src/compiler/spirv/vtn_generator_ids.h with a custom command
+[366/1230] Copying /work/src/compiler/rust/lib.rs to src/compiler/rust/libcompiler.rlib.p/structured/lib.rs
+[367/1230] Copying /work/src/compiler/rust/as_slice.rs to src/compiler/rust/libcompiler.rlib.p/structured/as_slice.rs
+[368/1230] Compiling C object src/compiler/nir/libnir.a.p/nir_unlower_io_to_vars.c.o
+[369/1230] Compiling C object src/compiler/spirv/libvtn.a.p/meson-generated_.._vtn_gather_types.c.o
+[370/1230] Compiling C object src/compiler/spirv/libvtn.a.p/meson-generated_.._spirv_info.c.o
+[371/1230] Compiling C object src/compiler/spirv/libvtn.a.p/gl_spirv.c.o
+[372/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_amd.c.o
+[373/1230] Generating bindings for Rust src/compiler/rust/rustmod-bindgen-bindings.h
+[374/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_debug.c.o
+[375/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_cfg.c.o
+[376/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_alu.c.o
+[377/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_cmat.c.o
+[378/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_subgroup.c.o
+[379/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_glsl450.c.o
+[380/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_structured_cfg.c.o
+[381/1230] Copying src/compiler/rust/bindings.rs to src/compiler/rust/libcompiler.rlib.p/structured/bindings.rs
+[382/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_opencl.c.o
+[383/1230] Copying src/compiler/rust/bindings.c to src/compiler/rust/libcompiler.rlib.p/structured/bindings.c
+[384/1230] Copying /work/src/compiler/rust/bitset.rs to src/compiler/rust/libcompiler.rlib.p/structured/bitset.rs
+[385/1230] Copying /work/src/compiler/rust/cfg.rs to src/compiler/rust/libcompiler.rlib.p/structured/cfg.rs
+[386/1230] Copying /work/src/compiler/rust/depth_first_search.rs to src/compiler/rust/libcompiler.rlib.p/structured/depth_first_search.rs
+[387/1230] Copying /work/src/compiler/rust/dataflow.rs to src/compiler/rust/libcompiler.rlib.p/structured/dataflow.rs
+[388/1230] Copying /work/src/compiler/rust/enum_as_u8.rs to src/compiler/rust/libcompiler.rlib.p/structured/enum_as_u8.rs
+[389/1230] Copying /work/src/compiler/rust/lower_bounded.rs to src/compiler/rust/libcompiler.rlib.p/structured/lower_bounded.rs
+[390/1230] Copying /work/src/compiler/rust/float16.rs to src/compiler/rust/libcompiler.rlib.p/structured/float16.rs
+[391/1230] Copying /work/src/compiler/rust/memstream.rs to src/compiler/rust/libcompiler.rlib.p/structured/memstream.rs
+[392/1230] Copying /work/src/compiler/rust/nir_instr_printer.rs to src/compiler/rust/libcompiler.rlib.p/structured/nir_instr_printer.rs
+[393/1230] Copying /work/src/compiler/rust/smallvec.rs to src/compiler/rust/libcompiler.rlib.p/structured/smallvec.rs
+[394/1230] Copying /work/src/compiler/rust/nir.rs to src/compiler/rust/libcompiler.rlib.p/structured/nir.rs
+[395/1230] Copying /work/src/compiler/rust/vec_pair.rs to src/compiler/rust/libcompiler.rlib.p/structured/vec_pair.rs
+[396/1230] Compiling Rust source ../../../subprojects/unicode-ident-1.0.12/src/lib.rs
+[397/1230] Generating src/vulkan/util/vk_dispatch_table with a custom command
+[398/1230] Generating src/vulkan/util/vk_enum_to_str with a custom command
+[399/1230] Generating src/vulkan/util/vk_struct_type_cast with a custom command
+[400/1230] Compiling C object src/compiler/spirv/libvtn.a.p/vtn_variables.c.o
+[401/1230] Compiling Rust source ../../../subprojects/proc-macro2-1.0.86/src/lib.rs
+[402/1230] Compiling C object src/compiler/rust/libcompiler_bindings.a.p/meson-generated_.._bindings.c.o
+[403/1230] Linking static target src/compiler/rust/libcompiler_bindings.a
+[404/1230] Generating src/vulkan/util/vk_extensions with a custom command
+[405/1230] Generating src/vulkan/runtime/vk_common_entrypoints with a custom command
+[406/1230] Compiling Rust source ../../../subprojects/quote-1.0.35/src/lib.rs
+[407/1230] Compiling C object src/compiler/spirv/libvtn.a.p/spirv_to_nir.c.o
+[408/1230] Linking static target src/compiler/spirv/libvtn.a
+[409/1230] Compiling C object src/vulkan/util/libvulkan_util.a.p/meson-generated_.._vk_extensions.c.o
+[410/1230] Compiling C object src/vulkan/util/libvulkan_util.a.p/vk_alloc.c.o
+[411/1230] Compiling C object src/compiler/nir/libnir.a.p/meson-generated_.._nir_opt_algebraic.c.o
+[412/1230] Linking static target src/compiler/nir/libnir.a
+[413/1230] Compiling C object src/vulkan/util/libvulkan_util.a.p/vk_format.c.o
+[414/1230] Compiling C object src/vulkan/util/libvulkan_util.a.p/vk_util.c.o
+[415/1230] Compiling C object src/vulkan/util/libvulkan_util.a.p/meson-generated_.._vk_dispatch_table.c.o
+[416/1230] Generating src/vulkan/runtime/vk_cmd_enqueue_entrypoints with a custom command
+[417/1230] Generating src/vulkan/runtime/vk_dispatch_trampolines with a custom command
+[418/1230] Generating src/vulkan/runtime/vk_physical_device_features with a custom command
+[419/1230] Generating src/vulkan/runtime/vk_cmd_queue with a custom command
+[420/1230] Generating src/vulkan/runtime/vk_physical_device_spirv_caps with a custom command
+[421/1230] Generating src/vulkan/runtime/vk_synchronization_helpers with a custom command
+[422/1230] Generating src/vulkan/runtime/vk_physical_device_properties with a custom command
+[423/1230] Generating src/vulkan/runtime/astc_spv.h with a custom command
+[424/1230] Compiling Rust source src/compiler/rust/libcompiler.rlib.p/structured/lib.rs
+[425/1230] Generating src/vulkan/wsi/wsi_entrypoints with a custom command
+[426/1230] Generating src/nouveau/headers/cl85b5.h with a custom command
+[427/1230] Generating src/nouveau/headers/cl902d.h with a custom command
+[428/1230] Compiling C object src/vulkan/wsi/libvulkan_wsi.a.p/meson-generated_.._wsi_common_entrypoints.c.o
+[429/1230] Compiling C object src/vulkan/wsi/libvulkan_wsi.a.p/wsi_common_headless.c.o
+[430/1230] Compiling C object src/vulkan/wsi/libvulkan_wsi.a.p/wsi_switch.c.o
+[431/1230] Generating src/nouveau/headers/cl9039.h with a custom command
+[432/1230] Generating src/nouveau/headers/cl906f.h with a custom command
+[433/1230] Generating src/nouveau/headers/cl9097.h with a custom command
+[434/1230] Generating src/nouveau/headers/cl90b5.h with a custom command
+[435/1230] Generating src/nouveau/headers/cl90c0.h with a custom command
+[436/1230] Generating src/nouveau/headers/cl91c0.h with a custom command
+[437/1230] Compiling C object src/vulkan/wsi/libvulkan_wsi.a.p/wsi_common.c.o
+[438/1230] Generating src/nouveau/headers/cl9297.h with a custom command
+[439/1230] Generating src/nouveau/headers/cla0b5.h with a custom command
+[440/1230] Generating src/nouveau/headers/cla040.h with a custom command
+[441/1230] Generating src/nouveau/headers/cla06f.h with a custom command
+[442/1230] Generating src/nouveau/headers/cla097.h with a custom command
+[443/1230] Generating src/vulkan/runtime/vk_format_info with a custom command
+[444/1230] Generating src/nouveau/headers/cla140.h with a custom command
+[445/1230] Generating src/nouveau/headers/cla16f.h with a custom command
+[446/1230] Generating src/nouveau/headers/cla1c0.h with a custom command
+[447/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/meson-generated_.._vk_common_entrypoints.c.o
+[448/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/meson-generated_.._vk_cmd_enqueue_entrypoints.c.o
+[449/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/meson-generated_.._vk_format_info.c.o
+[450/1230] Compiling C object src/vulkan/util/libvulkan_util.a.p/meson-generated_.._vk_enum_to_str.c.o
+[451/1230] Linking static target src/vulkan/util/libvulkan_util.a
+[452/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/meson-generated_.._vk_physical_device_spirv_caps.c.o
+[453/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/meson-generated_.._vk_synchronization_helpers.c.o
+[454/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/rmv_vk_rmv_common.c.o
+[455/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/meson-generated_.._vk_dispatch_trampolines.c.o
+[456/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/meson-generated_.._vk_physical_device_properties.c.o
+[457/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_blend.c.o
+[458/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/rmv_vk_rmv_exporter.c.o
+[459/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_buffer.c.o
+[460/1230] Compiling Rust source ../../../subprojects/syn-2.0.87/src/lib.rs
+[461/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_buffer_view.c.o
+[462/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_cmd_copy.c.o
+[463/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_cmd_enqueue.c.o
+[464/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_debug_report.c.o
+[465/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_command_pool.c.o
+[466/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_command_buffer.c.o
+[467/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_deferred_operation.c.o
+[468/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_descriptor_set_layout.c.o
+[469/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_descriptors.c.o
+[470/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_debug_utils.c.o
+[471/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_descriptor_update_template.c.o
+[472/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_device_generated_commands.c.o
+[473/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_device_memory.c.o
+[474/1230] Compiling Rust source ../../../src/compiler/rust/proc/lib.rs
+[475/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_framebuffer.c.o
+[476/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_device.c.o
+[477/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_fence.c.o
+[478/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_log.c.o
+[479/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_meta_object_list.c.o
+[480/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_image.c.o
+[481/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_physical_device.c.o
+[482/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_object.c.o
+[483/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_query_pool.c.o
+[484/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_pipeline_layout.c.o
+[485/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_sampler.c.o
+[486/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_semaphore.c.o
+[487/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_standard_sample_locations.c.o
+[488/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_queue.c.o
+[489/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_sync_binary.c.o
+[490/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_render_pass.c.o
+[491/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_sync_dummy.c.o
+[492/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_sync.c.o
+[493/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_sync_timeline.c.o
+[494/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_synchronization.c.o
+[495/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_ycbcr_conversion.c.o
+[496/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_graphics_state.c.o
+[497/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_meta.c.o
+[498/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_meta_clear.c.o
+[499/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_meta_blit_resolve.c.o
+[500/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_meta_draw_rects.c.o
+[501/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_nir.c.o
+[502/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/meson-generated_.._vk_physical_device_features.c.o
+[503/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/meson-generated_.._vk_cmd_queue.c.o
+[504/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_nir_convert_ycbcr.c.o
+[505/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_pipeline_cache.c.o
+[506/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_nir_lower_descriptor_heaps.c.o
+[507/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_shader.c.o
+[508/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_shader_module.c.o
+[509/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_meta_copy_fill_update.c.o
+[510/1230] Generating src/nouveau/headers/cla197.h with a custom command
+[511/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_texcompress_astc.c.o
+[512/1230] Generating src/nouveau/headers/cla26f.h with a custom command
+[513/1230] Generating src/nouveau/headers/clb06f.h with a custom command
+[514/1230] Generating src/nouveau/headers/cla297.h with a custom command
+[515/1230] Compiling C object src/vulkan/runtime/libvulkan_instance.a.p/vk_instance.c.o
+[516/1230] Generating src/nouveau/headers/clb097.h with a custom command
+[517/1230] Generating src/nouveau/headers/clb0b5.h with a custom command
+[518/1230] Compiling C object src/vulkan/runtime/libvulkan_lite_runtime.a.p/vk_video.c.o
+[519/1230] Generating src/nouveau/headers/clb1c0.h with a custom command
+[520/1230] Generating src/nouveau/headers/clb0c0.h with a custom command
+[521/1230] Generating src/nouveau/headers/clc06f.h with a custom command
+[522/1230] Generating src/nouveau/headers/clb197.h with a custom command
+[523/1230] Generating src/nouveau/headers/clc097.h with a custom command
+[524/1230] Generating src/nouveau/headers/cla0c0.h with a custom command
+[525/1230] Generating src/nouveau/headers/clc1b5.h with a custom command
+[526/1230] Generating src/nouveau/headers/clc197.h with a custom command
+[527/1230] Generating src/nouveau/headers/clc0b5.h with a custom command
+[528/1230] Generating src/nouveau/headers/clc1c0.h with a custom command
+[529/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_pipeline.c.o
+[530/1230] Generating src/nouveau/headers/clc0c0.h with a custom command
+[531/1230] Compiling C object src/vulkan/runtime/libvulkan_runtime.a.p/vk_texcompress_etc2.c.o
+[532/1230] Generating src/nouveau/headers/clc3b5.h with a custom command
+[533/1230] Generating src/nouveau/headers/clc397.h with a custom command
+[534/1230] Generating src/nouveau/headers/clc36f.h with a custom command
+[535/1230] Generating src/nouveau/headers/clc46f.h with a custom command
+[536/1230] Generating src/nouveau/headers/clc3c0.h with a custom command
+[537/1230] Generating src/nouveau/headers/clc5c0.h with a custom command
+[538/1230] Generating src/nouveau/headers/clc597.h with a custom command
+[539/1230] Generating src/nouveau/headers/clc56f.h with a custom command
+[540/1230] Generating src/nouveau/headers/clc5b0.h with a custom command
+[541/1230] Generating src/nouveau/headers/clc5b5.h with a custom command
+[542/1230] Generating src/nouveau/headers/clc6c0.h with a custom command
+[543/1230] Generating src/nouveau/headers/clc7b0.h with a custom command
+[544/1230] Generating src/nouveau/headers/clc6b5.h with a custom command
+[545/1230] Generating src/nouveau/headers/clc697.h with a custom command
+[546/1230] Generating src/nouveau/headers/clc7c0.h with a custom command
+[547/1230] Generating src/nouveau/headers/clc7b5.h with a custom command
+[548/1230] Generating src/nouveau/headers/clc797.h with a custom command
+[549/1230] Generating src/nouveau/headers/clc96f.h with a custom command
+[550/1230] Generating src/nouveau/headers/clc86f.h with a custom command
+[551/1230] Generating src/nouveau/headers/clc8b5.h with a custom command
+[552/1230] Generating src/nouveau/headers/clc9b0.h with a custom command
+[553/1230] Generating src/nouveau/headers/clc997.h with a custom command
+[554/1230] Generating src/nouveau/headers/clc9b5.h with a custom command
+[555/1230] Generating src/nouveau/headers/clc9c0.h with a custom command
+[556/1230] Generating src/nouveau/headers/clcb97.h with a custom command
+[557/1230] Generating src/nouveau/headers/clca6f.h with a custom command
+[558/1230] Generating src/nouveau/headers/clcab5.h with a custom command
+[559/1230] Generating src/nouveau/headers/clcbc0.h with a custom command
+[560/1230] Generating src/nouveau/headers/nv_push_class_dump.h with a custom command
+[561/1230] Generating src/nouveau/headers/clcd97.h with a custom command
+[562/1230] Generating src/nouveau/headers/clcec0.h with a custom command
+[563/1230] Generating src/nouveau/headers/clcdc0.h with a custom command
+[564/1230] Generating src/nouveau/headers/clce97.h with a custom command
+[565/1230] Generating src/nouveau/headers/nvh_classes_cl85b5.rs with a custom command
+[566/1230] Generating src/nouveau/headers/nvh_cl85b5_mthd.rs with a custom command
+[567/1230] Generating src/nouveau/headers/nvh_classes_cl902d.rs with a custom command
+[568/1230] Generating src/nouveau/headers/nvh_cl902d_mthd.rs with a custom command
+[569/1230] Generating src/nouveau/headers/nvh_classes_cl9039.rs with a custom command
+[570/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cl906f.c.o
+[571/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cl85b5.c.o
+[572/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cl90b5.c.o
+[573/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cl91c0.c.o
+[574/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cl9297.c.o
+[575/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cl9039.c.o
+[576/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla040.c.o
+[577/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla0b5.c.o
+[578/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla06f.c.o
+[579/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla140.c.o
+[580/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla16f.c.o
+[581/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla197.c.o
+[582/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cl902d.c.o
+[583/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla26f.c.o
+[584/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla1c0.c.o
+[585/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clb06f.c.o
+[586/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cl90c0.c.o
+[587/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clb0b5.c.o
+[588/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clb197.c.o
+[589/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clb0c0.c.o
+[590/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clb1c0.c.o
+[591/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc06f.c.o
+[592/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla097.c.o
+[593/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc097.c.o
+[594/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc197.c.o
+[595/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc1b5.c.o
+[596/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc1c0.c.o
+[597/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc0b5.c.o
+[598/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc36f.c.o
+[599/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla0c0.c.o
+[600/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc0c0.c.o
+[601/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cla297.c.o
+[602/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc3b5.c.o
+[603/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clb097.c.o
+[604/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc46f.c.o
+[605/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc56f.c.o
+[606/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc5b0.c.o
+[607/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc5b5.c.o
+[608/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc3c0.c.o
+[609/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc6b5.c.o
+[610/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc5c0.c.o
+[611/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc6c0.c.o
+[612/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc7b0.c.o
+[613/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc397.c.o
+[614/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc7b5.c.o
+[615/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc597.c.o
+[616/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc86f.c.o
+[617/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc8b5.c.o
+[618/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc96f.c.o
+[619/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc997.c.o
+[620/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc9b0.c.o
+[621/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc9b5.c.o
+[622/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc9c0.c.o
+[623/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc697.c.o
+[624/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clca6f.c.o
+[625/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc7c0.c.o
+[626/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clcb97.c.o
+[627/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clcab5.c.o
+[628/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clcec0.c.o
+[629/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clce97.c.o
+[630/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_cl9097.c.o
+[631/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clcbc0.c.o
+[632/1230] Generating src/nouveau/headers/nvh_cl9039_mthd.rs with a custom command
+[633/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clc797.c.o
+[634/1230] Generating src/nouveau/headers/nvh_classes_cl906f.rs with a custom command
+[635/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clcdc0.c.o
+[636/1230] Generating src/nouveau/headers/nvh_cl906f_mthd.rs with a custom command
+[637/1230] Generating src/nouveau/headers/nvh_classes_cl9097.rs with a custom command
+[638/1230] Generating src/nouveau/headers/nvh_classes_cl9097_tex.rs with a custom command
+[639/1230] Generating src/nouveau/headers/nvh_cl9097_mthd.rs with a custom command
+[640/1230] Generating src/nouveau/headers/nvh_classes_cl90c0.rs with a custom command
+[641/1230] Generating src/nouveau/headers/nvh_cl90b5_mthd.rs with a custom command
+[642/1230] Generating src/nouveau/headers/nvh_classes_cl90b5.rs with a custom command
+[643/1230] Generating src/nouveau/headers/nvh_cl90c0_mthd.rs with a custom command
+[644/1230] Generating src/nouveau/headers/nvh_cl91c0_mthd.rs with a custom command
+[645/1230] Generating src/nouveau/headers/nvh_classes_cl91c0.rs with a custom command
+[646/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/meson-generated_.._nv_push_clcd97.c.o
+[647/1230] Generating src/nouveau/headers/nvh_classes_cl9297.rs with a custom command
+[648/1230] Generating src/nouveau/headers/nvh_classes_cl9297_tex.rs with a custom command
+[649/1230] Generating src/nouveau/headers/nvh_cl9297_mthd.rs with a custom command
+[650/1230] Generating src/nouveau/headers/nvh_classes_cla040.rs with a custom command
+[651/1230] Generating src/nouveau/headers/nvh_cla040_mthd.rs with a custom command
+[652/1230] Compiling C object src/nouveau/headers/libnvidia_headers_c.a.p/nv_push.c.o
+[653/1230] Generating src/nouveau/headers/nvh_classes_cla0b5.rs with a custom command
+[654/1230] Linking static target src/nouveau/headers/libnvidia_headers_c.a
+[655/1230] Generating src/nouveau/headers/nvh_cla06f_mthd.rs with a custom command
+[656/1230] Generating src/nouveau/headers/nvh_cla0b5_mthd.rs with a custom command
+[657/1230] Generating src/nouveau/headers/nvh_classes_cla06f.rs with a custom command
+[658/1230] Generating src/nouveau/headers/nvh_classes_cla097.rs with a custom command
+[659/1230] Generating src/nouveau/headers/nvh_classes_cla097_sph.rs with a custom command
+[660/1230] Generating src/nouveau/headers/nvh_classes_cla140.rs with a custom command
+[661/1230] Generating src/nouveau/headers/nvh_classes_cla097_tex.rs with a custom command
+[662/1230] Generating src/nouveau/headers/nvh_cla097_mthd.rs with a custom command
+[663/1230] Generating src/nouveau/headers/nvh_cla140_mthd.rs with a custom command
+[664/1230] Generating src/nouveau/headers/nvh_classes_cla16f.rs with a custom command
+[665/1230] Generating src/nouveau/headers/nvh_cla16f_mthd.rs with a custom command
+[666/1230] Generating src/nouveau/headers/nvh_cla1c0_mthd.rs with a custom command
+[667/1230] Generating src/nouveau/headers/nvh_classes_cla197.rs with a custom command
+[668/1230] Generating src/nouveau/headers/nvh_classes_cla1c0_qmd.rs with a custom command
+[669/1230] Generating src/nouveau/headers/nvh_classes_cla1c0.rs with a custom command
+[670/1230] Generating src/nouveau/headers/nvh_cla197_mthd.rs with a custom command
+[671/1230] Generating src/nouveau/headers/nvh_classes_cla197_tex.rs with a custom command
+[672/1230] Generating src/nouveau/headers/nvh_cla297_mthd.rs with a custom command
+[673/1230] Generating src/nouveau/headers/nvh_classes_cla26f.rs with a custom command
+[674/1230] Generating src/nouveau/headers/nvh_classes_cla297_tex.rs with a custom command
+[675/1230] Generating src/nouveau/headers/nvh_classes_cla297.rs with a custom command
+[676/1230] Generating src/nouveau/headers/nvh_cla26f_mthd.rs with a custom command
+[677/1230] Generating src/nouveau/headers/nvh_classes_clb06f.rs with a custom command
+[678/1230] Generating src/nouveau/headers/nvh_clb06f_mthd.rs with a custom command
+[679/1230] Generating src/nouveau/headers/nvh_classes_clb0b5.rs with a custom command
+[680/1230] Generating src/nouveau/headers/nvh_classes_clb097.rs with a custom command
+[681/1230] Generating src/nouveau/headers/nvh_clb097_mthd.rs with a custom command
+[682/1230] Generating src/nouveau/headers/nvh_classes_clb097_tex.rs with a custom command
+[683/1230] Generating src/nouveau/headers/nvh_clb0c0_mthd.rs with a custom command
+[684/1230] Generating src/nouveau/headers/nvh_classes_clb0c0.rs with a custom command
+[685/1230] Generating src/nouveau/headers/nvh_clb0b5_mthd.rs with a custom command
+[686/1230] Generating src/nouveau/headers/nvh_classes_clb0c0_qmd.rs with a custom command
+[687/1230] Generating src/nouveau/headers/nvh_classes_clb1c0.rs with a custom command
+[688/1230] Generating src/nouveau/headers/nvh_classes_clb197.rs with a custom command
+[689/1230] Generating src/nouveau/headers/nvh_clb197_mthd.rs with a custom command
+[690/1230] Generating src/nouveau/headers/nvh_classes_clb197_tex.rs with a custom command
+[691/1230] Generating src/nouveau/headers/nvh_clb1c0_mthd.rs with a custom command
+[692/1230] Generating src/nouveau/headers/nvh_classes_clb1c0_qmd.rs with a custom command
+[693/1230] Generating src/nouveau/headers/nvh_classes_clc06f.rs with a custom command
+[694/1230] Generating src/nouveau/headers/nvh_clc06f_mthd.rs with a custom command
+[695/1230] Generating src/nouveau/headers/nvh_classes_clc097.rs with a custom command
+[696/1230] Generating src/nouveau/headers/nvh_clc097_mthd.rs with a custom command
+[697/1230] Generating src/nouveau/headers/nvh_classes_clc197.rs with a custom command
+[698/1230] Generating src/nouveau/headers/nvh_classes_clc197_tex.rs with a custom command
+[699/1230] Generating src/nouveau/headers/nvh_classes_clc097_tex.rs with a custom command
+[700/1230] Generating src/nouveau/headers/nvh_classes_clc1b5.rs with a custom command
+[701/1230] Generating src/nouveau/headers/nvh_clc197_mthd.rs with a custom command
+[702/1230] Generating src/nouveau/headers/nvh_classes_clc1c0.rs with a custom command
+[703/1230] Generating src/nouveau/headers/nvh_clc1b5_mthd.rs with a custom command
+[704/1230] Generating src/nouveau/headers/nvh_clc1c0_mthd.rs with a custom command
+[705/1230] Generating src/nouveau/headers/nvh_classes_cla0c0.rs with a custom command
+[706/1230] Generating src/nouveau/headers/nvh_classes_clc1c0_qmd.rs with a custom command
+[707/1230] Generating src/nouveau/headers/nvh_cla0c0_mthd.rs with a custom command
+[708/1230] Generating src/nouveau/headers/nvh_classes_cla0c0_qmd.rs with a custom command
+[709/1230] Generating src/nouveau/headers/nvh_clc0b5_mthd.rs with a custom command
+[710/1230] Generating src/nouveau/headers/nvh_classes_clc0b5.rs with a custom command
+[711/1230] Generating src/nouveau/headers/nvh_clc0c0_mthd.rs with a custom command
+[712/1230] Generating src/nouveau/headers/nvh_classes_clc0c0_qmd.rs with a custom command
+[713/1230] Generating src/nouveau/headers/nvh_classes_clc0c0.rs with a custom command
+[714/1230] Generating src/nouveau/headers/nvh_clc36f_mthd.rs with a custom command
+[715/1230] Generating src/nouveau/headers/nvh_classes_clc397_tex.rs with a custom command
+[716/1230] Generating src/nouveau/headers/nvh_classes_clc36f.rs with a custom command
+[717/1230] Generating src/nouveau/headers/nvh_classes_clc397.rs with a custom command
+[718/1230] Generating src/nouveau/headers/nvh_clc397_mthd.rs with a custom command
+[719/1230] Generating src/nouveau/headers/nvh_classes_clc3b5.rs with a custom command
+[720/1230] Generating src/nouveau/headers/nvh_clc3b5_mthd.rs with a custom command
+[721/1230] Generating src/nouveau/headers/nvh_classes_clc3c0_qmd.rs with a custom command
+[722/1230] Generating src/nouveau/headers/nvh_classes_clc3c0.rs with a custom command
+[723/1230] Generating src/nouveau/headers/nvh_classes_clc46f.rs with a custom command
+[724/1230] Generating src/nouveau/headers/nvh_clc3c0_mthd.rs with a custom command
+[725/1230] Generating src/nouveau/headers/nvh_clc46f_mthd.rs with a custom command
+[726/1230] Generating src/nouveau/headers/nvh_clc56f_mthd.rs with a custom command
+[727/1230] Generating src/nouveau/headers/nvh_classes_clc597_tex.rs with a custom command
+[728/1230] Generating src/nouveau/headers/nvh_classes_clc56f.rs with a custom command
+[729/1230] Generating src/nouveau/headers/nvh_classes_clc5b0.rs with a custom command
+[730/1230] Generating src/nouveau/headers/nvh_classes_clc597.rs with a custom command
+[731/1230] Generating src/nouveau/headers/nvh_clc597_mthd.rs with a custom command
+[732/1230] Generating src/nouveau/headers/nvh_clc5b0_mthd.rs with a custom command
+[733/1230] Generating src/nouveau/headers/nvh_classes_clc5b5.rs with a custom command
+[734/1230] Generating src/nouveau/headers/nvh_clc5b5_mthd.rs with a custom command
+[735/1230] Generating src/nouveau/headers/nvh_clc5c0_mthd.rs with a custom command
+[736/1230] Generating src/nouveau/headers/nvh_classes_clc5c0.rs with a custom command
+[737/1230] Generating src/nouveau/headers/nvh_classes_clc5c0_qmd.rs with a custom command
+[738/1230] Generating src/nouveau/headers/nvh_classes_clc697.rs with a custom command
+[739/1230] Generating src/nouveau/headers/nvh_classes_clc697_tex.rs with a custom command
+[740/1230] Generating src/nouveau/headers/nvh_clc697_mthd.rs with a custom command
+[741/1230] Generating src/nouveau/headers/nvh_classes_clc6b5.rs with a custom command
+[742/1230] Generating src/nouveau/headers/nvh_clc6b5_mthd.rs with a custom command
+[743/1230] Generating src/nouveau/headers/nvh_classes_clc6c0.rs with a custom command
+[744/1230] Generating src/nouveau/headers/nvh_clc6c0_mthd.rs with a custom command
+[745/1230] Generating src/nouveau/headers/nvh_classes_clc6c0_qmd.rs with a custom command
+[746/1230] Generating src/nouveau/headers/nvh_classes_clc797.rs with a custom command
+[747/1230] Generating src/nouveau/headers/nvh_classes_clc797_tex.rs with a custom command
+[748/1230] Generating src/nouveau/headers/nvh_clc797_mthd.rs with a custom command
+[749/1230] Generating src/nouveau/headers/nvh_classes_clc797_sph.rs with a custom command
+[750/1230] Generating src/nouveau/headers/nvh_classes_clc7b5.rs with a custom command
+[751/1230] Generating src/nouveau/headers/nvh_classes_clc7b0.rs with a custom command
+[752/1230] Generating src/nouveau/headers/nvh_clc7b0_mthd.rs with a custom command
+[753/1230] Generating src/nouveau/headers/nvh_clc7c0_mthd.rs with a custom command
+[754/1230] Generating src/nouveau/headers/nvh_classes_clc7c0.rs with a custom command
+[755/1230] Generating src/nouveau/headers/nvh_classes_clc7c0_qmd.rs with a custom command
+[756/1230] Generating src/nouveau/headers/nvh_clc7b5_mthd.rs with a custom command
+[757/1230] Generating src/nouveau/headers/nvh_classes_clc86f.rs with a custom command
+[758/1230] Generating src/nouveau/headers/nvh_clc8b5_mthd.rs with a custom command
+[759/1230] Generating src/nouveau/headers/nvh_classes_clc96f.rs with a custom command
+[760/1230] Generating src/nouveau/headers/nvh_clc86f_mthd.rs with a custom command
+[761/1230] Generating src/nouveau/headers/nvh_classes_clc8b5.rs with a custom command
+[762/1230] Generating src/nouveau/headers/nvh_clc96f_mthd.rs with a custom command
+[763/1230] Generating src/nouveau/headers/nvh_classes_clc997_tex.rs with a custom command
+[764/1230] Generating src/nouveau/headers/nvh_clc9b0_mthd.rs with a custom command
+[765/1230] Generating src/nouveau/headers/nvh_clc997_mthd.rs with a custom command
+[766/1230] Generating src/nouveau/headers/nvh_classes_clc9b5.rs with a custom command
+[767/1230] Generating src/nouveau/headers/nvh_classes_clc997.rs with a custom command
+[768/1230] Generating src/nouveau/headers/nvh_classes_clc9b0.rs with a custom command
+[769/1230] Generating src/nouveau/headers/nvh_classes_clc9c0.rs with a custom command
+[770/1230] Generating src/nouveau/headers/nvh_clc9b5_mthd.rs with a custom command
+[771/1230] Generating src/nouveau/headers/nvh_clc9c0_mthd.rs with a custom command
+[772/1230] Generating src/nouveau/headers/nvh_classes_clca6f.rs with a custom command
+[773/1230] Generating src/nouveau/headers/nvh_clca6f_mthd.rs with a custom command
+[774/1230] Generating src/nouveau/headers/nvh_classes_clc9c0_qmd.rs with a custom command
+[775/1230] Generating src/nouveau/headers/nvh_classes_clcab5.rs with a custom command
+[776/1230] Generating src/nouveau/headers/nvh_clcb97_mthd.rs with a custom command
+[777/1230] Generating src/nouveau/headers/nvh_clcab5_mthd.rs with a custom command
+[778/1230] Generating src/nouveau/headers/nvh_classes_clcb97.rs with a custom command
+[779/1230] Generating src/nouveau/headers/nvh_classes_clcb97_tex.rs with a custom command
+[780/1230] Generating src/nouveau/headers/nvh_classes_clcb97_sph.rs with a custom command
+[781/1230] Generating src/nouveau/headers/nvh_classes_clcbc0.rs with a custom command
+[782/1230] Generating src/nouveau/headers/nvh_clcbc0_mthd.rs with a custom command
+[783/1230] Generating src/nouveau/headers/nvh_classes_clcbc0_qmd.rs with a custom command
+[784/1230] Generating src/nouveau/headers/nvh_classes_clcd97.rs with a custom command
+[785/1230] Generating src/nouveau/headers/nvh_classes_clcdc0.rs with a custom command
+[786/1230] Generating src/nouveau/headers/nvh_clcd97_mthd.rs with a custom command
+[787/1230] Generating src/nouveau/headers/nvh_classes_clcd97_tex.rs with a custom command
+[788/1230] Generating src/nouveau/headers/nvh_clcdc0_mthd.rs with a custom command
+[789/1230] Generating src/nouveau/headers/nvh_classes_clcdc0_qmd.rs with a custom command
+[790/1230] Generating src/nouveau/headers/nvh_classes_clcec0.rs with a custom command
+[791/1230] Generating src/nouveau/headers/nvh_clcec0_mthd.rs with a custom command
+[792/1230] Generating src/nouveau/headers/nvh_classes_clcec0_qmd.rs with a custom command
+[793/1230] Generating src/nouveau/headers/nvh_classes_clce97_tex.rs with a custom command
+[794/1230] Generating src/nouveau/headers/nvh_classes_clce97.rs with a custom command
+[795/1230] Generating src/nouveau/headers/nvh_clce97_mthd.rs with a custom command
+[796/1230] Generating bindings for Rust src/nouveau/headers/rustmod-bindgen-nvidia_hwref_maxwell_gm107_dev_mmu.h
+[797/1230] Generating bindings for Rust src/nouveau/headers/rustmod-bindgen-nvidia_hwref_pascal_gp100_dev_mmu.h
+[798/1230] Generating bindings for Rust src/nouveau/headers/rustmod-bindgen-nvidia_hwref_hopper_gh100_dev_mmu.h
+[799/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cl85b5.c.o
+[800/1230] Generating bindings for Rust src/nouveau/headers/rustmod-bindgen-nvidia_hwref_turing_tu102_dev_mmu.h
+[801/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cl906f.c.o
+[802/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cl90b5.c.o
+[803/1230] Generating src/nouveau/headers/lib.rs with a custom command
+[804/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cl91c0.c.o
+[805/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cl9297.c.o
+[806/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cl9039.c.o
+[807/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla040.c.o
+[808/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla0b5.c.o
+[809/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla06f.c.o
+[810/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cl902d.c.o
+[811/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla140.c.o
+[812/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cl90c0.c.o
+[813/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla16f.c.o
+[814/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla197.c.o
+[815/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla26f.c.o
+[816/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clb06f.c.o
+[817/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla1c0.c.o
+[818/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clb0b5.c.o
+[819/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla097.c.o
+[820/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clb0c0.c.o
+[821/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clb1c0.c.o
+[822/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc06f.c.o
+[823/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc097.c.o
+[824/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clb197.c.o
+[825/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc197.c.o
+[826/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc1c0.c.o
+[827/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clb097.c.o
+[828/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc1b5.c.o
+[829/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla297.c.o
+[830/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc0b5.c.o
+[831/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc0c0.c.o
+[832/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cla0c0.c.o
+[833/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc36f.c.o
+[834/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc46f.c.o
+[835/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc3b5.c.o
+[836/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc56f.c.o
+[837/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc3c0.c.o
+[838/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc5b0.c.o
+[839/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc5b5.c.o
+[840/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc5c0.c.o
+[841/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_cl9097.c.o
+[842/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc6b5.c.o
+[843/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc6c0.c.o
+[844/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc597.c.o
+[845/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc7b5.c.o
+[846/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc7b0.c.o
+[847/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc397.c.o
+[848/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc86f.c.o
+[849/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc8b5.c.o
+[850/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc96f.c.o
+[851/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc997.c.o
+[852/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc7c0.c.o
+[853/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc9b0.c.o
+[854/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc9b5.c.o
+[855/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clca6f.c.o
+[856/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc9c0.c.o
+[857/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc697.c.o
+[858/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clcb97.c.o
+[859/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clcab5.c.o
+[860/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clcec0.c.o
+[861/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clce97.c.o
+[862/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/nouveau_bo.c.o
+[863/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/nouveau_context.c.o
+[864/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/nouveau_device.c.o
+[865/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clc797.c.o
+[866/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clcbc0.c.o
+[867/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clcdc0.c.o
+[868/1230] Generating src/nouveau/nil/nil_format_table with a custom command
+[869/1230] Compiling Rust source ../../../src/nouveau/rust/bitview/lib.rs
+[870/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/meson-generated_.._.._headers_nv_push_clcd97.c.o
+[871/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._nil_format_table.c.o
+[872/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cl85b5.c.o
+[873/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cl906f.c.o
+[874/1230] Compiling Rust source ../../../subprojects/paste-1.0.14/src/lib.rs
+[875/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cl90b5.c.o
+[876/1230] Compiling C object src/nouveau/winsys/libnouveau_ws.a.p/.._headers_nv_push.c.o
+[877/1230] Linking static target src/nouveau/winsys/libnouveau_ws.a
+[878/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cl91c0.c.o
+[879/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cl9297.c.o
+[880/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla040.c.o
+[881/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cl9039.c.o
+[882/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla06f.c.o
+[883/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cl902d.c.o
+[884/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla0b5.c.o
+[885/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla140.c.o
+[886/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla16f.c.o
+[887/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla197.c.o
+[888/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cl90c0.c.o
+[889/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla1c0.c.o
+[890/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla26f.c.o
+[891/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clb06f.c.o
+[892/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clb0b5.c.o
+[893/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clb0c0.c.o
+[894/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla097.c.o
+[895/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clb1c0.c.o
+[896/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clb197.c.o
+[897/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc06f.c.o
+[898/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc097.c.o
+[899/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc197.c.o
+[900/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc1b5.c.o
+[901/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla297.c.o
+[902/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc1c0.c.o
+[903/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc0b5.c.o
+[904/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cla0c0.c.o
+[905/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clb097.c.o
+[906/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc0c0.c.o
+[907/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc36f.c.o
+[908/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc46f.c.o
+[909/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc3b5.c.o
+[910/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc56f.c.o
+[911/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc3c0.c.o
+[912/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc5b5.c.o
+[913/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc5b0.c.o
+[914/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc5c0.c.o
+[915/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc6b5.c.o
+[916/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc6c0.c.o
+[917/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_cl9097.c.o
+[918/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc597.c.o
+[919/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc397.c.o
+[920/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc7b0.c.o
+[921/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc86f.c.o
+[922/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc7b5.c.o
+[923/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc8b5.c.o
+[924/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc96f.c.o
+[925/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc997.c.o
+[926/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc9b0.c.o
+[927/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc9b5.c.o
+[928/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc9c0.c.o
+[929/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clca6f.c.o
+[930/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clcab5.c.o
+[931/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc7c0.c.o
+[932/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clcb97.c.o
+[933/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc697.c.o
+[934/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clcec0.c.o
+[935/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clce97.c.o
+[936/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clcbc0.c.o
+[937/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clcdc0.c.o
+[938/1230] Generating src/nouveau/nil/nil_h with a custom command
+[939/1230] Generating src/nouveau/compiler/latencies/sm100.rs with a custom command
+[940/1230] Generating bindings for Rust src/nouveau/nil/rustmod-bindgen-nil_bindings.h
+[941/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clc797.c.o
+[942/1230] Compiling Rust source ../../../subprojects/rustc-hash-2.1.1/src/lib.rs
+[943/1230] Generating src/nouveau/compiler/latencies/lib.rs with a custom command
+[944/1230] Compiling Rust source src/nouveau/nil/nil_bindings.rs
+[945/1230] Compiling Rust source src/nouveau/compiler/latencies/lib.rs
+[946/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/meson-generated_.._.._headers_nv_push_clcd97.c.o
+[947/1230] Compiling C object src/nouveau/nil/liblibnil_format_table.a.p/.._headers_nv_push.c.o
+[948/1230] Linking static target src/nouveau/nil/liblibnil_format_table.a
+[949/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cl85b5.c.o
+[950/1230] Generating src/nouveau/compiler/nak_nir_algebraic.c with a custom command
+[951/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._nak_nir_algebraic.c.o
+[952/1230] Generating bindings for Rust src/nouveau/compiler/rustmod-bindgen-nak_bindings.h
+[953/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cl906f.c.o
+[954/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cl9039.c.o
+[955/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cl902d.c.o
+[956/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cl90b5.c.o
+[957/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cl91c0.c.o
+[958/1230] Compiling Rust source src/nouveau/compiler/nak_bindings.rs
+[959/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cl9297.c.o
+[960/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla0b5.c.o
+[961/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla06f.c.o
+[962/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla040.c.o
+[963/1230] Compiling Rust source ../../../src/nouveau/compiler/nak/ir_proc.rs
+[964/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla140.c.o
+[965/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla16f.c.o
+[966/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla197.c.o
+[967/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cl90c0.c.o
+[968/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla26f.c.o
+[969/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clb06f.c.o
+[970/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla1c0.c.o
+[971/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clb0b5.c.o
+[972/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla097.c.o
+[973/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clb0c0.c.o
+[974/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clb1c0.c.o
+[975/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc06f.c.o
+[976/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clb197.c.o
+[977/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc097.c.o
+[978/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc197.c.o
+[979/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla297.c.o
+[980/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc1b5.c.o
+[981/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc0b5.c.o
+[982/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc1c0.c.o
+[983/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cla0c0.c.o
+[984/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc0c0.c.o
+[985/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc36f.c.o
+[986/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc3b5.c.o
+[987/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clb097.c.o
+[988/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc46f.c.o
+[989/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc56f.c.o
+[990/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc5b0.c.o
+[991/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc5b5.c.o
+[992/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc3c0.c.o
+[993/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc5c0.c.o
+[994/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_cl9097.c.o
+[995/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc6b5.c.o
+[996/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc397.c.o
+[997/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc7b0.c.o
+[998/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc6c0.c.o
+[999/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc597.c.o
+[1000/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc86f.c.o
+[1001/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc7b5.c.o
+[1002/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc8b5.c.o
+[1003/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc997.c.o
+[1004/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc96f.c.o
+[1005/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc9b0.c.o
+[1006/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc9b5.c.o
+[1007/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc9c0.c.o
+[1008/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clca6f.c.o
+[1009/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc7c0.c.o
+[1010/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clcb97.c.o
+[1011/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clcab5.c.o
+[1012/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc697.c.o
+[1013/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clcec0.c.o
+[1014/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clce97.c.o
+[1015/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clcdc0.c.o
+[1016/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clcbc0.c.o
+[1017/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clc797.c.o
+[1018/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_cf.c.o
+[1019/1230] Compiling C object src/nouveau/compiler/libnak.a.p/meson-generated_.._.._headers_nv_push_clcd97.c.o
+[1020/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_gs_intrinsics.c.o
+[1021/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_fs_inputs.c.o
+[1022/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_cmat.c.o
+[1023/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_non_uniform_ldcx.c.o
+[1024/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_image_addrs.c.o
+[1025/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir.c.o
+[1026/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_scan_reduce.c.o
+[1027/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_vtg_io.c.o
+[1028/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_shared_atomics.c.o
+[1029/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_rematerialize_load_const.c.o
+[1030/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_mark_lcssa_invariants.c.o
+[1031/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_mesh_intrinsics.c.o
+[1032/1230] Compiling C object src/nouveau/compiler/libnak.a.p/nak_nir_lower_tex.c.o
+[1033/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cl85b5.c.o
+[1034/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cl906f.c.o
+[1035/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cl90b5.c.o
+[1036/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cl902d.c.o
+[1037/1230] Compiling C object src/nouveau/compiler/libnak.a.p/.._headers_nv_push.c.o
+[1038/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cl9039.c.o
+[1039/1230] Linking static target src/nouveau/compiler/libnak.a
+[1040/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cl91c0.c.o
+[1041/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla0b5.c.o
+[1042/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla06f.c.o
+[1043/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cl9297.c.o
+[1044/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cl90c0.c.o
+[1045/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla040.c.o
+[1046/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla140.c.o
+[1047/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla16f.c.o
+[1048/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla197.c.o
+[1049/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla26f.c.o
+[1050/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clb06f.c.o
+[1051/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla1c0.c.o
+[1052/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clb0b5.c.o
+[1053/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla097.c.o
+[1054/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clb197.c.o
+[1055/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clb1c0.c.o
+[1056/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc06f.c.o
+[1057/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clb0c0.c.o
+[1058/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clb097.c.o
+[1059/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc1b5.c.o
+[1060/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc197.c.o
+[1061/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc097.c.o
+[1062/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc1c0.c.o
+[1063/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc0b5.c.o
+[1064/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla0c0.c.o
+[1065/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc0c0.c.o
+[1066/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc36f.c.o
+[1067/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc3b5.c.o
+[1068/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc46f.c.o
+[1069/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cla297.c.o
+[1070/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc56f.c.o
+[1071/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc3c0.c.o
+[1072/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc5b0.c.o
+[1073/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc5b5.c.o
+[1074/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc5c0.c.o
+[1075/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc397.c.o
+[1076/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc6b5.c.o
+[1077/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_cl9097.c.o
+[1078/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc597.c.o
+[1079/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc7b0.c.o
+[1080/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc7b5.c.o
+[1081/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc6c0.c.o
+[1082/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc86f.c.o
+[1083/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc96f.c.o
+[1084/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc8b5.c.o
+[1085/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc997.c.o
+[1086/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc9b0.c.o
+[1087/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc9b5.c.o
+[1088/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc9c0.c.o
+[1089/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clca6f.c.o
+[1090/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc7c0.c.o
+[1091/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clcb97.c.o
+[1092/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc697.c.o
+[1093/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clcab5.c.o
+[1094/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clcec0.c.o
+[1095/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clce97.c.o
+[1096/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clcbc0.c.o
+[1097/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/mme_fermi.c.o
+[1098/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clcdc0.c.o
+[1099/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/mme_sim.c.o
+[1100/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/mme_fermi_sim.c.o
+[1101/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/mme_fermi_builder.c.o
+[1102/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/mme_tu104.c.o
+[1103/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clc797.c.o
+[1104/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/mme_tu104_builder.c.o
+[1105/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/mme_tu104_sim.c.o
+In function 'load_reg',
+    inlined from 'load_reg' at ../../../src/nouveau/mme/mme_tu104_sim.c:98:1,
+    inlined from 'load_pred' at ../../../src/nouveau/mme/mme_tu104_sim.c:136:19,
+    inlined from 'mme_tu104_sim_core' at ../../../src/nouveau/mme/mme_tu104_sim.c:414:22:
+../../../src/nouveau/mme/mme_tu104_sim.c:117:32: warning: array subscript 2 is above array bounds of 'const uint16_t[2]' {aka 'const short unsigned int[2]'} [-Warray-bounds=]
+  117 |       return (int16_t)inst->imm[1 - imm_idx];
+      |                       ~~~~~~~~~^~~~~~~~~~~~~
+In file included from ../../../src/nouveau/mme/mme_tu104_sim.c:9:
+../../../src/nouveau/mme/mme_tu104.h: In function 'mme_tu104_sim_core':
+../../../src/nouveau/mme/mme_tu104.h:162:13: note: while referencing 'imm'
+  162 |    uint16_t imm[2];
+      |             ^~~
+In function 'load_reg',
+    inlined from 'load_reg' at ../../../src/nouveau/mme/mme_tu104_sim.c:98:1,
+    inlined from 'load_pred' at ../../../src/nouveau/mme/mme_tu104_sim.c:136:19,
+    inlined from 'mme_tu104_sim_core' at ../../../src/nouveau/mme/mme_tu104_sim.c:414:22:
+../../../src/nouveau/mme/mme_tu104_sim.c:113:32: warning: array subscript 4294967295 is above array bounds of 'const uint16_t[2]' {aka 'const short unsigned int[2]'} [-Warray-bounds=]
+  113 |       return (int16_t)inst->imm[imm_idx];
+      |                       ~~~~~~~~~^~~~~~~~~
+../../../src/nouveau/mme/mme_tu104.h: In function 'mme_tu104_sim_core':
+../../../src/nouveau/mme/mme_tu104.h:162:13: note: while referencing 'imm'
+  162 |    uint16_t imm[2];
+      |             ^~~
+[1106/1230] Generating src/nouveau/vulkan/nvk_entrypoints with a custom command
+[1107/1230] Generating src/nouveau/vulkan/nvk_drirc with a custom command
+[1108/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/meson-generated_.._.._headers_nv_push_clcd97.c.o
+[1109/1230] Generating src/nouveau/vulkan/nvkcl.spv with a custom command
+[1110/1230] Generating src/nouveau/vulkan/nvkcl.cpp with a custom command
+[1111/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._nvk_drirc.c.o
+[1112/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._nvk_entrypoints.c.o
+[1113/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cl85b5.c.o
+[1114/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cl906f.c.o
+[1115/1230] Compiling C object src/nouveau/mme/libnouveau_mme.a.p/.._headers_nv_push.c.o
+[1116/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cl90b5.c.o
+[1117/1230] Linking static target src/nouveau/mme/libnouveau_mme.a
+[1118/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cl91c0.c.o
+[1119/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cl9297.c.o
+[1120/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cl902d.c.o
+[1121/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla040.c.o
+[1122/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla06f.c.o
+[1123/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cl9039.c.o
+[1124/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla0b5.c.o
+[1125/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla140.c.o
+[1126/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla16f.c.o
+[1127/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla197.c.o
+[1128/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla26f.c.o
+[1129/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla1c0.c.o
+[1130/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cl90c0.c.o
+[1131/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clb06f.c.o
+[1132/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clb0b5.c.o
+[1133/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clb0c0.c.o
+[1134/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clb197.c.o
+[1135/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla097.c.o
+[1136/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clb1c0.c.o
+[1137/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc06f.c.o
+[1138/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla297.c.o
+[1139/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc097.c.o
+[1140/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc1c0.c.o
+[1141/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc197.c.o
+[1142/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc1b5.c.o
+[1143/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc0b5.c.o
+[1144/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clb097.c.o
+[1145/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc0c0.c.o
+[1146/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc36f.c.o
+[1147/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cla0c0.c.o
+[1148/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc46f.c.o
+[1149/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc3b5.c.o
+[1150/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc56f.c.o
+[1151/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc3c0.c.o
+[1152/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc5b5.c.o
+[1153/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc5b0.c.o
+[1154/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc5c0.c.o
+[1155/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc6b5.c.o
+[1156/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_cl9097.c.o
+[1157/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc597.c.o
+[1158/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc397.c.o
+[1159/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc6c0.c.o
+[1160/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc7b0.c.o
+[1161/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc86f.c.o
+[1162/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc7b5.c.o
+[1163/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc8b5.c.o
+[1164/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc96f.c.o
+[1165/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc997.c.o
+[1166/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc9b5.c.o
+[1167/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc9b0.c.o
+[1168/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc697.c.o
+[1169/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc9c0.c.o
+[1170/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clca6f.c.o
+[1171/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc7c0.c.o
+[1172/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clcab5.c.o
+[1173/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clcb97.c.o
+[1174/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clcec0.c.o
+[1175/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clce97.c.o
+[1176/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clcdc0.c.o
+[1177/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_acceleration_structure.c.o
+[1178/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clcbc0.c.o
+[1179/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_buffer.c.o
+[1180/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clc797.c.o
+[1181/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_buffer_view.c.o
+[1182/1230] Compiling C++ object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._nvkcl.cpp.o
+[1183/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/meson-generated_.._.._headers_nv_push_clcd97.c.o
+[1184/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_cmd_clear.c.o
+[1185/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_cmd_copy.c.o
+[1186/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_cmd_dispatch.c.o
+[1187/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_cmd_pool.c.o
+[1188/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_cmd_buffer.c.o
+[1189/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_cmd_meta.c.o
+[1190/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_descriptor_set.c.o
+[1191/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_descriptor_set_layout.c.o
+[1192/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_descriptor_table.c.o
+[1193/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_device.c.o
+[1194/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_edb_bview_cache.c.o
+[1195/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_device_memory.c.o
+[1196/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_format.c.o
+[1197/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_cmd_indirect.c.o
+[1198/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_heap.c.o
+[1199/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_event.c.o
+[1200/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_host_copy.c.o
+[1201/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_indirect_execution_set.c.o
+[1202/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_image_view.c.o
+[1203/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_instance.c.o
+../../../src/nouveau/vulkan/nvk_instance.c: In function 'nvk_CreateInstance':
+../../../src/nouveau/vulkan/nvk_instance.c:235:1: warning: label 'fail_init' defined but not used [-Wunused-label]
+  235 | fail_init:
+      | ^~~~~~~~~
+[1204/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_mem_stream.c.o
+[1205/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_mme.c.o
+[1206/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_image.c.o
+[1207/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_mem_arena.c.o
+[1208/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_nir_lower_mesh_shader.c.o
+[1209/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_queue.c.o
+[1210/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_physical_device.c.o
+[1211/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_query_pool.c.o
+[1212/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_cmd_draw.c.o
+[1213/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_sampler.c.o
+[1214/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_nir_lower_descriptors.c.o
+[1215/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_wsi.c.o
+[1216/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_upload_queue.c.o
+[1217/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/layers_nvk_app_workarounds.c.o
+[1218/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvkmd_nvkmd.c.o
+[1219/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvkmd_nvgpu_nvkmd_nvgpu_ctx.c.o
+[1220/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvkmd_nvgpu_nvkmd_nvgpu_pdev.c.o
+[1221/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvkmd_nvgpu_nvkmd_nvgpu_dev.c.o
+[1222/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvkmd_nvgpu_nvkmd_nvgpu_va.c.o
+[1223/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvkmd_nvgpu_nvkmd_nvgpu_mem.c.o
+[1224/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvkmd_nvgpu_nvkmd_nvgpu_sync.c.o
+[1225/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/nvk_shader.c.o
+[1226/1230] Compiling C object src/nouveau/vulkan/libnvk.a.p/.._headers_nv_push.c.o
+[1227/1230] Linking static target src/nouveau/vulkan/libnvk.a
+[1228/1230] Compiling Rust source src/nouveau/headers/lib.rs
+[1229/1230] Compiling Rust source ../../../src/nouveau/nil/lib.rs
+[1230/1230] Compiling Rust source ../../../src/nouveau/compiler/nak/lib.rs
+>> staging Vulkan portlib package in switch/build/pkg
+/bin/bash: line 6: /opt/devkitpro/devkitA64/bin/aarch64-none-elf-ar: No such file or directory
+make: *** [Makefile:130: package] Error 127
