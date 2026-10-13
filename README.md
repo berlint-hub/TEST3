@@ -93,7 +93,20 @@ pacman -S devkitA64 switch-tools libnx switch-sdl2 switch-sdl2_ttf \
           switch-ntfs-3g
 ```
 
-Provide a compatible Mesa NVK package under `vulkan/include` and `vulkan/lib`.
+The Vulkan build needs a Mesa NVK driver archive set; pick one of:
+
+* **nxvk** (public, GPL-2.0-or-later) — Mesa 26.2.2 NVK for Tegra X1,
+  <https://github.com/PalindromicBreadLoaf/nxvk>:
+
+  ```sh
+  git clone -b switch https://github.com/PalindromicBreadLoaf/nxvk
+  cd nxvk && make image && make && sudo make install   # needs docker/podman
+  export MESA_FLAVOR=nxvk                              # link via nxvk.pc
+  ```
+
+* **vendored bundle** (default) — drop the NVK archives under `vulkan/include`
+  and `vulkan/lib`. That bundle is not in this repository.
+
 Extract the 4248 and 3668 APKs into sibling folders named
 `NetherSX2-v2.2n-4248` and `NetherSX2-v2.2n-3668`, or set `CORES_DIR` to the
 folder containing them. CMake, Ninja, and Git are required; the build downloads pinned
@@ -101,18 +114,26 @@ libsmb2 and libusbhsfs revisions.
 
 ```sh
 ./build_all.sh
+
+# narrower bundles: one core, one renderer (also hides the matching menu entries)
+CORES=4248 RENDERERS=VK MESA_FLAVOR=nxvk ./build_all.sh
 ```
 
 ### Continuous integration
 
 `.github/workflows/nethersx2-build.yml` builds the OpenGL emulator core host and the
 launcher (plus the forwarder stub) with devkitPro on every push and pull
-request, and runs the host-side tests for the Tegra X1 memory primitives.
+request, and runs the host-side tests for the Tegra X1 memory primitives. Neither
+the NVK driver bundle nor the Android cores are in this repository, so that
+workflow builds and uploads the emulator/launcher binaries only.
 
-It cannot produce a usable release `NetherSX2.nro`: the two emulator cores and
-the Mesa NVK archives are not in this repository and are not redistributable,
-so CI artifacts are build validation only. The Vulkan job is opt-in — set the
-`ENABLE_VK_BUILD` repository variable and a `MESA_SDK_URL` secret to enable it.
+`.github/workflows/release-vulkan.yml` is a manual workflow that publishes a
+complete `NetherSX2.nro`: it builds nxvk, fetches the 4248 `libemucore.so` from
+the public NetherSX2 APK, builds the Vulkan renderer with `MESA_FLAVOR=nxvk`
+and creates a GitHub release. Because nxvk is GPL-2.0-or-later and linked
+statically, the resulting binary is a combined work under the GPL — the release
+notes say so.
+
 
 ### Credits
 

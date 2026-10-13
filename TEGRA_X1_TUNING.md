@@ -239,3 +239,82 @@ Maxwellu).
    stack; ověřit, že backtrace v `crash.c` funguje i bez FP).
 6. Zvážit **měřiče**: jednoduchý počítadlo `svcGetSystemTick()` kolem MTGS
    prezentace by umožnilo ladit frame pacing přímo na zařízení.
+
+---
+
+## 8. Vulkan na X1: veřejný ovladač nxvk
+
+`make RENDERER=VK` linkoval 23 archivů NVK ze složky `vulkan/`. Ten balík je
+soukromý build NaGaa95 (není v repu, viz upstream issue #25), takže veřejně
+smysluplný Vulkan build stojí na **nxvk** — forku Mesa, který NVK (a přes Zink
+i OpenGL) portuje na Tegra X1/GM20B:
+
+<https://github.com/PalindromicBreadLoaf/nxvk> (větev `switch`, Mesa 26.2.2,
+GPL-2.0-or-later pro nové soubory)
+
+### Co se tím mění v linku
+
+nxvk balí driver jako běžný devkitPro portlib,ne jako 23 samostatných archivů:
+
+| | vendored (soukromý) | nxvk (veřejný) |
+|---|---|---|
+| archivy | `libnvk.a` + 22 dalších (`libvulkan_runtime.a`, `libnir.a`, …) | `libnvk.a` + `libnvk_support.a` |
+| flagy | pevný `-l:libX.a` seznam | `pkg-config --libs nxvk` (`nxvk.pc`) |
+| závislosti | `-lz -lzstd` | `-lz -lexpat` (driconf) |
+| vstupní bod | – | `-Wl,-u,vk_icdGetInstanceProcAddr` |
+
+Frontendové archivy `libvulkan_{lite_,}runtime/instance/wsi` v Mesa 26.2 zmizely
+(jsou součástí `libnvk.a`), takže původní `-l:lib*.a` seznam by s nxvk
+neprolinkoval. Proto přibyl `MESA_FLAVOR`:
+
+```sh
+make RENDERER=VK MESA_FLAVOR=nxvk          # flagy vezme z nxvk.pc
+make RENDERER=VK MESA_FLAVOR=nxvk NXVK_ROOT=../nxvk/switch/build/pkg   # nestaged
+```
+
+Bez `pkg-config` se použije přesný fallback z `nxvk.pc`. `vendored` (výchozí) a
+`MESA_FLAVOR=sdk` se chovají beze změny.
+
+### Jak nxvk postavit
+
+```sh
+git clone -b switch https://github.com/PalindromicBreadLoaf/nxvk
+cd nxvk
+make image          # jednorázově: toolchain image (docker/podman)
+make                # Vulkan archivy -> switch/build/pkg/lib
+make gl             # navíc Zink/GL (OpenGL 4.5 core, GLES 3.2)
+sudo make install   # do $DEVKITPRO/portlibs/switch (+ include/vulkan, nxvk.pc)
+```
+
+Nároky: docker/podman, Rust nightly + `rust-src`, meson; reálně 30–60 minut.
+Pak už jen (viz § výše):
+
+```sh
+CORES=4248 RENDERERS=VK MESA_FLAVOR=nxvk ./build_all.sh
+```
+
+### Licence
+
+nxvk je GPL-2.0-or-later a linkuje se staticky, takže výsledný `.nro` je
+odvozené dílo pod GPL: kdokoli ho šíří, musí nabídnout i zdrojový kód (tento rep
++ nxvk). Permisivní části portu (MIT/BSD) si svou licenci ponechávají. Release
+workflow to píše přímo do poznámek vydání.
+
+### Kdy na X1 dává Vulkan smysl
+
+* **Pro:** NVK má výrazně nižší CPU/driver overhead (žádné GL state tracking),
+  umí threaded presentation (core 3668) a je **nutný pro LSFG 2× frame
+  generation** (včetně `Lossless.dll`).
+* **Proti:** u her limitovaných fillrate (vyšší internal resolution) může být
+  nativní `nvc0` GL rychlejší — Zink/NVK přidává vrstvu. LSFG navíc samo ukrojí
+  z rozpočtu GPU, který má X1 (Maxwell @ ~768 MHz handheld / ~307 MHz docked
+  …) velmi omezený.
+* **Doporučení:** měř A/B (§6) — Vulkan jako výchozí, `OpenGL (NVC0)` jako
+  fallback pro hry, kde klesne fillrate.
+
+### CI
+
+`.github/workflows/release-vulkan.yml` postaví nxvk (cache podle commitu),
+stáhne `libemucore.so` z veřejného NetherSX2 APK (4248 z
+`Trixarian/NetherSX2-patch`), zbuildí `RENDERER=VK MESA_FLAVOR=nxvk` s jediným
+corem a publikuje `NetherSX2.nro` jako GitHub release.
