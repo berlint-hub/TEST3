@@ -1918,20 +1918,24 @@ static void nv_probe(void) {
 
 int main(void) {
   extern int crash_in_progress(void);
+#ifdef USE_VULKAN
+  // Required, not diagnostic. nvk_physical_device_create()
+  // (nvk_physical_device.c:1508-1518) rejects any GPU nvk_is_conformant() does
+  // not recognise, and in an NDEBUG build returns VK_ERROR_INCOMPATIBLE_DRIVER
+  // with the warning compiled out. Mesa's enumerate_physical_devices_locked()
+  // swallows exactly that code and falls through to the DRM path, which is NULL
+  // on Horizon -- so the instance comes up with zero physical devices and
+  // nothing is logged anywhere. Tegra X1 (GM20B/Maxwell) is not on NVK's
+  // conformant list, so opt in explicitly. This must stay outside the
+  // diagnostic guard: without it no Vulkan build can see a GPU at all.
+  setenv("NVK_I_WANT_A_BROKEN_VULKAN_DRIVER", "1", 1);
+#endif
+
 #if defined(USE_VULKAN) && defined(NETHERSX2_VK_DIAGNOSTIC)
   unlink(DATA_ROOT "/nethersx2-exception.log");
   unlink(DATA_ROOT "/nethersx2-mesa.log");
   unlink(DATA_ROOT "/nethersx2-mesa-stderr.log");
   setenv("MESA_LOG_FILE", DATA_ROOT "/nethersx2-mesa.log", 1);
-  // THE FIX for zero physical devices. nvk_physical_device_create()
-  // (nvk_physical_device.c:1508-1518) rejects any GPU that nvk_is_conformant()
-  // does not recognise, and in an NDEBUG build it returns
-  // VK_ERROR_INCOMPATIBLE_DRIVER with the warning compiled out entirely. Mesa's
-  // enumerate_physical_devices_locked() then swallows exactly that code and
-  // falls through to the DRM path, which is NULL on Horizon -- yielding
-  // VK_SUCCESS over an empty device list and no log output at all. Tegra X1
-  // (GM20B/Maxwell) is not on NVK's conformant list, so opt in explicitly.
-  setenv("NVK_I_WANT_A_BROKEN_VULKAN_DRIVER", "1", 1);
   // Mesa only honours MESA_LOG_FILE when both __normal_user() and fopen()
   // succeed (src/util/log.c); otherwise mesa_log_file stays stderr, and on
   // Horizon stderr goes nowhere. That is why nvkmd's own explanation of the
