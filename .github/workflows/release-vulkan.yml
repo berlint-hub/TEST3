@@ -486,7 +486,8 @@ jobs:
           # the APK layout from here is what this replaces.
           { echo "== core.apk: $url =="
             echo "== sha256: $(sha256sum core.apk | cut -d' ' -f1) =="
-            unzip -l core.apk
+            echo "== entries that matter (lib/, assets/, top level) =="
+            unzip -Z1 core.apk | grep -iE '^(lib/|assets/)|^[^/]+$' | head -80
             echo "== assets entries =="
             unzip -Z1 core.apk | grep -i '^assets/' | head -80
           } > "$GITHUB_WORKSPACE/apk-listing.txt" 2>&1
