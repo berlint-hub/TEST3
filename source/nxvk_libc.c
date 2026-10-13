@@ -38,6 +38,7 @@
 #include <fcntl.h>
 #include <dirent.h>
 #include <malloc.h>
+#include <signal.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <pwd.h>
@@ -132,8 +133,10 @@ int fstatat(int dirfd, const char *path, struct stat *st, int flags) {
 int dirfd(DIR *dirp) { (void)dirp; errno = ENOSYS; return -1; }
 int flock(int fd, int operation) { (void)fd; (void)operation; return 0; }
 
-/* No signals are delivered under Horizon. */
-int pthread_sigmask(int how, const void *set, void *oldset) {
+/* No signals are delivered under Horizon. newlib declares pthread_sigmask in
+ * sys/signal.h but never defines it, so the signature has to match exactly --
+ * a void * stand-in is a conflicting type. */
+int pthread_sigmask(int how, const sigset_t *set, sigset_t *oldset) {
   (void)how; (void)set; (void)oldset;
   return 0;
 }
