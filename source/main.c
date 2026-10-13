@@ -1935,6 +1935,15 @@ int main(void) {
     if (mesa_err) {
       setvbuf(mesa_err, NULL, _IOLBF, 0);
       stderr = mesa_err;
+      // mesa_log_file is captured exactly once, in mesa_log_init_once(), and its
+      // only two assignments are "mesa_log_file = stderr" and the MESA_LOG_FILE
+      // fopen (log.c:143/165) -- there is no setter. If the first Mesa log
+      // happens on the core's VM thread, that capture reads stderr from there
+      // and can miss this redirect. Force the one-shot init to run here, on the
+      // main thread, while stderr already points at our file.
+      extern void _mesa_log(const char *fmtString, ...)
+         __attribute__((format(printf, 1, 2)));
+      _mesa_log("NetherSX2: mesa log initialised on the host main thread\n");
     }
     vk_diag_reset();
     vk_diag_note("host main entered renderer=%d", GS_RENDERER);
