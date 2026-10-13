@@ -864,6 +864,29 @@ vkGetPhysicalDeviceMemoryProperties2_shim(VkPhysicalDevice pd,
   }
 }
 
+// physical device enumeration. Not otherwise hooked, which left a blind spot
+// exactly where a loader-less NVK link is most likely to come up empty: if
+// nvkmd_nvgpu_try_create_pdev() fails (nvInitialize(), nvgpu channel), NVK
+// reports zero devices and the core gives up without another Vulkan call --
+// which is what the trace looked like. Logged under the diagnostic build only.
+#ifdef NETHERSX2_VK_DIAGNOSTIC
+static PFN_vkEnumeratePhysicalDevices real_enum_pdevs = NULL;
+static VkResult VKAPI_CALL
+vkEnumeratePhysicalDevices_shim(VkInstance instance, uint32_t *pPhysicalDeviceCount,
+                                VkPhysicalDevice *pPhysicalDevices) {
+  if (!real_enum_pdevs) {
+    vk_diag_note("vkEnumeratePhysicalDevices: NVK returned no function pointer");
+    if (pPhysicalDeviceCount) *pPhysicalDeviceCount = 0;
+    return VK_ERROR_INITIALIZATION_FAILED;
+  }
+  VkResult r = real_enum_pdevs(instance, pPhysicalDeviceCount, pPhysicalDevices);
+  vk_diag_note("vkEnumeratePhysicalDevices result=%d count=%u querying=%d", r,
+               pPhysicalDeviceCount ? *pPhysicalDeviceCount : 0,
+               pPhysicalDevices ? 1 : 0);
+  return r;
+}
+#endif
+
 // device proc addr wrapper: swap in our present shim; forward everything else to
 // NVK's real GDPA unchanged.
 static PFN_vkVoidFunction VKAPI_CALL
@@ -946,6 +969,12 @@ vk_gipa_hook(VkInstance inst, const char *name) {
       real_acquire_next_image =
           (PFN_vkAcquireNextImageKHR)vkGetInstanceProcAddr(inst, name);
       return (PFN_vkVoidFunction)vkAcquireNextImageKHR_shim;
+    }
+#endif
+#ifdef NETHERSX2_VK_DIAGNOSTIC
+    if (!strcmp(name, "vkEnumeratePhysicalDevices")) {
+      real_enum_pdevs = (PFN_vkEnumeratePhysicalDevices)vkGetInstanceProcAddr(inst, name);
+      return (PFN_vkVoidFunction)vkEnumeratePhysicalDevices_shim;
     }
 #endif
     if (!strcmp(name, "vkCreateDevice")) {

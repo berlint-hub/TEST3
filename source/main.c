@@ -2085,6 +2085,15 @@ int main(void) {
     update_gamepads();
     ++input_polls;
 
+#if defined(USE_VULKAN) && defined(NETHERSX2_VK_DIAGNOSTIC)
+    // Heartbeat. Without it a trace that stops after vkCreateInstance is
+    // ambiguous: "the core thread wedged" and "the core exited" look identical.
+    // ~5s apart at the loop's own poll interval.
+    if ((input_polls % 300) == 0)
+      vk_diag_note("host heartbeat polls=%d vm_running=%d presents=%d", input_polls,
+                   g_vm_running, vk_present_count);
+#endif
+
     if (!g_vm_running && input_polls > vm_exit_grace_polls)
       break;
     svcSleepThread(input_poll_interval_ns);
