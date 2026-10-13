@@ -170,6 +170,10 @@ jobs:
           docker build -t nxvk switch/docker 2>&1 | tee "$GITHUB_WORKSPACE/nxvk-image.log"
           exit ${PIPESTATUS[0]}
 
+      # Every make phase runs the real work inside the container, i.e. as root,
+      # so the files it leaves in the checkout are root-owned and the host-side
+      # `touch`/`cp` in nxvk's own Makefile (or the steps below) get EPERM.
+      # Reclaim ownership after each phase.
       - name: Build the native Mesa tools
         id: native
         if: needs.prep.outputs.nxvk_sdk_url == '' && steps.image.outcome == 'success'
@@ -179,7 +183,9 @@ jobs:
           set +e
           make CONTAINER=docker switch/build/native-tools/bin/mesa_clc 2>&1 \
             | tee "$GITHUB_WORKSPACE/nxvk-native.log"
-          exit ${PIPESTATUS[0]}
+          code=${PIPESTATUS[0]}
+          sudo chown -R "$(id -u):$(id -g)" nxvk
+          exit $code
 
       - name: Build the Rust std sysroot
         id: sysroot
@@ -190,7 +196,9 @@ jobs:
           set +e
           make CONTAINER=docker switch/rust/sysroot/.stamp 2>&1 \
             | tee "$GITHUB_WORKSPACE/nxvk-sysroot.log"
-          exit ${PIPESTATUS[0]}
+          code=${PIPESTATUS[0]}
+          sudo chown -R "$(id -u):$(id -g)" nxvk
+          exit $code
 
       - name: Cross-compile the NVK driver archives
         id: driver
@@ -200,7 +208,9 @@ jobs:
         run: |
           set +e
           make CONTAINER=docker 2>&1 | tee "$GITHUB_WORKSPACE/nxvk-build.log"
-          exit ${PIPESTATUS[0]}
+          code=${PIPESTATUS[0]}
+          sudo chown -R "$(id -u):$(id -g)" nxvk
+          exit $code
 
       # The runner log cannot be read from where this workflow is maintained, so
       # the failing line is encoded into an artifact name and the whole log is
