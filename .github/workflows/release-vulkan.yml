@@ -59,7 +59,11 @@ permissions:
 
 concurrency:
   group: release-vulkan
-  cancel-in-progress: false
+  # true: while iterating on the build, a queued run otherwise waits for a
+  # stuck one to time out (a run retrying pkg.devkitpro.org's 403 burns ~20
+  # minutes producing nothing). The newest commit is the one worth building,
+  # and a superseded release tag is never published.
+  cancel-in-progress: true
 
 env:
   DEVKITPRO: /opt/devkitpro
