@@ -191,4 +191,50 @@ VkResult vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *pPresentInfo) 
   return fn(queue, pPresentInfo);
 }
 
+/* ---- submission / presentation ---- */
+
+VkResult vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits,
+                       VkFence fence) {
+  PFN_vkQueueSubmit fn = ICD_FN(vkQueueSubmit);
+  if (!fn) return VK_ERROR_INITIALIZATION_FAILED;
+  return fn(queue, submitCount, pSubmits, fence);
+}
+
+VkResult vkQueueSubmit2(VkQueue queue, uint32_t submitCount, const VkSubmitInfo2 *pSubmits,
+                        VkFence fence) {
+  PFN_vkQueueSubmit2 fn = ICD_FN(vkQueueSubmit2);
+  if (!fn) return VK_ERROR_INITIALIZATION_FAILED;
+  return fn(queue, submitCount, pSubmits, fence);
+}
+
+VkResult vkQueueSubmit2KHR(VkQueue queue, uint32_t submitCount, const VkSubmitInfo2 *pSubmits,
+                           VkFence fence) {
+  PFN_vkQueueSubmit2KHR fn = ICD_FN(vkQueueSubmit2KHR);
+  if (!fn) return VK_ERROR_EXTENSION_NOT_PRESENT;
+  return fn(queue, submitCount, pSubmits, fence);
+}
+
+VkResult vkAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout,
+                               VkSemaphore semaphore, VkFence fence, uint32_t *pImageIndex) {
+  PFN_vkAcquireNextImageKHR fn = ICD_FN(vkAcquireNextImageKHR);
+  if (!fn) return VK_ERROR_EXTENSION_NOT_PRESENT;
+  return fn(device, swapchain, timeout, semaphore, fence, pImageIndex);
+}
+
+/* ---- physical device (1.1 / KHR) ---- */
+
+void vkGetPhysicalDeviceMemoryProperties2(VkPhysicalDevice physicalDevice,
+                                          VkPhysicalDeviceMemoryProperties2 *pMemoryProperties) {
+  PFN_vkGetPhysicalDeviceMemoryProperties2 fn = ICD_FN(vkGetPhysicalDeviceMemoryProperties2);
+  if (!fn) { if (pMemoryProperties) pMemoryProperties->memoryProperties = (VkPhysicalDeviceMemoryProperties){0}; return; }
+  fn(physicalDevice, pMemoryProperties);
+}
+
+void vkGetPhysicalDeviceMemoryProperties2KHR(VkPhysicalDevice physicalDevice,
+                                            VkPhysicalDeviceMemoryProperties2 *pMemoryProperties) {
+  PFN_vkGetPhysicalDeviceMemoryProperties2KHR fn = ICD_FN(vkGetPhysicalDeviceMemoryProperties2KHR);
+  if (!fn) { if (pMemoryProperties) pMemoryProperties->memoryProperties = (VkPhysicalDeviceMemoryProperties){0}; return; }
+  fn(physicalDevice, pMemoryProperties);
+}
+
 #endif /* USE_VULKAN && NETHERSX2_VK_ICD_ONLY */
