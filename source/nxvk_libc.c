@@ -40,8 +40,24 @@
 #include <malloc.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sys/uio.h>
 #include <pwd.h>
+
+#if defined(__has_include)
+#  if __has_include(<sys/uio.h>)
+#    include <sys/uio.h>
+#    define NETHERSX2_HAVE_SYS_UIO_H 1
+#  elif __has_include(<sys/_iovec.h>)
+     /* devkitA64's newlib has no <sys/uio.h>, which is why writev is an
+      * undefined reference. It does have <sys/_iovec.h>, and that is where
+      * libsmb2's socket.c gets struct iovec from, so take it from the same
+      * place rather than redefining a type the TU may already have. */
+#    include <sys/_iovec.h>
+#    define NETHERSX2_HAVE_SYS_UIO_H 1
+#  endif
+#endif
+#ifndef NETHERSX2_HAVE_SYS_UIO_H
+struct iovec { void *iov_base; size_t iov_len; };
+#endif
 
 /* Tegra X1: 4x Cortex-A57, 4 GB of LPDDR4 shared between the CPU and the GPU.
  * Only Mesa's disk-cache sizing and CPU detect read these, and there is no
