@@ -591,3 +591,82 @@ takže zachovává délku, a `dlopen_fake` název ignoruje. Zůstává vypnutý.
 | Android + Adreno | ✅ smysl | vymění starý OEM ovladač za novější Turnip |
 | Android + Tegra (Switchroot) | ❌ ne | Turnip je Qualcomm-only |
 | **Horizon OS (NetherSX2_nx)** | ❌ **no-op** | `dlopen` je falešný, název se zahodí |
+
+### 9.8 Jak nasadit patchnuté jádro na Switch (ověřeno ve zdrojích launcheru)
+
+Jádro **není** na SD kartě volně — launcher si ho tahá z romfs uvnitř `.nro`.
+Celá cesta, krok za krokem:
+
+**1. Build vyžaduje neporušené jádro.** `tools/prepare_build_inputs.py`
+ověřuje sha256 a při neshodě spadne:
+
+```python
+CORE_HASHES = {
+    "4248": "6f4473845483fa2e7be9d1e8aeac17cd12561d8153d51201037826b9c1b5ffde",
+    "3668": "4e378da548984dc0208ff2240aae003942ae9c5a6eec3a36c838c65ac6a37a63",
+}
+if hashlib.sha256(core).hexdigest() != CORE_HASHES[version]:
+    raise ValueError(...)
+```
+
+Náš **nepatchnutý** základ tento hash má (`6f447384…`), patchnutý výstup
+(`be64362a…`) by build odmítl. Patchujeme proto **až po** extrakci, ne před ní.
+
+**2. Launcher kopíruje jádro z romfs na SD a nastaví `Wrapper/CoreSo`:**
+
+```cpp
+std::string coreSource      = "romfs:/cores/emucore_" + build + ".so";
+std::string coreDestination = std::string(CORES_DIR) + "/libemucore_" + build + ".so";
+bool haveCore = ensureCore(coreSource.c_str(), coreDestination.c_str(), build);
+...
+if (haveCore) {
+  std::string corePath = "/switch/nethersx2/cores/libemucore_" + build + ".so";
+  storeSet(g_global, "Wrapper/CoreSo", corePath.c_str());
+  storeSet(effective, "Wrapper/CoreSo", corePath.c_str());
+}
+```
+
+`main.c` pak načte právě tuhle cestu (`so_load(&emu_mod, g_core_so, …)`).
+
+⚠️ **Ruční editace `Wrapper/CoreSo` v `nethersx2.ini` nefunguje** — launcher ten
+klíč při každém startu přepíše (`storeSet`).
+
+**3. Ale `ensureCore` kontroluje jen marker, ne obsah:**
+
+```c
+static bool ensureBundledFile(const char *src, const char *dst, const std::string &marker) {
+  char cur[48] = {0};
+  FILE *f = fopen(marker.c_str(), "r");
+  if (f) { if (!fgets(cur, sizeof(cur), f)) cur[0] = 0; fclose(f); }
+  struct stat st;
+  if (trim(cur)==BUILD_STAMP && stat(dst,&st)==0 && S_ISREG(st.st_mode)) return true;  // přeskočí kopii
+  if (!extractFromRomfs(src,dst,true)) return false;
+  ...
+}
+```
+
+Marker je `/switch/nethersx2/cores/.core_build_4248` (obsahuje `BUILD_STAMP`).
+Sedí-li stamp **a** cílový soubor existuje → **nekopíruje se nic**.
+
+#### ⇒ Postup
+
+1. Spusť launcher **jednou**, ať jádro rozbalí.
+2. Zkopíruj `libemucore_tegrax1.so` na
+   **`/switch/nethersx2/cores/libemucore_4248.so`** — **přepiš, zachovej jméno**.
+3. Spusť znovu. Launcher vidí platný marker + existující soubor → přeskočí
+   kopii → `Wrapper/CoreSo` ukáže na tentýž soubor → načte se **náš** patchnutý
+   core.
+
+Marker nech být — na něm závisí, že se náš soubor nepřepíše.
+
+#### Kontrola a nástrahy
+
+- Načtení selže → `fatal_error("Could not load\n%s.", g_core_so)`, tj. hláška s
+  cestou. Není to tiché selhání.
+- **Při přechodu na novější `NetherSX2.nro`** se změní `BUILD_STAMP`, marker
+  přestane sedět a launcher jádro znovu rozbalí → **náš patchnutý soubor
+  přepíše**. Po každé aktualizaci je nutné krok 2 zopakovat.
+- Cesta platí pro build **4248**. Klasické jádro 3668 je
+  `libemucore_3668.so` — naše patche jsou pro něj neplatné.
+- Runtime patche portu (`g_patches_4248`, 16 položek) se aplikují **navrch**;
+  ověřeno 0 kolizí (§9.2).
