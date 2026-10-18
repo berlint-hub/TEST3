@@ -537,3 +537,57 @@ cíl **irelevantní** — zůstává volitelný a vypnutý.
 
 Naše patche jsou renderer-agnostické (týkají se GS upscale clampu, texture
 preload a `preserve-user-data`), takže fungují se všemi třemi.
+
+### 9.7 Má cenu přidat `libvulkad.so` jako u Turnipu? → **Ne, je to no-op**
+
+Častá otázka: na Androidu se pro Turnip dodává vedle `libemucore.so` ještě
+`libvulkad.so`. Má to přínos i na Switchi? **Ne.** Čtyři důvody, ověřené ve
+zdrojích portu:
+
+**1. Mechanismus na Horizon OS neexistuje.** Turnip shim funguje proto, že na
+Androidu *je* dynamický loader a adresář s vyměnitelnými ovladači
+(`/system/vendor/lib64/`). Na Switchi se žádné externí `.so` nenačítá — port
+`dlopen` kompletně emuluje (`source/dl_emu.c`).
+
+**2. Název souboru se zahodí.** To je ten rozhodující důkaz:
+
+```c
+void *dlopen_fake(const char *filename, int flags) {
+  (void)flags;
+  // any name (libEGL.so, libaaudio.so, self) -> the same pseudo handle
+  return HANDLE_DEFAULT;   // vždy 0x444C4F50 ("DLOP")
+}
+```
+
+`src/imports.c:295` přesměruje import `dlopen` jádra na tuhle funkci. Ta vrací
+**vždy tentýž sentinel handle**, ať ptáš po `libvulkan.so`, `libvulkad.so` nebo
+čemkoli jiném; `dlsym_fake` pak stejně hledá jen v importní tabulce a exportech
+modulu. Přejmenování řetězce v binárce proto nemá **žádný** efekt — ani dobrý,
+ani špatný.
+
+**3. Vulkan je staticky zalinkovaný.** `build_all.sh` odkazuje
+`$MESA_SDK_ROOT/lib/libvulkan.a` a `libEGL.a` — statické archívy vlinkované do
+`NetherSX2.nro` už při překladu. Neexistuje samostatný `.so`, který by šel
+přiložit vedle jádra. (Přesně tohle je náš `nxvk-vulkan-tegra-x1.tar.gz` — ta
+`libvulkan.a`.)
+
+**4. Není za co měnit.** Smysl Turnip shimu je „OEM dodal starý ovladač, my
+dodáme novější Turnip". Na Tegra X1 existuje právě jeden Vulkan ovladač — NVK
+přes NXVK. Stock NVIDIA Android ovladač na Horizon neběží (NVIDIA nikdy
+nevydala Horizon Vulkan driver). Turnip je navíc **Adreno/Qualcomm only**.
+
+#### Ekvivalent na Switchi: překlad, ne přiložení souboru
+
+Výměna ovladače se tu dělá v **build-time** — postavíš `NetherSX2.nro` s jinou
+verzí NXVK (obsah `vulkan/lib/libvulkan.a`). Stejný efekt, jiná fáze.
+
+#### Je patch `vulkan-shim-hook` škodlivý?
+
+**Není** — jen zbytečný. Mění pouze `libvulkan` → `libvulkad` (obojí 9 bajtů),
+takže zachovává délku, a `dlopen_fake` název ignoruje. Zůstává vypnutý.
+
+| platforma | `libvulkad.so` | proč |
+|---|---|---|
+| Android + Adreno | ✅ smysl | vymění starý OEM ovladač za novější Turnip |
+| Android + Tegra (Switchroot) | ❌ ne | Turnip je Qualcomm-only |
+| **Horizon OS (NetherSX2_nx)** | ❌ **no-op** | `dlopen` je falešný, název se zahodí |
