@@ -670,3 +670,77 @@ Marker nech být — na něm závisí, že se náš soubor nepřepíše.
   `libemucore_3668.so` — naše patche jsou pro něj neplatné.
 - Runtime patche portu (`g_patches_4248`, 16 položek) se aplikují **navrch**;
   ověřeno 0 kolizí (§9.2).
+
+---
+
+## 10. Kandidáti na další Tegra X1 patche (a kde to naráží)
+
+Nástroj: `tools/find_tegra_candidates.py`.
+
+### 10.1 První pokus selhal, a proč
+
+Hrubý sken (`ldrsb` + registrový shift po celém `.text`) dal **1123 zásahů** —
+k ničemu. Binárka je **stripped** (žádné `.symtab`, jen 330 importů v
+`.dynsym`), takže bez profilu ze zařízení nelze poznat, který zásah je horká
+cesta a který se zavolá jednou za běh. Nástroj proto nedělá „najdi patch",
+ale „udělej pořádek a ověř kolize".
+
+### 10.2 Co se našlo: 27 spin smyček
+
+`sched_yield` je importován a má **89** volání; **27** z nich je uvnitř
+zpětné větve, tedy skutečný spin. Na 4jádrovém Cortex-A57 bez SMT spinující
+vlákno sežere celé jádro — to je ten správný druh cíle.
+
+| | |
+|---|---|
+| `sched_yield` volání | 89 |
+| z toho uvnitř smyčky | **27** |
+| kolize s applied/hlídanými místy | **0** |
+
+Všechny jsou mimo rozsah našich 5 patchů i mimo `0x4b2500` (VU steal) a
+`0x4bab84` (port).
+
+### 10.3 Konfigurační struktura
+
+Z `VU_Thread::ExecuteVU` (0x4b24b0–0x4b2530):
+
+```
+x21 = ADRP 0x2604000 + 0xf20  ->  0x2604F20     (EmuConfig.Speedhacks)
+  +0  = příznaky       (bit 5 testován tbnz na 0x4b252c)
+  +5  = EECycleSkip    (ldrb w10,[x21,#5] -> MUL na 0x4b2500)
+```
+
+To je kotva pro případné další knoby ze stejné struktury.
+
+### 10.4 Kde to naráží — a proč jsem zatím nic neaplikoval
+
+**Který spin je horký, z binárky poznat nejde.** Patching studené smyčky
+není k ničemu; patching horké smyčky špatně (např. odebráním potřebného
+yieldu) může naopak uškodit. Obojí bez dat ze zařízení.
+
+Fork už diagnostiku má — commit `b7a18c1` „počítat sched_yield per vlákno,
+rozlišit spin od práce". **Správné pořadí se tedy musí vzít z toho logu,
+ne odhadem.** Navrhovaný postup:
+
+1. Spustit na Switchi s diagnostikou.
+2. Vytáhnout `sched_yield` počty per vlákno.
+3. Spárovat s 27 kandidáty podle toho, která smyčka patří kterému vláknu.
+4. Teprve pak vybrat.
+
+### 10.5 Co už je hotovo jinde — neopakovat
+
+| věc | stav |
+|---|---|
+| VU cycle steal (`0x4b2500`) | má fork, ověřeno kompatibilní (§9.8) |
+| `EECycleRate` | v jádře existuje, ale jde o **nastavení**, ne o patch |
+| upscale clamp, texture preload, preserve-user-data | naše 5 patchů |
+| pinování vláken, `sched_yield` diagnostika, LSFG | fork |
+
+`EECycleRate` stojí za zmínku zvlášť: řetězec je v binárce přítomen, takže
+jde o existující knob vystavený přes UI — není důvod ho patchovat.
+
+### 10.6 Shrnutí
+
+Katalog je **podklad pro rozhodnutí, ne rozhodnutí**. Bez logu ze zařízení
+by další patch byl střelba naslepo, a u jádra, které port kontroluje přes
+16+1 `expect` hodnot, je střelba naslepo zbytečně riskantní.
