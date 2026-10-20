@@ -154,3 +154,99 @@ doménový model. `AsyncTextureStreamer` je rozumný návrh pipeline.
 *Zapsáno jako součást branch `arena/8b264db8-test3`. Napsáno bez spuštění
 Ghidry nebo jiného dekompilátoru — jde o statickou analýzu ISA, obsahu
 tarballe a architektury, ne o dekompilaci.*
+
+
+---
+
+## 9. Dodatek: „jde to tedy opatchovat?" (naměřeno 2026-10-20)
+
+### 9.1 Binárka už NEON používá — změřeno
+
+Disassembly celého `.text` (2 350 567 instrukcí), skupiny z capstone:
+
+| skupina | počet | % z .text |
+|---|---|---|
+| **NEON** | **54 542** | **2,32 %** |
+| FP (skalární) | 22 213 | 0,95 % |
+| FP16 | 0 | 0,00 % |
+| DOTPROD | 0 | 0,00 % |
+| SVE / SVE2 | 0 | 0,00 % |
+| MatMul / RDM / CRYPTO / AES | 0 | 0,00 % |
+
+**140 různých NEON mnemonik**, nejčastější: `mov`, `movi`, `dup`, `ext`,
+`zip1`, `add`, `and`, `uzp2`, `cmeq`, `usra`, `smax`, `smin`, `sshr`, `ushll`.
+`zip1`/`uzp2`/`ushll`/`ext` jsou klasické vzorce **autovektorizace překladače**
+(prokládání, rozšiřování) — tedy výstup clang/ndk, ne ruční kód.
+
+Dva závěry:
+
+1. **ISA audit je potvrzen daty** — SVE, FP16, dot-product, MatMul, RDM,
+   CRYPTO, AES: všude 0. Binárka je čisté ARMv8.0-A.
+2. **Neexistuje „NEON mezera", kterou by `neon_opt` zaplnil.** Překladač
+   už NEON vygeneroval. Ruční rutiny typu `neon_swizzle_rgba_bgra()` by
+   reimplementovaly kód, který tam je.
+
+### 9.2 VU1 se generuje až za běhu
+
+Hustota NEON v okolí MTVU/VU je **podprůměrná**:
+
+| oblast | NEON | % |
+|---|---|---|
+| MTVU/VU okolí `0x4b2000–0x4b6000` | 13 | 0,32 % |
+| VU steal `0x4b2000–0x4b2a00` | 0 | 0,00 % |
+| MTVU semafor `0x4b22a0–0x4b2400` | 0 | 0,00 % |
+| GS okolí `0x4ba000–0x4bc000` | 0 | 0,00 % |
+| *(celá .text)* | *(54 542)* | *(2,32 %)* |
+
+Není to tím, že by VU1 byl nevektorizovaný. Je to tím, že binárka obsahuje
+**VU recompiler**, nikoliv VU kód — ten recompiler **vygeneruje NEON až za
+běhu** (JIT) do bufferu. Staticky v `.text` proto nic neuvidíme.
+
+Důsledek: ruční NEON v binárce VU1 práci neovlivní, a fixní GPU compute
+shader nemůže nahradit **libovolný** VU1 mikrokód, který dodává hra.
+
+### 9.3 Místo na kód by bylo — to není problém
+
+V `.text` existuje souvislý úsek **24 228 nul** na `0x88a15c` až `0x890000`:
+
+- končí **přesně na 64KB hranici** (`0x890000`) ⇒ linker padding
+- před ním končí funkce tail-calem `b #0xb577d0` (PLT)
+- za ním začíná nová funkce `mov x16, sp` / `stp x16,x30,[x0]` (ukládání
+  registrů do bufferu — setjmp/ucontext typ)
+- nuly se dekódují jako **`udf #0`** (permanently undefined) ⇒ nikdy se
+  nevykoná
+
+Tedy legitimní **code cave**. Prostor není překážka.
+
+### 9.4 Skutečná překážka: chybí symboly, ne místo
+
+I s 24 KB volného místa by injekce vyžadovala:
+
+1. najít funkci, kterou přesměrovat — binárka je **stripped**, bez symbolů;
+2. znát její ABI a datové struktury (formát textur, layout VBO);
+3. upravit call sites nebo prolog bez rozbití okolí.
+
+To nejde bezpečně udělat. `neon_opt` navíc žádný integrační bod ani
+build systém nemá — je to knihovna hledající hostitele.
+
+### 9.5 Co binární patch umí a co ne
+
+| Umí ✅ | Neumí ❌ |
+|---|---|
+| změnit konstantu (rozlišení, defaulty) | přidat novou funkci |
+| vypnout kontrolu (`nop`, `b`) | přidat compute shader |
+| nahradit instrukci **v místě** (`isb`→`yield`) | přidat pipeline / nový průchod |
+| zachovat volání funkcí | přidat datové struktury |
+
+Našich 5 patchů + `spin-relax` jsou přesně typ „změna chování na existujícím
+místě". `neon_opt` je typ „přidat novou funkcionalitu" — a ten ze své podstaty
+vyžaduje zdrojáky.
+
+### 9.6 Odpověď
+
+- **NEON část** — technicky vložitelná, ale **zbytečná**: binárka už NEON má,
+  VU1 se vektorizuje JITem za běhu.
+- **Compute shadery** — **nelze**: potřebují `vkCreateShaderModule`
+  z aplikační vrstvy, my máme jen přeloženou binárku.
+- **Překážkou není prostor** (24 KB je k dispozici), ale **absence symbolů
+  a zdrojáků**.
