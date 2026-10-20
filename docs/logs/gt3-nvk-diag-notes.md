@@ -212,3 +212,77 @@ Zatím **nedává smysl** žádný další aplikovat:
   `VK_ARM_rasterization_order_attachment_access`) je **vlastnost ovladače**,
   ne jádra — binárním patchem jádra to nevyřešíme.
 
+
+## 6. Dodatek: cílové rozlišení 2× — co z našich patchů platí dál
+
+Nejnovější commit forku (`26a9bdd5`) uvádí:
+
+> *„Hráč chce hrát na 2x interním rozlišení a níž nepůjde."*
+
+To přímo dopadá na náš největší patch. Přesná podoba clampu
+(`0x4bab6c..0x4bab8c`):
+
+```
+0x4bab78: mov  w8, #0x42480000   ; 0x42480000 = 50.0f
+0x4bab7c: fmov s1, w8
+0x4bab80: fmin s1, s0, s1        ; HORNÍ limit 50x
+0x4bab84: fmov s2, #0.50000000   ; DOLNÍ limit 0.5x (port -> 0.25x)
+0x4bab88: fcmp s0, s2
+0x4bab8c: fcsel s0, s2, s1, mi   ; náš patch: fmov s0, s1  (bez dolního)
+```
+
+**2× leží uvnitř [0.25×, 50×], takže se neuplatní žádný clamp**
+⇒ `gs-max-upscale-unclamp` je při 2× **inertní**. Odemýká opačný konec
+rozsahu, než který se používá.
+
+| patch | při 2× | proč |
+|---|---|---|
+| `gs-max-upscale-unclamp` | ❌ inertní | clamp se neuplatní |
+| `texture-preload-defaults` | ✅ **důležitější** | textury jsou při 2× 4× větší |
+| `texture-preload-gssettings` | ✅ totéž | |
+| `preserve-user-data` ×2 | ✅ | bezpečnost, nezávislé na rozlišení |
+
+Pozor i na přenos měření: A/B série v §2.5 (42.95 / 43.34 / 43.51 fps) běžela
+na **`upscale=0.50`** (viz startup echo `settings upscale=0.50`). Na 2× se
+čísla nebudou přenášet — podle forku má GPU při 2× 4× víc pixelů a každá
+kopie targetu nese 16× víc bajtů než při 0,5×, takže se zed přesouvá na GPU.
+
+### XGKick Skip: na 4248 nedělá nic
+
+`patch_xgkick_skip()` ve forku (`source/hooks/patches.c:185`):
+
+```c
+if (!core_is_3668() || !prefs_get_bool("EmuCore/Patches/XGKickSkip", false) ||
+    prefs_get_bool("Wrapper/BootBIOS", false) || ...)
+  return;
+...
+if (*first != 0x14000012 || *second != 0x140001d7) return;
+```
+
+Tři důvody, proč na nás nedosáhne:
+
+1. **Gate na `core_is_3668()`** — pro 4248 vrací hned.
+2. **Expecty nesedí** (kontrolováno v našem jádru):
+
+   | adresa | fork čeká | naše 4248 |
+   |---|---|---|
+   | `0x3cfa98` | `0x14000012` | `0x5401a561` |
+   | `0x3cfad8` | `0x140001d7` | `0x0b080128` |
+
+   Adresy patří jádru 3668 (12 094 744 B), ne našemu (12 162 984 B).
+3. **Default off** a navíc vypnuto při bootu do BIOS.
+
+Je to navíc věc z upstreamu — fork ji nepřidal. **Zapomenout.**
+
+### Verdikt (aktualizovaný)
+
+Při cílovém 2×:
+
+- Další binární patch jádra **nedává smysl** — nejen že chybí měření, ale
+  největší známý problém (80.6 kopií targetu/snímek kvůli chybějící
+  `VK_ARM_rasterization_order_attachment_access`) je **vlastnost ovladače**,
+  ne jádra.
+- Nástroj, který fork už zpřístupnil: **`UserHacks_TextureInsideRt`** (0/1/2).
+  Při 2× je jeho význam větší, ne menší — každá kopie nese 16× víc bajtů než
+  při 0,5×.
+- Zbývá GPU fill rate (4× pixelů proti nativu) — to binární patch neovlivní.
