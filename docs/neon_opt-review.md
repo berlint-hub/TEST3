@@ -250,3 +250,120 @@ vyžaduje zdrojáky.
   z aplikační vrstvy, my máme jen přeloženou binárku.
 - **Překážkou není prostor** (24 KB je k dispozici), ale **absence symbolů
   a zdrojáků**.
+
+
+---
+
+## 10. Dodatek: „a nejde vylepšit ty NEON funkce, co tam jsou?"
+
+Změřeno 2026-10-20. Otázka míří na NEON, který binárka **už obsahuje**
+(54 542 instrukcí, 140 mnemonik), ne na přidání nového.
+
+### 10.1 Co by šlo teoreticky zlepšit — a kolik toho je
+
+| kandidát | počet | poznámka |
+|---|---|---|
+| `fmul`+`fadd` → `fmla` (FP fúze) | **0** | překladač už fúzoval |
+| `mul`+`add` → `mla` (celočíselná fúze) | **0** | překladač už fúzoval |
+| `ins` (element insert, cross-lane, pomalé) | **0** | už se nepoužívá |
+| `tbl`/`tbx` (na A57 mikrokódované) | **598** | z toho 567 = 1 tabulkový registr |
+| `ext` | 2 141 | permutace |
+| `zip1`/`zip2`/`uzp1`/`uzp2`/`trn` | 5 231 | transpozice |
+
+**Fúze jsou vyčerpané.** Překladač odvedl práci — není tam jediný pár
+`fmul`+`fadd` ani `mul`+`add`, který by šel sloučit.
+
+### 10.2 Proč `tbl` nejde nahradit
+
+567 z 598 je `tbl vD.16b, {vS.16b}, vI.16b` — permutace bajtů s **jedním**
+tabulkovým registrem. Index `vI` se ale načítá **za běhu**:
+
+```
+adrp  x9, #0x12f000
+ldr   q1, [x9, #0xf20]        ; index z konstanty v .rodata
+tbl   v0.16b, {v0.16b}, v1.16b
+```
+
+nebo je výsledkem předchozích výpočtů. Statickou permutaci (a tedy náhradu
+za `rev16`/`rev32`/`xtn`/`zip`) by šlo zvolit jen kdyby byl index konstantní
+**na každém místě volání** — a i pak by šlo o ~598 instrukcí, tedy
+**1,1 % NEON kódu**.
+
+### 10.3 Kde ten NEON je (73 % na jednom místě)
+
+Hustota po 64KB blocích — jinak než rovnoměrně být nemůže:
+
+| blok | NEON | % |
+|---|---|---|
+| `0x680000` | 5 895 | **36,0 %** |
+| `0x670000` | 4 297 | 26,2 % |
+| `0x5d0000` | 4 180 | 25,5 % |
+| `0x5e0000` | 4 134 | 25,2 % |
+| `0x5c0000` | 4 105 | 25,1 % |
+| `0x5f0000` | 3 814 | 23,3 % |
+| `0x600000` | 3 454 | 21,1 % |
+| zbylých 128 bloků | — | **0–5 %** |
+
+**TOP 15 bloků (pás `0x5b0000`–`0x6a0000`) nese 39 833 z 54 542, tedy 73 %
+veškerého NEON kódu.**
+
+### 10.4 Co ten kód dělá — a proč to pravděpodobně není horké
+
+Region **neodkazuje na jediný řetězec** (ověřeno dvěma způsoby vazby
+`adrp`+`add`). PLT volání z něj jsou téměř výhradně STL
+(`_ZdlPv` 837×, `basic_string::append` 77×, `__next_prime` 44×) — žádná
+grafika, žádné logování.
+
+Vzorek z `0x5718fc` ukazuje surový výpočet:
+
+```
+sqadd   v26.8h, v20.8h, v23.8h      ; saturující sčítání
+add     v25.8h, v25.8h, v17.8h
+sshr    v25.8h, v25.8h, #1          ; průměr dvou hodnot
+sqxtun  v30.8b, v25.8h              ; 16h -> 8b s balením
+sqxtun2 v30.16b, v26.8h
+tbl     v24.16b, {v29.16b, v30.16b}, v18.16b
+```
+
+`sqadd` + `sshr #1` + `sqxtun` = **průměrování pixelů a balení 16→8 bitů**.
+To je obrazové/video zpracování — tedy buď **IPU (MPEG-2 dekodér PS2)**,
+nebo softwarový renderer.
+
+**Ani jedno není na horké cestě hry:**
+
+- IPU běží jen při **FMV/videu**, ne během hraní;
+- softwarový renderer se nepoužívá, když běží **hardwarový** backend
+  (Deko3D / Vulkan-NVK), což je náš případ;
+- navíc podle měření forku je při cílových 2× úzkým hrdlem **GPU**
+  (kopírování render targetů), ne CPU.
+
+Přesnou identifikaci subsystému **si netroufám tvrdit** — binárka je
+stripped a region nemá žádné řetězce. Jde o závěr z tvaru kódu.
+
+### 10.5 Proč binární patch na tohle nestačí
+
+Binární patch bez symbolů umí jen **1:1 náhradu instrukce se stejnými
+registry** — registr alokovat znovu nemůžeme. Na ARMv8.0-A / Cortex-A57:
+
+- řetězy `zip`/`uzp`/`trn` jsou pro transpozici **už optimální**; levnější
+  varianta neexistuje (bez SVE);
+- fúze jsou vyčerpané (10.1);
+- `tbl` má dynamický index (10.2);
+- `ins` se už nepoužívá.
+
+**Žádná 1:1 náhrada, která by byla prokazatelně rychlejší, neexistuje.**
+
+### 10.6 Odpověď
+
+Vylepšit stávající NEON binárním patchem **nejde**, a to ze dvou důvodů
+zároveň:
+
+1. **není co** — překladač už fúzoval, permutace jsou optimální pro
+   ARMv8.0-A, `tbl` nelze specializovat;
+2. **a stejně by to nebylo horké** — 73 % NEON kódu leží v obrazovém/video
+   zpracování, které při hardwarovém renderování a při 2× (GPU-bound)
+   nehraje roli.
+
+Kdyby se někdo přesto chtěl pokusit, jediná smysluplná cesta vede přes
+**zdrojáky a překlad s profilem** (`-fprofile-use`) nebo ruční přepis
+konkrétního jádra s měřením — ne přes patch binárky.
