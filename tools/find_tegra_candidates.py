@@ -3,30 +3,42 @@
 find_tegra_candidates.py -- katalog kandidatu na dalsi Tegra X1 patche
 v libemucore.so (NetherSX2 v2.2n-4248).
 
-PROC TENHLE NSTROJ
-------------------
-Prvni pokus o hledani dalsich patchu byl hruby sken (hledani `ldrsb`+shifty
-v celem .text) a dal 1123 zasahu -- k nicemu. Bez symbolu (binarka je
-stripped) a bez profilu ze zarizeni se nedá poznat, ktery z nich je horky
-a ktery je studena cesta, ktera se zavola jednou za beh.
+SKENOVAT 'isb', NE 'sched_yield'
+--------------------------------
+Prvni verze tohohle nastroje hledala spin pres volani sched_yield() a nasla
+27 mist. To byla CHYBA ze dvou duvodu:
 
-Tenhle nastroj proto nedela "najdi patch", ale "udelat poradek":
+1. PCSX2 ShortSpin()/WorkSema spinuje na `isb` v userspace a sched_yield()
+   vola az po vycerpani spin budgetu. Spin, ktery se jeste nevycerpal, se
+   sched_yield vubec nedotkne -- takze ta metoda nemohla horke spiny najit.
+   (Zjistil to fork merenim, commit b3aa5ca7.)
 
-  [1] spin smycky -- sched_yield() uvnitr zpetne vetve. Na 4jadrovem
-      Cortex-A57 (zadne SMT) spinujici vlakno sezere cele jadro.
-  [2] konfiguracni struktura -- kde zije EmuConfig.Speedhacks (x21 =
-      0x2604F20, EECycleSkip na +5), aby se daly pridavat dalsi knoby.
-  [3] kolize -- zadny kandidat nesmi lezet v rozsahu jiz applied patchu.
+2. Kdyz jsem pak hledal `isb` primo, taky jsem nasel nula -- protoze jsem mel
+   spatne kodovanou konstantu. 0xD5033FDF jsem mel oznaceny jako "DSB sy",
+   ale je to `isb`.
 
-CO NEUMI: urcit, ktery spin je doopravdy horky. To vyzaduje profil ze
-zarizeni (fork uz diagnostiku ma: "pocitat sched_yield per vlakno").
-Vystup je podklad pro rozhodnuti, ne rozhodnuti samo.
+   Spravne:  0xD503201F = nop     0xD5033FDF = isb
+             0xD503205F = yield/wfe (v tomhle jadre 0x -- nepouziva se)
+
+Co tedy skenovat: souvisle bloky `isb` (ShortSpin() je rozvinuty 8x) a za
+nim zpetnou vetev. V tomhle jadre: 707 isb -> 105 bloku -> 86 spin smycek.
+
+STRuktura typicke smycky (priklad z MTVU, 0x4b2304):
+
+    0x4b2304: mov  w9, wzr          ; pocitadlo = 0
+    0x4b2308: isb                   ; -+
+      ...     isb  (celkem 8x)      ;  | ShortSpin() x 8
+    0x4b2324: isb                   ; -+
+    0x4b2328: add  w9, w9, w8       ; += spin budget  (ldr w8,[x24,#0xc08])
+    0x4b232c: cmp  w9, #0x1f4       ; 500  <- SPIN BUDGET, kandidat na patch
+    0x4b2330: b.lo #0x4b2308        ; dokud < 500
+    0x4b2344: bl   #0x8a3380        ; az pak blokovaci cesta (nanosleep 1 s)
 
 POUZITI
 -------
     python3 tools/find_tegra_candidates.py [SOUBOR] [--json VYSTUP]
 
-Vyžaduje capstone (pip install capstone).
+Vyzaduje capstone (pip install --break-system-packages capstone).
 """
 
 import argparse
@@ -39,9 +51,10 @@ try:
 except ImportError:
     sys.exit("Chybi capstone: pip install --break-system-packages capstone")
 
+ISB = 0xD5033FDF          # isb  (NE "DSB sy" -- to byla moje puvodni chyba)
+NOP = 0xD503201F
+
 # Rozsahy uz aplikovanych patchi z tools/patch_tegra_x1.py.
-# Zadny novy kandidat se nesmi dotknout techto bajtu -- jinak by zmenil
-# 'expect' hodnotu, kterou port kontroluje.
 APPLIED = {
     0x4bab80: ("gs-max-upscale-unclamp", 16),
     0x84179c: ("texture-preload-defaults", 4),
@@ -59,10 +72,10 @@ WATCHED = {
 
 def text_bounds(path):
     """Vrati (file_off_start, file_off_end) sekce .text."""
+    import re
     import subprocess
     out = subprocess.run(["readelf", "-SW", path],
                          capture_output=True, text=True).stdout
-    import re
     m = re.search(r"\[\s*\d+\]\s+\.text\s+PROGBITS\s+([0-9a-f]+)\s+"
                   r"([0-9a-f]+)\s+([0-9a-f]+)", out)
     if not m:
@@ -71,49 +84,41 @@ def text_bounds(path):
     return off, off + size
 
 
-def find_plt_slot(path, name="sched_yield"):
-    """Odhadne adresu PLT stubu pro importovanou funkci."""
-    import subprocess
-    import re
-    syms = subprocess.run(["readelf", "-sW", path],
-                          capture_output=True, text=True).stdout
-    idx = None
-    n = 0
-    for line in syms.splitlines():
-        m = re.match(r"\s*\d+:\s+0+\s+0\s+FUNC\s+GLOBAL\s+DEFAULT\s+UND\s+(\S+)",
-                     line)
-        if not m:
-            continue
-        if m.group(1).startswith(name):
-            idx = n
-            break
-        n += 1
-    if idx is None:
-        return None
-    sec = subprocess.run(["readelf", "-SW", path],
-                         capture_output=True, text=True).stdout
-    m = re.search(r"\[\s*\d+\]\s+\.plt\s+PROGBITS\s+([0-9a-f]+)\s+"
-                  r"([0-9a-f]+)\s+([0-9a-f]+)", sec)
-    plt_va = int(m.group(1), 16)
-    return plt_va + 32 + idx * 16
+def isb_runs(d, t0, t1, min_len=4):
+    """Seskupi isb do souvislych bloku (mezera <= 2 instrukce)."""
+    hits = [o for o in range(t0, t1 - 3, 4)
+            if struct.unpack_from("<I", d, o)[0] == ISB]
+    if not hits:
+        return []
+    runs, cur = [], [hits[0]]
+    for a, b in zip(hits, hits[1:]):
+        if b - a <= 8:
+            cur.append(b)
+        else:
+            runs.append((cur[0], cur[-1]))
+            cur = [b]
+    runs.append((cur[0], cur[-1]))
+    return [(s, e) for s, e in runs if (e - s) // 4 + 1 >= min_len]
 
 
-def call_sites(d, t0, t1, target):
-    for off in range(t0, t1 - 3, 4):
-        w = struct.unpack_from("<I", d, off)[0]
-        if (w & 0xFC000000) != 0x94000000:      # BL
-            continue
-        imm = w & 0x3FFFFFF
-        if imm & (1 << 25):
-            imm -= (1 << 26)
-        if off + imm * 4 == target:
-            yield off
+def backward_branch(md, d, block_end, block_start, look=14):
+    """Najde zpetnou vetev za blokem (do `look` instrukci)."""
+    for i in md.disasm(d[block_end + 4: block_end + 4 + look * 4],
+                       block_end + 4):
+        if (i.mnemonic.startswith("b.") and i.operands
+                and i.operands[0].type == capstone.arm64.ARM64_OP_IMM):
+            tgt = i.operands[0].imm
+            if block_start - 16 * 4 <= tgt <= block_end:
+                return i.address, tgt
+    return None
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("so", nargs="?", default="4248/arm64-v8a/libemucore_tegrax1.so")
+    ap = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("so", nargs="?",
+                    default="4248/arm64-v8a/libemucore_tegrax1.so")
     ap.add_argument("--json", dest="json_out", default=None)
     a = ap.parse_args()
 
@@ -122,85 +127,89 @@ def main():
     md = capstone.Cs(capstone.CS_ARCH_ARM64, capstone.CS_MODE_LITTLE_ENDIAN)
     md.detail = True
 
+    nop = sum(1 for o in range(t0, t1 - 3, 4)
+              if struct.unpack_from("<I", d, o)[0] == NOP)
+    isb = sum(1 for o in range(t0, t1 - 3, 4)
+              if struct.unpack_from("<I", d, o)[0] == ISB)
+
     print("=" * 88)
     print(f"KANDIDATI NA DALSI TEGRA X1 PATCHE: {a.so}")
     print(f".text: 0x{t0:x}..0x{t1:x}  ({t1 - t0:,} B)   stripped: bez .symtab")
     print("=" * 88)
+    print(f"\n[0] HINT/BARRIER INSTRUKCE")
+    print(f"    nop   0x{NOP:08x} : {nop}")
+    print(f"    isb   0x{ISB:08x} : {isb}   <- spinuje se na tomhle")
+    print(f"    (yield/wfe 0xD503205F v tomto jadre neni -- PCSX2 tu varianta "
+          f"nepouziva)")
 
-    # ---- [1] spin smycky -------------------------------------------------
-    plt = find_plt_slot(a.so)
-    if plt is None:
-        print("\nsched_yield neni importovan -- spin smycky nelze najit toutou cestou")
-        spins = []
-    else:
-        calls = list(call_sites(d, t0, t1, plt))
-        spins = []
-        for c in calls:
-            lo, hi = c - 40 * 4, c + 12 * 4
-            ins = list(md.disasm(d[lo:hi + 4], lo))
-            for i in ins:
-                if i.mnemonic.startswith("b.") and i.operands:
-                    tgt = i.operands[0].imm
-                    if lo <= tgt <= c:
-                        pre = [x for x in ins if c - 20 <= x.address < c]
-                        spins.append({
-                            "addr": c, "loop_head": tgt,
-                            "body": "; ".join(f"{x.mnemonic} {x.op_str}"
-                                              for x in pre[-3:]),
-                        })
-                        break
+    runs = isb_runs(d, t0, t1)
+    loops = []
+    for s, e in runs:
+        br = backward_branch(md, d, e, s)
+        if br:
+            loops.append({"start": s, "end": e,
+                          "n_isb": (e - s) // 4 + 1,
+                          "branch": br[0], "target": br[1]})
 
-        print(f"\n[1] SPIN SMYCKY (sched_yield uvnitr zpetne vetve)")
-        print(f"    {len(spins)} z {len(calls)} volani sched_yield je ve smycce\n")
-        print(f"    {'SITE':<12}{'ZACATEK SMYCKY':<16}TELO PRED YIELD")
-        print("    " + "-" * 84)
-        for s in spins:
-            print(f"    0x{s['addr']:<10x}0x{s['loop_head']:<14x}{s['body'][:56]}")
+    print(f"\n[1] SPIN SMYCKY (blok isb + zpetna vetev)")
+    print(f"    {isb} isb -> {len(runs)} souvislych bloku (>=4)"
+          f" -> {len(loops)} skutecnych spin smycek\n")
+    print(f"    {'BLOK ISB':<24}{'N':<4}{'VETEV':<12}{'CIL':<12}POZNAMKA")
+    print("    " + "-" * 84)
+    for L in loops:
+        note = ""
+        if 0x4b2000 <= L["start"] <= 0x4b2600:
+            note = "MTVU / VU_Thread"
+        elif 0x2fc000 <= L["start"] <= 0x2ff700:
+            note = "recompiler blok"
+        print(f"    0x{L['start']:x}-0x{L['end']:x}  {L['n_isb']:<4}"
+              f"0x{L['branch']:<10x}0x{L['target']:<10x}{note}")
 
-    # ---- [2] konfiguracni struktura --------------------------------------
+    # --- konfiguracni struktura -------------------------------------------
     print(f"\n[2] KONFIGURACNI STRUKTURA (EmuConfig.Speedhacks)")
-    print("    Z VU_Thread::ExecuteVU, oblasti 0x4b24b0..0x4b2530:")
-    print("      x21 = ADRP 0x2604000 + 0xf20   -> 0x2604F20")
-    print("      +0   = priznaky (bit 5 testovan tbnz na 0x4b252c)")
-    print("      +5   = EECycleSkip (ldrb w10,[x21,#5] -> MUL na 0x4b2500)")
-    print("    Dalsi offsety teze struktury v dosahu (0x4b2000..0x4b2c00):")
-    for i in md.disasm(d[0x4b2000:0x4b2c00], 0x4b2000):
-        if i.mnemonic in ("ldrb", "ldr", "ldrsw", "ldrh") and "x21" in i.op_str:
-            print(f"      0x{i.address:x}: {i.mnemonic:<6}{i.op_str}")
+    print("    Z VU_Thread::ExecuteVU (0x4b24b0..0x4b2530):")
+    print("      x21 = ADRP 0x2604000 + 0xf20  ->  0x2604F20")
+    print("      +0  = priznaky (bit 5 testovan tbnz na 0x4b252c)")
+    print("      +5  = EECycleSkip (ldrb w10,[x21,#5] -> MUL na 0x4b2500)")
 
-    # ---- [3] kolize -------------------------------------------------------
-    print(f"\n[3] KONTROLA KOLIZI")
+    # --- kolize -------------------------------------------------------------
     watched = dict(WATCHED)
     for off, (nm, ln) in APPLIED.items():
         for k in range(off, off + ln):
             watched.setdefault(k, f"nase: {nm}")
+    print(f"\n[3] KONTROLA KOLIZI")
     bad = []
-    for s in spins:
-        for k in range(s["loop_head"], s["addr"] + 4):
+    for L in loops:
+        for k in range(L["start"] - 0x40, L["end"] + 0x40):
             if k in watched:
-                bad.append((s["addr"], k, watched[k]))
+                bad.append((L["start"], k, watched[k]))
                 break
+        for off, (nm, ln) in APPLIED.items():
+            if not (L["end"] + 0x40 < off or L["start"] - 0x40 > off + ln):
+                bad.append((L["start"], off, f"nase: {nm}"))
     if bad:
         for sa, k, why in bad:
             print(f"    !! spin 0x{sa:x} zasahuje 0x{k:x} ({why})")
     else:
-        print(f"    OK: zadny z {len(spins)} kandidatu nelezi v rozsahu")
-        print(f"        applied patchu ani hlidanych mist ({len(watched)} bajtu)")
+        print(f"    OK: zadny z {len(loops)} spinu nelezi v rozsahu applied")
+        print(f"        patchu ani hlidanych mist")
 
     print("\n" + "=" * 88)
     print("CO Z TOHO PLYNE")
     print("=" * 88)
-    print(f"  - {len(spins)} spin smycek je katalogizovano a zadna nekoliduje.")
-    print("  - Ktera z nich je horka, z Binarky POZNAT NELZE (stripped, bez profilu).")
-    print("  - Fork uz diagnostiku ma (sched_yield per vlakno) -- skutecne")
-    print("    poradi se musi vzit z logu ze zarizeni, ne odhadem.")
-    print("  - VU cycle steal (0x4b2500) uz fork ma; EE CycleRate je v jadre")
-    print("    pritomen jako retezec, ale jde o nastaveni, ne o patch.")
+    print(f"  - {len(loops)} spin smycek je katalogizovano, 0 kolizi.")
+    print("  - Zkratit SPIN BUDGET (cmp w?, #0x1f4 = 500) je oboustranny")
+    print("    obchod: driv vrati jadro ostatnim, ale prida prepnuti kontextu.")
+    print("  - Ktery spin je horky, z binarky POZNAT NELZE (stripped). Chybí")
+    print("    CPU cas per vlakno (pthr_cpu_time_report ve forku).")
+    print("  - Nejvetsi nalezeny problem neni v jadre, ale v ovladaci:")
+    print("    chybi VK_ARM_rasterization_order_attachment_access, takze GS")
+    print("    musi kopirovat render targety (80.6 kopii/snimku v GT3).")
+    print("    Binarnim patchem jadra to nevyresime -- resi to")
+    print("    UserHacks_TextureInsideRt, ktery fork uz zpristupnil v menu.")
 
     if a.json_out:
-        json.dump({"spins": spins, "applied": {hex(k): v[0]
-                                               for k, v in APPLIED.items()}},
-                  open(a.json_out, "w"), indent=2)
+        json.dump({"spin_loops": loops}, open(a.json_out, "w"), indent=2)
         print(f"\nJSON: {a.json_out}")
 
 
