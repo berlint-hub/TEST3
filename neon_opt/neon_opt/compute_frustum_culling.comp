@@ -1,0 +1,228 @@
+#version 460
+// ============================================================================
+// Compute Shader: Frustum Culling - GPU parallel culling
+// ============================================================================
+// Mirrors neon_frustum_culling.h functionality on GPU
+// AABB/Sphere/OBB vs Frustum, BVH traversal
+// ============================================================================
+
+layout(set = 0, binding = 0, std430) readonly buffer FrustumPlanes {
+    vec4 planes[6];  // each: {nx, ny, nz, d}
+};
+
+layout(set = 0, binding = 1, std430) readonly buffer AABBs {
+    vec4 mins[];     // {min_x, min_y, min_z, 0}
+    vec4 maxs[];     // {max_x, max_y, max_z, 0}
+};
+
+layout(set = 0, binding = 2, std430) readonly buffer Spheres {
+    vec4 data[];     // {center_x, center_y, center_z, radius}
+};
+
+layout(set = 0, binding = 3, std430) readonly buffer OBBs {
+    vec4 centers[];
+    vec4 axis_x[];
+    vec4 axis_y[];
+    vec4 axis_z[];
+    vec4 half_extents[];
+};
+
+layout(set = 0, binding = 4, std430) readonly buffer BVHNodes {
+    vec4 node_min[];
+    vec4 node_max[];
+    ivec4 node_children[];  // {left, right, first_prim, prim_count}
+};
+
+layout(set = 0, binding = 5, std430) writeonly buffer CullResults {
+    uint32_t visible_indices[];
+    uint32_t visible_count;
+};
+
+layout(set = 0, binding = 6, std430) writeonly buffer VisibleMask {
+    uint32_t mask[];  // 32 objects per uint
+};
+
+layout(push_constant) uniform PushConstants {
+    uint32_t object_count;
+    uint32_t cull_type;     // 0=AABB, 1=Sphere, 2=OBB, 3=BVH
+    uint32_t max_visible;
+    uint32_t bvh_root;
+    uint32_t pad[2];
+} params;
+
+const uint32_t LOCAL_SIZE = 256;
+
+// Plane test: distance = dot(plane.xyz, point) + plane.w
+float plane_distance(vec4 plane, vec3 point) {
+    return dot(plane.xyz, point) + plane.w;
+}
+
+// AABB vs Frustum: test max corner for positive normal, min for negative
+bool aabb_vs_frustum(vec4 min, vec4 max) {
+    for (int p = 0; p < 6; ++p) {
+        vec4 plane = planes[p];
+        vec3 n = plane.xyz;
+        
+        // Select corner
+        vec3 corner = vec3(
+            n.x >= 0.0 ? max.x : min.x,
+            n.y >= 0.0 ? max.y : min.y,
+            n.z >= 0.0 ? max.z : min.z
+        );
+        
+        float dist = dot(n, corner) + plane.w;
+        if (dist <= 0.0) return false;
+    }
+    return true;
+}
+
+// Sphere vs Frustum
+bool sphere_vs_frustum(vec4 sphere) {
+    vec3 center = sphere.xyz;
+    float radius = sphere.w;
+    
+    for (int p = 0; p < 6; ++p) {
+        vec4 plane = planes[p];
+        float dist = dot(plane.xyz, center) + plane.w;
+        if (dist <= -radius) return false;
+    }
+    return true;
+}
+
+// OBB vs Frustum (Separating Axis Theorem)
+bool obb_vs_frustum(vec4 center, vec4 axis_x, vec4 axis_y, vec4 axis_z, vec4 half_extent) {
+    for (int p = 0; p < 6; ++p) {
+        vec4 plane = planes[p];
+        vec3 n = plane.xyz;
+        
+        // Project half-extents onto plane normal
+        float r = half_extent.x * abs(dot(axis_x.xyz, n)) +
+                  half_extent.y * abs(dot(axis_y.xyz, n)) +
+                  half_extent.z * abs(dot(axis_z.xyz, n));
+        
+        float dist = dot(n, center.xyz) + plane.w;
+        if (dist <= -r) return false;
+    }
+    return true;
+}
+
+// BVH node test
+bool bvh_node_vs_frustum(uint32_t node_idx) {
+    vec4 min = node_min[node_idx];
+    vec4 max = node_max[node_idx];
+    return aabb_vs_frustum(min, max);
+}
+
+// Main culling kernel
+void main() {
+    uint32_t idx = gl_GlobalInvocationID.x;
+    
+    // Load frustum planes
+    vec4 planes_local[6];
+    for (int i = 0; i < 6; ++i) {
+        planes_local[i] = planes[i];
+    }
+    
+    switch (params.cull_type) {
+        case 0: { // AABB culling
+            if (idx >= params.object_count) return;
+            
+            vec4 min = mins[idx];
+            vec4 max = maxs[idx];
+            
+            bool visible = aabb_vs_frustum(min, max);
+            
+            if (visible) {
+                // Atomic append to visible list
+                uint32_t pos = atomicAdd(visible_count, 1);
+                if (pos < params.max_visible) {
+                    visible_indices[pos] = idx;
+                }
+            }
+            break;
+        }
+        
+        case 1: { // Sphere culling
+            if (idx >= params.object_count) return;
+            
+            vec4 sphere = data[idx];
+            bool visible = sphere_vs_frustum(sphere);
+            
+            if (visible) {
+                uint32_t pos = atomicAdd(visible_count, 1);
+                if (pos < params.max_visible) {
+                    visible_indices[pos] = idx;
+                }
+            }
+            break;
+        }
+        
+        case 2: { // OBB culling
+            if (idx >= params.object_count) return;
+            
+            vec4 center = centers[idx];
+            vec4 ax = axis_x[idx];
+            vec4 ay = axis_y[idx];
+            vec4 az = axis_z[idx];
+            vec4 he = half_extents[idx];
+            
+            bool visible = obb_vs_frustum(center, ax, ay, az, he);
+            
+            if (visible) {
+                uint32_t pos = atomicAdd(visible_count, 1);
+                if (pos < params.max_visible) {
+                    visible_indices[pos] = idx;
+                }
+            }
+            break;
+        }
+        
+        case 3: { // BVH traversal (single-threaded per workgroup)
+            // Only first thread in workgroup does traversal
+            if (gl_LocalInvocationID.x != 0) return;
+            
+            // Stack for iterative traversal
+            uint32_t stack[64];
+            uint32_t stack_top = 0;
+            stack[stack_top++] = params.bvh_root;
+            
+            while (stack_top > 0) {
+                uint32_t node_idx = stack[--stack_top];
+                
+                // Test node bounds
+                if (!bvh_node_vs_frustum(node_idx)) continue;
+                
+                ivec4 children = node_children[node_idx];
+                int left = children.x;
+                int right = children.y;
+                int first = children.z;
+                int count = children.w;
+                
+                if (left == -1) {
+                    // Leaf - add primitives
+                    for (int i = 0; i < count; ++i) {
+                        uint32_t pos = atomicAdd(visible_count, 1);
+                        if (pos < params.max_visible) {
+                            visible_indices[pos] = uint32_t(first + i);
+                        }
+                    }
+                } else {
+                    // Internal - push children
+                    stack[stack_top++] = uint32_t(right);
+                    stack[stack_top++] = uint32_t(left);
+                }
+            }
+            break;
+        }
+    }
+}
+
+// Bitmask generation kernel (separate dispatch)
+layout(local_size_x = 256) in;
+void main_mask() {
+    uint32_t idx = gl_GlobalInvocationID.x;
+    if (idx >= params.object_count) return;
+    
+    // This would be a second pass to generate bitmask
+    // For now, use visible_indices from main kernel
+}
