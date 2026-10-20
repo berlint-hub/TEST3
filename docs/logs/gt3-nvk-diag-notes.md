@@ -286,3 +286,49 @@ Při cílovém 2×:
   Při 2× je jeho význam větší, ne menší — každá kopie nese 16× víc bajtů než
   při 0,5×.
 - Zbývá GPU fill rate (4× pixelů proti nativu) — to binární patch neovlivní.
+
+
+## 7. Spin smyčky IDENTIFIKOVÁNY (a náhrada za Ghidru)
+
+§2 končilo tím, že 86 spin smyček nelze "seřadit podle žravosti", protože
+binárka je stripped. To je nyní vyřešeno — víme, **ve které funkci jsou a co
+dělají**.
+
+### Ghidra/REA: konečný ortel
+
+- `berlint-hub/rea` je **legitimní fork** (`isFork: true`, rodič `morluto/rea`).
+  Varování v README míří na typosquatting, ne na tento fork. Můj první poplach
+  byl neopodstatněný.
+- REA se nainstaluje a spustí (Node 22.22.3, v6.7.0), ale `rea doctor` hlásí
+  `healthy:false` — **všech 5 nativních enginů chybí** (Hopper, Ghidra, IDA,
+  JADX, Kuna). REA žádný dekompilátor **nebalí ani nestahuje**, musíš ho dodat.
+- Dodat nejde: `release-assets.githubusercontent.com` síťově neprůchozí,
+  Kuna asset navíc vrací HTTP 404, a Rust/Java toolchain v sandboxu chybí
+  (jen python3 + gcc). **REA je zde slepá ulička**, nikoli podvod.
+
+### Co fungovalo místo toho
+
+`angr` 9.2.213 z PyPI — ale **plná `CFGFast` na 12 MB / 3 GB RAM nedoběhla**
+(~23 min, narostla na 2,97 GB, zastaveno před OOM).
+
+Levná náhrada, která dala stejný výsledek za 7 sekund:
+začátky funkcí z cílů `bl` (4 273) + prology `stp x29,x30,[sp,#..]!` (7 818),
+a jména z `.rela.plt` (685 stubů → reálná jména i ve stripped binárce).
+
+### Výsledek
+
+- 86 smyček v **40 funkcích**; **37 funkcí volá `sem_wait`** (79 smyček).
+- ⇒ jde o **PCSX2 `Semaphore::Wait()`**.
+- 5 kalibračních smyček (`0x8a34xx`) má jiný tvar a je nutno je vynechat.
+- Řazení paměti dělá **`ldar`**, ne `isb` → výměna `isb`→`yield` je bezpečná.
+- Implementováno jako opt-in patch `spin-relax` (81 míst), plně ověřeno
+  (1296 B = 81×16, 0 bajtů mimo, 0 kolizí, `verify_nx_compat` zelený).
+- **Záměrně NE v hlavním deliverable** — směr výkonu není změřen. Podrobně
+  `docs/tegra-x1-patch-report.md` §11.
+
+### Co to mění na §5 (chybějící data)
+
+§2.5/§5 žádaly "CPU čas per vlákno", aby se dalo říct, který spin je horký.
+To stále platí jako **nejlepší** zdroj (fork to už měří, commit `b3aa5ca7`).
+Nově ale přibyla možnost A/B přímo na binárce: nahraješ spin-relax variantu
+a změříš FPS. To je přímější než nepřímé odhady.

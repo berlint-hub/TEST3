@@ -44,10 +44,36 @@ import sys
 import os
 import re
 import hashlib
+import struct
 import subprocess
 import argparse
 
 EXPECTED_SIZE_4248 = 12_162_984   # build.py: vetev "adreno/4248"
+
+# -------------------------------------------- spin-loop (Semaphore::Wait)
+# PCSX2 ceka na semafor aktivnim spinem. Struktura (overeno na vsech 81 mist):
+#
+#     ldr  w8,[xN,#0xc08]     ; g_spin_cycles
+#     cbz  w8, -> nanosleep   ; pomalou cestu (1 s!) vezme jen kdyz je 0
+#     mov  w9, wzr
+#   blok:  8x isb             ; <-- ZDRZENI
+#     add  w9, w9, w8
+#     cmp  w9, #0x1f4         ; 500
+#     b.lo blok
+#     add  w22, w22, w9
+#     ldar w21,[xN]           ; <-- ZNOVU NACTENO S ACQUIRE
+#     tbz  w21, #0x1f, ...    ; podminka ukonceni
+#
+# DULEZITE: razeni pameti dela 'ldar' (acquire), NE 'isb'. ISB neni datova
+# bariera - ARM ARM vyslovne rika, ze ISB neradi datove pristupy. ISB je
+# tady ciste zpozdeni, takze jeho vymena za 'yield' je PAMETOVE BEZPECNA.
+#
+# 'yield' (0xD503203F) je presne to, co pouziva linuxovy arm64 cpu_relax().
+# POZOR na zmenu: 0xD503205F neni yield, ale WFE!
+ISB_WORD      = 0xD5033FDF
+YIELD_WORD    = 0xD503203F
+ADD_W9_W9_W8  = 0x0B080129      # add w9, w9, w8
+CMP_W9_500    = 0x7107D13F      # cmp w9, #0x1f4
 
 # -------------------------------------------------------------- katalog
 
@@ -133,6 +159,25 @@ OPTIONAL = [
              "nebo 0x681e7c), sám ho neaplikuje — pochází z xdelta. "
              "Nemám jeho původní bajty, proto je vypnutý defaultně.",
     ),
+    dict(
+        id="spin-relax",
+        desc="[EXPERIMENTÁLNÍ — ZMĚŘ] isb -> yield ve spin smyčkách semaforu",
+        off=None,
+        mode="spinrelax",     # hledá se podle signatury, 81 míst
+        old=b"", new=b"",     # delkove zachovne, nahrazuje se 8x4B na miste
+        note="PCSX2 aktivně čeká na semafor 8x 'isb' ve smyčce. ISB je na "
+             "Cortex-A57 drahá instrukce (splachuje pipeline) a přitom NENÍ "
+             "datová bariéra — řazení paměti zajišťuje 'ldar' před blokem, "
+             "takže výměna za 'yield' (0xD503203F, = linuxový arm64 "
+             "cpu_relax()) je PAMĚŤOVĚ BEZPEČNÁ.\n"
+             "            SMĚR VÝKONU JE OVŠEM NEJEDNOZNAČNÝ a nebyl změřen: "
+             "rychlejší spin = častější dotaz na semafor (nižší latence), "
+             "ale také plné vytížení jádra při čekání. Na 4jádrovém Tegra X1 "
+             "s připnutými vlákny (EE/GS/MTVU/driver na vlastní jádro) může "
+             "pomoci; pokud jádra sdílí, může naopak škodit.\n"
+             "            PROTO JE VYPNUTÝ. Zapni --with-spin-relax, odměř "
+             "FPS a 1% low, a teprve podle výsledku se rozhodni.",
+    ),
 ]
 
 
@@ -182,9 +227,46 @@ def find_all(data, needle):
     return out
 
 
+def isb_run8():
+    return struct.pack("<8I", *([ISB_WORD] * 8))
+
+
+def yield_run8():
+    return struct.pack("<8I", *([YIELD_WORD] * 8))
+
+
+def find_spin_blocks(data, run8=None):
+    """Najde spin bloky Semaphore::Wait CISTE PODLE SIGNATURY (ne offsetu).
+
+    Vyžaduje celý tvar:
+        8x <run8> | add w9,w9,w8 | cmp w9,#0x1f4 | b.lo <zacatek bloku>
+    Tim se zaroven vylouci 5 kalibracnich smycek jinde v binarce (ty maji
+    za isb 'subs w8,w8,#1 ; b.ne' a nesmi se menit).
+
+    run8=None hleda puvodni 8x isb; predat yield_run8() hleda jiz patchnuty
+    stav (kvuli idempotenci).
+    """
+    run8, out = (isb_run8() if run8 is None else run8), []
+    addw = struct.pack("<I", ADD_W9_W9_W8)
+    cmpw = struct.pack("<I", CMP_W9_500)
+    i = data.find(run8)
+    while i != -1:
+        j = i + 32
+        if data[j:j + 4] == addw and data[j + 4:j + 8] == cmpw:
+            w = struct.unpack_from("<I", data, j + 8)[0]
+            if (w & 0xFF000010) == 0x54000000 and (w & 0xF) == 0x3:  # b.lo
+                off = (w >> 5) & 0x7FFFF
+                if off >= 0x40000:            # imm19 je signed
+                    off -= 0x80000
+                if j + 8 + off * 4 == i:      # skace zpet na zacatek bloku
+                    out.append(i)
+        i = data.find(run8, i + 1)
+    return out
+
+
 # -------------------------------------------------------------- akce
 
-def do_patch(src, dst, extra=False, force=False, shim=False):
+def do_patch(src, dst, extra=False, force=False, shim=False, spin=False):
     with open(src, "rb") as fh:
         data = bytearray(fh.read())
 
@@ -198,13 +280,42 @@ def do_patch(src, dst, extra=False, force=False, shim=False):
 
     todo = list(PATCHES)
     if extra:
-        todo += [p for p in OPTIONAL if p["id"] != "vulkan-shim-hook"]
+        todo += [p for p in OPTIONAL if p["id"] not in
+                 ("vulkan-shim-hook", "spin-relax")]
     if shim:
         todo += [p for p in OPTIONAL if p["id"] == "vulkan-shim-hook"]
+    if spin:
+        todo += [p for p in OPTIONAL if p["id"] == "spin-relax"]
     applied = []
     for p in todo:
         if p.get("mode") != "multi" and len(p["old"]) != len(p["new"]):
             die(f"{p['id']}: patch neni delkove zachovny")
+        if p.get("mode") == "spinrelax":
+            blocks = find_spin_blocks(data)
+            if not blocks:
+                done = find_spin_blocks(data, yield_run8())
+                if done:
+                    print(f"  [=    ] {p['id']:<28} jiz aplikovano "
+                          f"({len(done)} mist ma yield)")
+                else:
+                    print(f"  [!    ] {p['id']:<28} preskoceno "
+                          f"(signatura spin smycky nenalezena)")
+                continue
+            run8, yld8 = isb_run8(), yield_run8()
+            n_new = 0
+            for b in blocks:
+                if data[b:b + 32] == run8:
+                    data[b:b + 32] = yld8
+                    n_new += 1
+            if n_new:
+                applied.append(p)
+                print(f"  [patch ] {p['id']:<28} {n_new}/{len(blocks)} mist "
+                      f"-> yield")
+                print(f"            {p['desc']}")
+            else:
+                print(f"  [=    ] {p['id']:<28} jiz aplikovano "
+                      f"({len(blocks)} mist ma yield)")
+            continue
         if p.get("mode") == "multi":
             n_ok = 0
             for off, old_s in p["old_list"]:
@@ -330,6 +441,12 @@ def do_list():
         print(f"   {p['desc']}")
         if p.get("mode") == "multi":
             print("   offset " + ", ".join("0x%x" % o for o, _ in p["old_list"]))
+        elif p.get("mode") == "spinrelax":
+            print("   hledá se podle signatury (8x isb | add w9,w9,w8 | "
+                  "cmp w9,#0x1f4 | b.lo)")
+            print("   81 míst -> 81x 32 B nahrazeno (8x isb -> 8x yield)")
+        elif p["off"] is None:
+            print("   offset (zjišťuje se za běhu)")
         else:
             print(f"   offset 0x{p['off']:x}   {len(p['old'])} B -> {len(p['new'])} B")
         print(f"   {p['note']}\n")
@@ -344,6 +461,10 @@ def main():
     ap.add_argument("--list", action="store_true", help="vypis katalog patchu")
     ap.add_argument("--with-vulkan-bypass", action="store_true",
                     help="pridat i nepotvrzeny Vulkan format bypass")
+    ap.add_argument("--with-spin-relax", action="store_true",
+                    help="EXPERIMENTALNI: 8x isb -> 8x yield ve spin smyckach "
+                         "semaforu (81 mist). Pametove bezpecne, ale SMER "
+                         "VYKONU NEZMEREN -- odmer FPS!")
     ap.add_argument("--with-vulkan-shim-hook", action="store_true",
                     help="presmerovat loader na libvulkad.so (POUZE pokud dodavas "
                          "vlastni libvulkad.so - jinak rozbijes Vulkan)")
@@ -357,7 +478,8 @@ def main():
         do_check(a.check); return
     if not a.src or not a.dst:
         ap.error("chybi VSTUP a/nebo VYSTUP (nebo pouzij --check / --list)")
-    do_patch(a.src, a.dst, a.with_vulkan_bypass, a.force, a.with_vulkan_shim_hook)
+    do_patch(a.src, a.dst, a.with_vulkan_bypass, a.force,
+             a.with_vulkan_shim_hook, a.with_spin_relax)
 
 
 if __name__ == "__main__":

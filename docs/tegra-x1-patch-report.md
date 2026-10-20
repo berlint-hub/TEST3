@@ -744,3 +744,136 @@ jde o existující knob vystavený přes UI — není důvod ho patchovat.
 Katalog je **podklad pro rozhodnutí, ne rozhodnutí**. Bez logu ze zařízení
 by další patch byl střelba naslepo, a u jádra, které port kontroluje přes
 16+1 `expect` hodnot, je střelba naslepo zbytečně riskantní.
+
+
+## 11. `spin-relax` — `isb` → `yield` ve spin smyčkách semaforu (EXPERIMENTÁLNÍ)
+
+Dosud jsme spin smyčky jen spočítali (§10), nevěděli jsme ale, **ve které funkci
+jsou** a co dělají. To vyřešila analýza pořízená náhradou za Ghidru — viz
+§11.1 — a díky ní je tento patch **strukturně ověřený**.
+
+### 11.1 Jak jsme zjistili, co ty smyčky jsou (bez Ghidry)
+
+Ghidra ani žádný jiný dekompilátor není v tomto sandboxu dostupný
+(release assety na `release-assets.githubusercontent.com` jsou síťově
+blokované, chybí Rust/Java toolchain). Místo toho:
+
+1. **`angr` 9.2.213 z PyPI** — plná `CFGFast` analýza 12 MB binárky na 3 GB RAM
+   **nedoběhla** (narostla na ~3 GB a musela být zastavena).
+2. Fungovala **levná náhrada**: začátky funkcí z cílových adres všech `bl`
+   instrukcí + detekce prologů `stp x29,x30,[sp,#..]!` (celkem 10 406 začátků),
+   a **jména externích funkcí z `.rela.plt`** (685 PLT stubů → skutečná jména
+   dynamických symbolů, i když je binárka stripped).
+
+Výsledek: **86 spin smyček leží v 40 funkcích**, z nich **37 volá `sem_wait`**
+(pokrývá 79 smyček). Zbylé 3: jedna kalibrační funkce (`0x8a3384`, 5 smyček,
+volá `clock_gettime`), jedna producentská (`0x8058f4`, `usleep`+`sem_post`) a
+jedna bez PLT volání.
+
+Z toho plyne identifikace: jde o **PCSX2 `Semaphore::Wait()`**.
+
+### 11.2 Přesná struktura (MTVU instance, funkce `0x4b22a0`)
+
+```
+  0x4b22c0: ldar  w21,[x19]        ; atomic acquire load počítadla
+  0x4b22c4: tbnz  w21,#0x1f, exit  ; sign bit -> rovnou blokovat
+  0x4b22cc: mov   w22,wzr          ; total_spin = 0
+  0x4b22d4: ldr   w23,[x8,#0xc0c]  ; spin budget
+  outer:
+  0x4b22dc: cmp   w22,w23
+  0x4b22e0: b.ls  #0x4b22fc        ; ještě máme rozpočet -> spinuj
+  0x4b22f0: bl    #0x2f7760        ; atomic CAS (zkus odečíst)
+  0x4b22fc: ldr   w8,[x24,#0xc08]  ; g_spin_cycles
+  0x4b2300: cbz   w8,#0x4b2344     ; == 0 -> pomalá cesta (nanosleep 1 s!)
+  0x4b2304: mov   w9,wzr
+  blok:
+  0x4b2308: isb   x8               ; <-- ZDRŽENÍ (8 instrukcí)
+  0x4b2328: add   w9,w9,w8
+  0x4b232c: cmp   w9,#0x1f4        ; 500
+  0x4b2330: b.lo  blok
+  0x4b2334: add   w22,w22,w9
+  0x4b2338: ldar  w21,[x19]        ; <-- ZNOVU NAČTENO, ACQUIRE
+  0x4b233c: tbz   w21,#0x1f, outer ; podmínka ukončení
+```
+
+### 11.3 Proč je výměna za `yield` paměťově bezpečná
+
+**Řazení paměti zajišťuje `ldar` na `0x4b2338`, nikoli `isb`.** Podle ARM ARM
+ISB *neuspořádává datové přístupy* — je to instrukční bariéra (spláchnutí
+pipeline), datovou bariérou je `dmb`/`dsb`. `isb` je zde tedy čisté zdržení
+a jeho výměna za `yield` (`0xD503203F` — přesně to, co používá linuxový
+arm64 `cpu_relax()`) mění jen **délku** zdržení, ne sémantiku.
+
+Varování do budoucna: **nekódovat `yield` jako `0xD503205F`** — to je `wfe`.
+Správně: `nop`=`0xD503201F`, `yield`=`0xD503203F`, `wfe`=`0xD503205F`,
+`wfi`=`0xD503207F`, `isb`=`0xD50330DF`/`0xD5033FDF`.
+
+### 11.4 Uniformita a rozsah
+
+Všech **81** míst má identický tvar (ověřeno strojově):
+
+| kontrola | výsledek |
+|---|---|
+| délka souvislého běhu ISB | 8 instrukcí u **všech 86** |
+| `add w9,w9,w8` | `0x0B080129` (shodné) |
+| `cmp w9,#0x1f4` | `0x7107D13F` (shodné) |
+| `b.lo` cíluje na začátek bloku | **81/81** |
+| rozdíl `isb` vs `yield` | jen 2 z 4 bajtů (`DF 3F` → `3F 20`, `03 D5` shodné) |
+
+**Vyloučeno záměrně:** 5 kalibračních smyček na
+`0x8a3414 / 0x8a3494 / 0x8a3518 / 0x8a35a0 / 0x8a3618` — ty mají za `isb`
+místo toho `subs w8,w8,#1 ; b.ne`, takže je podpisová kontrola
+`add w9,w9,w8 / cmp w9,#0x1f4 / b.lo` automaticky přeskočí. Ověřeno, že
+zůstaly nedotčeny.
+
+### 11.5 Ověření výsledku
+
+```
+počet změněných bajtů : 1296  (= 81 míst x 16 B)
+8x isb -> 8x yield    : 81/81
+bajtů mimo očekávané pozice : 0
+zbytek binarky        : identický
+velikost              : 12 162 984 B (délkově zachovné)
+kolize s 5 našimi patchi + VU steal (0x4b2500) : 0
+verify_nx_compat.py   : VERDIKT KOMPATIBILNI, 16/16 patchů portu, 0 kolizí
+```
+
+Nejbližší spin smyčka k VU steal adrese `0x4b2500` je `0x4b2308` (MTVU) —
+tedy **500 bajtů pod** ní, žádný překryv.
+
+### 11.6 PROČ JE VYPNUTÝ — směr výkonu nebyl změřen
+
+Tohle je důležité a je to důvod, proč patch **není** v hlavním deliverable:
+
+- `isb` na Cortex-A57 splachuje pipeline a je řádově **desítky cyklů**;
+  `yield` je hint za ~1 cyklus. Spin se proto zkrátí v čase zhruba **20–50×**.
+- Počet *iterací* se nezmění (pořád `w9` do 500), takže se nezmění ani počet
+  průchodů vnější smyčkou. Změní se jen to, **jak často se v čase ptáme na
+  semafor**.
+- Rychlejší dotazování = **nižší latence** probuzení, ale také **plné
+  vytížení jádra** po dobu čekání.
+- Na 4jádrovém Tegra X1, kde fork připíná EE→0, GS→1, MTVU→2, driver→3
+  (každé vlákno vlastní jádro), je tight spin pravděpodobně **v pořádku až
+  prospěšný**. Pokud by jádra byla sdílená, čekající vlákno by naopak
+  **kradlo cykly producentovi** a výkon by klesl.
+
+Bez měření (FPS + 1 % low) nelze říct, kterým směrem se to vydá. Navíc
+podle §6 je při cílovém rozlišení 2× úzkým hrdlem GPU (kopírování render
+targetů), takže CPU-side změna pravděpodobně ani nebude dominantní.
+
+### 11.7 Jak to odzkoušet (A/B)
+
+```bash
+# experimentální varianta (5 ověřených patchů + spin-relax)
+python3 tools/patch_tegra_x1.py 4248/arm64-v8a/libemucore.so \
+    4248/arm64-v8a/libemucore_tegrax1_spinrelax.so --with-spin-relax
+
+# kontrola, že je aplikováno (idempotentní)
+python3 tools/patch_tegra_x1.py --check 4248/arm64-v8a/libemucore_tegrax1_spinrelax.so
+```
+
+Na konoli nahraj `libemucore_tegrax1_spinrelax.so` jako
+`/switch/nethersx2/cores/libemucore_4248.so` (jméno musí zůstat),
+změř, pak vrať `libemucore_tegrax1.so` a změř znovu. Teprve podle výsledku
+se rozhodni. **Hlavní deliverable `libemucore_tegrax1.so` je beze změny**
+(sha256 `be64362a...`).
