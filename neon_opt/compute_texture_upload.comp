@@ -1,0 +1,142 @@
+#version 460
+// ============================================================================
+// Compute Shader: Texture Upload / Format Conversion
+// ============================================================================
+// Mirrors neon_texture_upload.h functionality on GPU
+// RGBA↔BGRA swizzle, sRGB↔Linear, premultiply, mip generation
+// ============================================================================
+
+layout(set = 0, binding = 0, rgba8) readonly uniform image2D src_image;
+layout(set = 0, binding = 1, rgba8) writeonly uniform image2D dst_image;
+
+layout(set = 0, binding = 2, std430) readonly buffer SrcPixels {
+    vec4 src_pixels[];   // Linear buffer: width*height vec4
+};
+
+layout(set = 0, binding = 3, std430) writeonly buffer DstPixels {
+    vec4 dst_pixels[];
+};
+
+layout(set = 0, binding = 4, std430) readonly buffer SrcMip {
+    vec4 src_mip[];
+};
+
+layout(set = 0, binding = 5, std430) writeonly buffer DstMip {
+    vec4 dst_mip[];
+};
+
+layout(push_constant) uniform PushConstants {
+    uint32_t width;
+    uint32_t height;
+    uint32_t mip_level;
+    uint32_t operation;       // 0=swizzle, 1=srgb2linear, 2=linear2srgb, 3=premul, 4=unpremul, 5=mip_box
+    uint32_t src_mip_width;
+    uint32_t src_mip_height;
+    uint32_t channels;        // 3 or 4
+    uint32_t pad[2];
+} params;
+
+const uint32_t LOCAL_SIZE = 16;
+
+// sRGB to Linear (approximate)
+vec3 srgb_to_linear(vec3 c) {
+    vec3 linear = c / 12.92;
+    vec3 pow_c = pow((c + 0.055) / 1.055, vec3(2.4));
+    bvec3 mask = lessThanEqual(c, vec3(0.04045));
+    return mix(pow_c, linear, vec3(mask));
+}
+
+// Linear to sRGB (approximate)
+vec3 linear_to_srgb(vec3 c) {
+    vec3 srgb = c * 12.92;
+    vec3 pow_c = 1.055 * pow(c, vec3(1.0/2.4)) - 0.055;
+    bvec3 mask = lessThanEqual(c, vec3(0.0031308));
+    return mix(pow_c, srgb, vec3(mask));
+}
+
+void main() {
+    ivec2 coord = ivec2(gl_GlobalInvocationID.xy);
+    
+    if (coord.x >= int(params.width) || coord.y >= int(params.height)) return;
+    
+    vec4 px;
+    
+    // Load source pixel
+    switch (params.operation) {
+        case 0: // swizzle RGBA ↔ BGRA
+        case 1: // sRGB to Linear
+        case 2: // Linear to sRGB
+        case 3: // premultiply
+        case 4: // unpremultiply
+            px = imageLoad(src_image, coord);
+            break;
+        case 5: // mip generation - load from buffer
+            uint32_t idx = coord.y * params.width + coord.x;
+            px = SrcPixels[idx];
+            break;
+    }
+    
+    vec4 result = px;
+    
+    switch (params.operation) {
+        case 0: // RGBA ↔ BGRA swizzle
+            result = px.bgra;
+            break;
+            
+        case 1: // sRGB to Linear
+            result.rgb = srgb_to_linear(px.rgb);
+            break;
+            
+        case 2: // Linear to sRGB
+            result.rgb = linear_to_srgb(px.rgb);
+            break;
+            
+        case 3: // Premultiply alpha
+            result.rgb = px.rgb * px.a;
+            break;
+            
+        case 4: // Unpremultiply alpha
+            if (px.a > 0.0) {
+                result.rgb = px.rgb / px.a;
+            } else {
+                result.rgb = vec3(0.0);
+            }
+            break;
+            
+        case 5: // Mip generation - box filter
+            // Source is previous mip level (params.src_mip_width x params.src_mip_height)
+            // Each thread writes one pixel of current mip
+            {
+                uint32_t sx = coord.x * 2;
+                uint32_t sy = coord.y * 2;
+                
+                vec4 sum = vec4(0.0);
+                uint32_t count = 0;
+                
+                for (int dy = 0; dy < 2; ++dy) {
+                    for (int dx = 0; dx < 2; ++dx) {
+                        uint32_t sample_x = sx + dx;
+                        uint32_t sample_y = sy + dy;
+                        if (sample_x < params.src_mip_width && sample_y < params.src_mip_height) {
+                            uint32_t sample_idx = sample_y * params.src_mip_width + sample_x;
+                            sum += SrcMip[sample_idx];
+                            count++;
+                        }
+                    }
+                }
+                result = sum / float(count);
+            }
+            break;
+    }
+    
+    // Write result
+    switch (params.operation) {
+        case 5: // Mip writes to buffer
+            uint32_t dst_idx = coord.y * params.width + coord.x;
+            DstMip[dst_idx] = result;
+            break;
+        default: // Image operations
+            imageStore(dst_image, coord, result);
+            break;
+    }
+}

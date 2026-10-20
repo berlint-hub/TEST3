@@ -1,0 +1,79 @@
+#version 460
+// ============================================================================
+// Compute Shader: UBO Upload - GPU-side staging buffer preparation
+// ============================================================================
+// Mirrors neon_ubo_upload.h functionality on GPU
+// Uses storage buffers + push constants for maximum throughput
+// ============================================================================
+
+// Layout bindings
+layout(set = 0, binding = 0, std430) readonly buffer SrcMatrices {
+    mat4 src_matrices[];
+};
+
+layout(set = 0, binding = 1, std430) writeonly buffer DstUBO {
+    mat4 dst_matrices[];
+};
+
+layout(set = 0, binding = 2, std430) readonly buffer SrcVec4Array {
+    vec4 src_vec4[];
+};
+
+layout(set = 0, binding = 3, std430) writeonly buffer DstVec4Array {
+    vec4 dst_vec4[];
+};
+
+layout(set = 0, binding = 4, std430) readonly buffer SrcBulk {
+    vec4 src_bulk[];
+};
+
+layout(set = 0, binding = 5, std430) writeonly buffer DstBulk {
+    vec4 dst_bulk[];
+};
+
+// Push constants for dispatch parameters
+layout(push_constant) uniform PushConstants {
+    uint32_t matrix_count;      // Number of mat4 to copy
+    uint32_t vec4_count;        // Number of vec4 to copy
+    uint32_t bulk_vec4_count;   // Number of vec4 for bulk copy
+    uint32_t src_matrix_offset; // Offset in src_matrices
+    uint32_t dst_matrix_offset; // Offset in dst_matrices
+    uint32_t src_vec4_offset;
+    uint32_t dst_vec4_offset;
+    uint32_t bulk_src_offset;
+    uint32_t bulk_dst_offset;
+    uint32_t operation;         // 0=matrices, 1=vec4, 2=bulk
+    uint32_t pad[3];
+} params;
+
+const uint32_t LOCAL_SIZE = 64;
+
+void main() {
+    uint32_t idx = gl_GlobalInvocationID.x;
+    
+    switch (params.operation) {
+        case 0: // mat4 array copy
+            if (idx < params.matrix_count) {
+                uint32_t src_idx = params.src_matrix_offset + idx;
+                uint32_t dst_idx = params.dst_matrix_offset + idx;
+                dst_matrices[dst_idx] = src_matrices[src_idx];
+            }
+            break;
+            
+        case 1: // vec4 array copy
+            if (idx < params.vec4_count) {
+                uint32_t src_idx = params.src_vec4_offset + idx;
+                uint32_t dst_idx = params.dst_vec4_offset + idx;
+                dst_vec4[dst_idx] = src_vec4[src_idx];
+            }
+            break;
+            
+        case 2: // bulk vec4 copy (like neon_copy_128)
+            if (idx < params.bulk_vec4_count) {
+                uint32_t src_idx = params.bulk_src_offset + idx;
+                uint32_t dst_idx = params.bulk_dst_offset + idx;
+                dst_bulk[dst_idx] = src_bulk[src_idx];
+            }
+            break;
+    }
+}
