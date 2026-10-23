@@ -877,3 +877,150 @@ Na konoli nahraj `libemucore_tegrax1_spinrelax.so` jako
 změř, pak vrať `libemucore_tegrax1.so` a změř znovu. Teprve podle výsledku
 se rozhodni. **Hlavní deliverable `libemucore_tegrax1.so` je beze změny**
 (sha256 `be64362a...`).
+
+
+## 12. Přehodnocení: co z našich 5 patchů na forku skutečně dělá něco
+
+*Zapsáno 2026-10-20 po prostudování nových commitů forku
+(`7f21062`, zejména `229256b`, `4c78d90`, `a1908f1`).*
+**Tohle nejsou odhady — každý řádek je ověřený v kódu forku nebo v binárce.**
+
+### 12.1 Co nového fork změřil (a proč je to dobrá zpráva)
+
+Při **2× interním rozlišení** (log z buildu `26a9bdd`, GT3):
+94 oken závodu, **73 (78 %) drží ≥ 49,80 fps**, medián 50,17, minimum 44,37.
+Proti běhu na 0,5× (84 % oken nad 49,80) **prakticky stejné**, přestože plocha
+pixelů je šestnáctinásobná. **Počet kopií na snímek klesl z mediánu 35,2 na
+17,3** — sada hacků proti kopiím zabrala i při zvýšeném rozlišení.
+
+Dva odlišné režimy, které nové pole `acquire` poprvé dokáže oddělit:
+
+| režim | příznaky |
+|---|---|
+| střed závodu — **renderer-bound** | korelace GS % s fps **−0,63**, kopií/snímek s fps −0,47; 6 oken s GS >85 % je mezi nejpomalejšími |
+| posledních 7 oken — **GPU-bound** | `acquire` **37–86 % délky okna** (2251–5968 ms), submit 37–54 ms, present 82–177 ms, EE 70–83 %, GS 55–75 % |
+
+Bez pole `acquire` by ten úsek vypadal jako „čekání na GPU = 0 %", protože
+fence zůstaly na 7–14 ms — přesně takhle už dvakrát vznikla diagnóza, kterou
+měření pak vyvrátilo.
+
+Vyřešená stará otázka: **záseky SD kartou za jízdy NEJSOU**
+(`io read 9 × 0 KiB blocked 0.6–0.8 ms`). SD karta je reálný propad jen při
+bootu a nahrávání stavu.
+
+### 12.2 Nová páka: `OverrideTextureBarriers` (commit `229256b`)
+
+Tristate int (−1 = auto), ne bool — vázaný `SettingsWrapBitfieldEx`, kreslený
+jako `DrawIntListSetting`. Je to **poslední knoflík ovlivňující přímo ten
+GPU-bound úsek** (v něm 422–605 pipeline bariér na snímek proti 64–199 ve
+středu závodu).
+
+Protože `VK_ARM_rasterization_order_attachment_access` **není podporováno**,
+musí se target, který se zároveň sampuje, nejdřív zkopírovat. **Force on**
+nechá renderer použít bariéry místo kopií — ale ovladač nezaručuje řazení,
+takže **může rozbít blending a efekty**.
+
+**To je věc menu forku, ne binární patch jádra.**
+
+### 12.3 Upozornění: `paltex` NENÍ texture preloading
+
+Při kontrole echa (`paltex=1`) jsem měl podezření, že launcher zapisuje jiný
+klíč než jádro čte — stejná chyba, jakou fork našel u FXAA
+(`EmuCore/GS/FXAA` vs jádro `"fxaa"`, řádka byla mrtvá od commitu `720da09`).
+
+**Poplach byl falešný a ověření to ukázalo:**
+
+```
+launcher/source/main.cpp:474:
+  O_CHOICE("GPU palette conv", "EmuCore/GS/paltex", C_bool, "false"),
+```
+
+`paltex` je **bool „GPU palette conversion"**, ne úroveň preloadingu.
+Ověřeno i v naší binárce: jádro má `"texture_preloading"` (1×),
+`"UserHacks_TexturePreloading"` **0×** — takže launcherova řádka
+`EmuCore/GS/texture_preloading` je **živá**, správně nasměrovaná.
+
+### 12.4 A teď ta nepříjemná část: 4 z 5 našich patchů jsou na forku no-op
+
+**(a) `scale-unclamp` — nadbytečný**
+
+Fork si clamp opravuje **sám**, v `source/hooks/patches.c:50`:
+
+```c
+// Android exposes 0.25x, but this core revision clamps the GS multiplier to 0.5x.
+{ 0x4bab84, 0x1e2c1002, 0x1e2a1002, "GS upscale minimum 0.25x" },
+```
+
+Port tedy nastavuje minimum na **0,25×**. A menu (`C_upscale`, main.cpp:385)
+nabízí jako nejnižší položku právě **0.25x**.
+
+Náš patch (`0x4bab80`+16) mění sousední slovo `0x4bab8c`
+(`fcsel` → `fmov`), takže **si s portem nekonkurují** a nehrozí kolize —
+ověřeno `verify_nx_compat` (0 kolizí). Ale náš patch tím pádem umožňuje jen
+hodnoty **pod 0,25×**, které menu neumí vybrat. Užitečný je tedy pouze při
+ruční editaci ini.
+
+**(b) `texture-preload-defaults` + `texture-preload-gssettings` — nadbytečné**
+
+Oba mění *default* v jádře, tedy hodnotu použitou, když ini klíč chybí.
+Jenže launcher ho zapisuje **při každém spuštění** (`main.cpp:8040`):
+
+```c
+if(launch) commitAll();
+...
+static void commitAll() {
+  ...
+  std::string v = iniGet(o.key, o.def);
+  iniSet(o.key, v.c_str());
+}
+```
+
+`commitAll()` projde **všechny** klíče menu a zapíše je. A launcher má
+`texture_preloading` defaultovaný na **`"2"`** (main.cpp:473) — tedy Full,
+**stejnou hodnotu jako náš patch**. Ini hodnota má přednost před defaultem
+jádra ⇒ naše dva patche se na tomto portu vůbec neuplatní.
+
+**(c) `preserve-user-data-1/2` — pořád platí jako pojistka**
+
+Chrání před `ApplyPerformancePreset` (smazání karet/achievementů při
+resetu presetu). V launcheru jsem **žádnou řádku pro reset presetu nenašel**,
+takže na tomto portu může být cesta nedosažitelná — to netvrdím s jistotou.
+Každopádně jde o bezpečnostní síť bez vedlejších účinků.
+
+**(d) `spin-relax` — beze změny**
+
+Pořád opt-in, pořád nezměřený (§11.6).
+
+### 12.5 Tabulka
+
+| náš patch | na forku | důvod |
+|---|---|---|
+| `scale-unclamp` | **no-op** | port sám nastavuje min 0,25×; menu min je 0,25× |
+| `texture-preload-defaults` | **no-op** | launcher zapíše `texture_preloading=2` při každém startu |
+| `texture-preload-gssettings` | **no-op** | totéž |
+| `preserve-user-data-1` | pojistka | platí, pokud je cesta dosažitelná |
+| `preserve-user-data-2` | pojistka | totéž |
+| `spin-relax` (opt-in) | nezměřeno | viz §11.6 |
+
+### 12.6 Co z toho plyne
+
+Deliverable **není špatně** — je korektní, délkově zachovný a plně
+kompatibilní (`verify_nx_compat`: 16/16 patchů portu, 0 kolizí). Jen na tomto
+konkrétním portu většina jeho obsahu **nedělá rozdíl**, protože fork už totéž
+vyřešil v menu nebo vlastními runtime patchi.
+
+To je dobrá zpráva: znamená to, že platforma je dál, než jsme čekali. Naše
+binární patchování bylo užitečné jako průzkum; reálné páky jsou teď:
+
+1. **`OverrideTextureBarriers`** (nové, v menu) — na GPU-bound úsek;
+2. sada hacků proti kopiím (`UserHacks_TextureInsideRt` atd.) — už zapnutá,
+   kopie klesly 35,2 → 17,3;
+3. **`spin-relax`** — jediná věc z naší sady, kterou fork neumí nahradit
+   nastavením. Vyžaduje A/B měření, které stále nemáme.
+
+### 12.7 Oprava nástroje
+
+`patch_tegra_x1.py --check` padal na `TypeError` — vada, kterou jsem zanesl
+přidáním `spin-relax` (položka má `off=None`, `do_check` to neřešil).
+Opraveno; `--check` nyní hlásí
+`spin-relax … (0 mist yield / 81 mist isb)` resp. `(81 / 0)`.

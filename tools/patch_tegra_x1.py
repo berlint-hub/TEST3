@@ -413,6 +413,20 @@ def do_check(path):
             st = "APLIKOVANO" if n_new == 3 else ("neaplikovano" if d.count(b"libvulkan") == 3 else "??")
             print(f"  [{st:<12}] {p['id']:<28} {p['desc']}")
             continue
+        if p.get("mode") == "spinrelax":
+            n_isb = len(find_spin_blocks(d))
+            n_yld = len(find_spin_blocks(d, yield_run8()))
+            if n_yld and not n_isb:
+                st = "APLIKOVANO"
+            elif n_isb and not n_yld:
+                st = "neaplikovano"
+            elif n_isb and n_yld:
+                st = "??CASTECNE"
+            else:
+                st = "??"
+            print(f"  [{st:<12}] {p['id']:<28} {p['desc']}"
+                  f"  ({n_yld} mist yield / {n_isb} mist isb)")
+            continue
         # Overujeme VZDY na offsetu. Pocitani bajtu nespolehlive:
         #  - `nop` (1f2003d5) je v binarce 17 352x
         #  - sekvence `mov x1..x5, xzr; nop` (nova hodnota preserve-*) take
