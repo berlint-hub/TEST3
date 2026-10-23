@@ -51,9 +51,22 @@ lib/pkgconfig/  licenses/  BUILDINFO.txt
 
 **Žádné `src/`.** Ověřeno: `tar tzf … | grep -c 'src/'` → 0.
 Jde o distribuci přeložených statických knihoven, ne zdrojový strom.
-`src/vulkan/runtime/` tedy **neexistuje** a nelze do něj nic přidat.
-Zdrojáky nxvk navíc nelze stáhnout — `release-assets.githubusercontent.com`
-je odtud síťově neprůchozí (ověřeno dříve).
+V **tomto artefaktu** tedy `src/vulkan/runtime/` není.
+
+> ### ⚠️ OPRAVA (2026-10-20) — tento odstavec byl špatně
+>
+> Původní text končil tvrzením *„Zdrojáky nxvk nelze stáhnout"*. **To byla
+> moje chyba, ne síťový fakt.** Ověřoval jsem jen release assety
+> (`release-assets.githubusercontent.com`, skutečně neprůchozí) a **nezkusil
+> jsem `git clone`** — což je mezera v postupu, ne důkaz.
+>
+> `git clone https://github.com/berlint-hub/nxvk.git` (větev
+> `arena/92b2b9eb-nxvk`) projde a doručí **plný zdrojový strom**
+> (499 MB, HEAD `9786622`). `src/vulkan/runtime/` v něm **existuje**,
+> včetně `meson.build`.
+>
+> Tvrzení výše platí tedy jen pro náš `.tar.gz`, ne o dostupnosti zdrojáků.
+> **Zádrhel A tím odpadá.** Zádrhely B a C (níže) platí dál — viz §11.
 
 ## 3. Zádrhel B: compute shader do ovladače nepatří
 
@@ -367,3 +380,91 @@ zároveň:
 Kdyby se někdo přesto chtěl pokusit, jediná smysluplná cesta vede přes
 **zdrojáky a překlad s profilem** (`-fprofile-use`) nebo ruční přepis
 konkrétního jádra s měřením — ne přes patch binárky.
+
+
+---
+
+## 11. `berlint-hub/nxvk` — zdrojáky jsou k dispozici (a co z toho plyne)
+
+### 11.1 Co je k dispozici
+
+| věc | hodnota |
+|---|---|
+| repozitář | `berlint-hub/nxvk`, fork `PalindromicBreadLoaf/nxvk` (`isFork: true`) |
+| velikost | 576 MB (shallow clone 499 MB) |
+| větve | `switch`, `arena/92b2b9eb-nxvk`, `arena/068e6f2f-nxvk` |
+| HEAD zkoumané větve | `9786622` — *tegra wsi: opt-in low latency* |
+| `src/vulkan/runtime/` | **existuje**, vč. `meson.build` |
+
+Takže integrační cesta z `OPTIMIZATION_SUMMARY.md` je **technicky
+průchozí**. To ale neznamená, že je správná — viz 11.3.
+
+### 11.2 `NVK_LOW_LATENCY=1` — míří přesně na naměřený bottleneck
+
+HEAD commit přidává opt-in proměnnou prostředí `NVK_LOW_LATENCY=1`.
+Ověřeno v kódu `src/vulkan/wsi/wsi_switch.c`:
+
+```c
+#define WSI_SWITCH_IMAGE_COUNT_LOW_LATENCY 2          /* ř. 60  */
+...
+const uint64_t timeout = chain->low_latency ? 0 : info->timeout;   /* ř. 615 */
+if (chain->low_latency) {
+   /* Never fall into the blocking libnx dequeue; report NOT_READY. */
+   result = wsi_switch_dequeue_nonblocking(chain, 0, &slot);       /* ř. 625 */
+}
+```
+
+a `caps->minImageCount = caps->maxImageCount = wsi_switch_image_count()`
+(ř. 120–121), present mode `VK_PRESENT_MODE_MAILBOX_KHR` (ř. 95).
+Soubor se builduje pro Switch: `src/vulkan/wsi/meson.build:41`
+`if host_machine.system() == 'horizon'`.
+
+**Proč je to důležité:** fork naměřil, že v GPU-bound úseku (posledních 7
+oken) je prezentující vlákno **zaparkované ve `vkAcquireNextImageKHR` na
+37–86 % délky okna** (2251–5968 ms), zatímco CPU má rezervu. Přesně tohle
+`NVK_LOW_LATENCY` odstraňuje — acquire nebude blokovat, vrátí `NOT_READY`.
+
+**Výslovné varování z commitu:** *„This is a latency/bandwidth knob, not an
+FPS claim; no hardware A/B recorded yet."* Výchozí stav je vypnuto a
+3-image cesta je bez proměnné bit-identická.
+
+**⚠️ Riziko:** acquire teď může vrátit `VK_NOT_READY`. Aplikace to musí
+obsloužit (přeskočit snímek). Z naší binárky **nelze prokázat**, že to
+PCSX2 dělá — řetězec `VK_NOT_READY` v jádře existuje (offset `0xcb761`),
+ale leží vedle `vkCreateFence failed:` a dalších chybových hlášek, tedy
+jde spíš o tabulku jmen výsledků než o důkaz obsluhy. **Vyžaduje test na
+zařízení.**
+
+### 11.3 Co se tím NEMĚNÍ: architektonický zádrhel B platí dál
+
+`src/vulkan/runtime/` skutečně hostuje interní compute shadery:
+
+```
+src/vulkan/runtime/bvh/lbvh_main.comp
+src/vulkan/runtime/bvh/leaf.comp
+src/vulkan/runtime/bvh/hploc_internal.comp
+src/vulkan/runtime/vk_texcompress_astc.c
+```
+
+Jenže to všechno jsou operace, které **vlastní ovladač** a které odstartuje
+nějaký Vulkan příkaz: BVH se staví uvnitř
+`vkCmdBuildAccelerationStructuresKHR`, ASTC komprese uvnitř texcompress.
+
+**Vertex skinning a frustum culling žádný takový příkaz nemají.** Žádné
+`vkCmdSkinVertices` ani `vkCmdCullObjects` neexistuje — ovladač tyto koncepty
+nikdy neuvidí, protože mu je nikdo nepředá. Shodou okolností existuje
+adresář `runtime/bvh/`, ale ten je pro **ray-tracingové
+akcelerační struktury**, ne pro scénový BVH hry — není to táž věc.
+
+Zdrojáky tedy odstraňují **praktickou** překážku (kde psát kód), ne
+**architektonickou** (že by tam ten kód neměl být).
+
+### 11.4 Doporučení
+
+1. **Odměřit `NVK_LOW_LATENCY=1`** — je to jediná nová páka, která míří na
+   změřený GPU-bound úsek, a zatím nemá žádné A/B. Riziko `VK_NOT_READY`
+   otestovat na GT3.
+2. `neon_opt` do nxvk **nedávat** — patří do rendereru emulátoru
+   (aplikační vrstva), viz §3 a precedens `third_party/lsfg-vk`.
+3. Pokud někdo přesto chce GPU práci v nxvk, legitimní jsou jen operace,
+   které ovladač vlastní (blit/clear/copy/komprese formátů).
