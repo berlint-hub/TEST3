@@ -1024,3 +1024,109 @@ binární patchování bylo užitečné jako průzkum; reálné páky jsou teď:
 přidáním `spin-relax` (položka má `off=None`, `do_check` to neřešil).
 Opraveno; `--check` nyní hlásí
 `spin-relax … (0 mist yield / 81 mist isb)` resp. `(81 / 0)`.
+
+
+## 13. Fork `9131db2`: `NVK_LOW_LATENCY` je dvouvrstvé (a návod z §12.6 je nepřesný)
+
+*Zapsáno 2026-10-24, po prostudování commitů `faae5a5`, `6490624`, `9131db2`.*
+
+V `docs/neon_opt-review.md` §11 jsem `NVK_LOW_LATENCY=1` prezentoval jako
+knoflík ovladače, který stačí nastavit. **To je nepřesné.** Fork ho má
+integrovaný end-to-end a při startu proměnnou **aktivně přepisuje** — ručně
+nastavené `NVK_LOW_LATENCY` v prostředí se tedy vůbec neuplatní.
+
+### 13.1 Dvě vrstvy, jedna proměnná
+
+| vrstva | kde | co dělá |
+|---|---|---|
+| ovladač (nxvk) | `src/vulkan/wsi/wsi_switch.c:60,615` | 2 image místo 3, MAILBOX, acquire s timeoutem 0 vrací `NOT_READY` místo blokace |
+| shim (fork) | `source/hooks/vk.c:233-262` | čte tutéž proměnnou; přidává wall-clock pacer před submit (cíl = příští vblank − 2 ms lead), sledování pending fence, výběr módu MAILBOX > FIFO > IMMEDIATE |
+
+Pacer po minutém vblanku **nepřidává další celou periodu spánku**
+(`low_latency_pace_delay_ns`, `vk.c:279`): když `now >= next_vblank`, vrací 0
+a pozdní snímek se odešle hned, MAILBOX nechá ze swapchainu vypadnout ten,
+který to nestihl. Komentář v kódu míří přesně na to, co se tu dřív dvakrát
+špatně diagnostikovalo — celoperiodový spánek po minutí vblanku je ~18 ms
+při 50 Hz navíc a mění krátké přetížení v trvalý low-FPS rytmus.
+
+### 13.2 Řídicí tok — proč „nastav proměnnou" nefunguje
+
+`source/main.c:2073-2095`:
+
+```c
+manual_low_latency = prefs_get_bool("EmuCore/GS/low_latency", false);
+display_sync_enabled = prefs_get_bool("Wrapper/SyncFrameLimitToDisplay", false)
+                    || auto_fpslocker_sync;               // default true
+...
+low_latency = manual_low_latency && !display_sync_active;
+setenv("NVK_LOW_LATENCY", low_latency ? "1" : "0", 1);     // vzdy prepise
+```
+
+A shim má ještě jednosměrnou západku (`vk.c:236-249`): když se SaltyNX
+objeví **až po startu**, `vk_low_latency_enabled()` low latency potlačí,
+nastaví `setenv("NVK_LOW_LATENCY","0",1)` a **už nikdy ji znovu nepovolí**
+— ani když sdílený blok přechodně zmizí.
+
+Display sync a low latency jsou tedy **záměrně neslučitelné**: display sync
+potřebuje vblank back-pressure z FIFO, low latency chce MAILBOX bez bloku.
+`6490624` to dotahuje v swapchain shimu (`vk.c:1564`): když je aktivní
+FPSLocker display sync, vynutí FIFO i přes frontendův IMMEDIATE.
+A `faae5a5` zrušil dřívější vazbu, kdy AutoSyncFPSLocker low-latency cestu
+zapínal automaticky.
+
+### 13.3 Správný recept na A/B test
+
+V launcher menu řádka pro `low_latency` **není** (jen `Wrapper/SyncFrameLimitToDisplay`
+na `launcher/source/main.cpp:664`) — jde o ruční editaci `nethersx2.ini`:
+
+```ini
+[EmuCore/GS]
+low_latency = 1
+[Wrapper]
+AutoSyncFPSLocker = false
+SyncFrameLimitToDisplay = false
+```
+
+Kontrola v logu, že se to skutečně chytlo (jinak měříš původní cestu):
+
+```
+low-latency enabled=1 NVK_LOW_LATENCY=1
+nvk wsi: low-latency on, 2 images, mode MAILBOX
+```
+
+Kdyby byl SaltyNX/FPSLocker aktivní a AutoSync zapnutý, log by ukázal
+`enabled=0` a test by byl bezcenný, aniž by to bylo vidět jinak.
+
+### 13.4 Riziko `VK_NOT_READY` — zpřesněno, ne vyvráceno
+
+Acquire shim (`vk.c:1426-1459`) předává timeout aplikace ovladači
+**beze změny** a výsledek vrací jádru **beze změny**. Komentář to říká
+explicitně: *„don't turn VK_NOT_READY into a 50 ms retry loop."* Shim jen
+před blokujícím acquire počká na pending fence předchozího snímku.
+
+Jenže ovladač s `NVK_LOW_LATENCY=1` si timeout interně vynutí na 0
+(`wsi_switch.c:615`) bez ohledu na to, co jádro předalo. Takže jádro může
+z volání, kde žádalo blokující acquire, dostat `VK_NOT_READY` — a shim ho
+před tím **nechrání**. Otázka, zda to PCSX2 obsluhuje, zůstává otevřená;
+z binárky ji prokázat neumím (viz neon_opt-review §11.2).
+
+Pacer ale drží hloubku fronty na jednom snímku, takže `NOT_READY` by mělo
+být vzácné — a diagnostický build každý neúspěšný acquire loguje
+(`result != VK_SUCCESS && != VK_SUBOPTIMAL_KHR`), takže se to v logu
+pozná na první pohled.
+
+### 13.5 `9131db2` — savestate pořadí
+
+`saveStateSlot` se teď volá **před** `quick_menu_close()` (`source/main.c`),
+jak to dělá upstream. Důvod: zavření menu může obnovit `OsdShowMessages` a
+zavolat `applySettings()`, což by přeuspořádalo GS rekonfiguraci před
+asynchronní snímek stavu. Netýká se výkonu ani našich binárních patchů.
+
+### 13.6 Dopad na náš deliverable
+
+Žádný. `source/hooks/patches.c` se mezi `7f21062` a `9131db2` nezměnil;
+`verify_nx_compat` proti `9131db2` znovu: **16/16, exit 0, KOMPATIBILNI**.
+
+Závěr z §12.6 tím dostává konkrétnější tvar: jediné dvě dosud neodměřené
+páky jsou `OverrideTextureBarriers` (menu) a low-latency cesta podle
+receptu v 13.3. Ani jedna není binární patch jádra.
