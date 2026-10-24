@@ -20,6 +20,19 @@
 #define FxaaSubpixMax 0.0   //[0.00 to 1.00] Amount of subpixel aliasing removal. 0.00: Edge only antialiasing (no blurring)
 #define FxaaEarlyExit 1     //[0 or 1] Use Fxaa early exit pathing. When disabled, the entire scene is antialiased(FSAA). 0 is off, 1 is on.
 
+// ---- Ladění (vše jde přepsat přes -D, výchozí hodnoty jsou níže) -------------------------------
+// FXAA_SEARCH_STEPS: kolik kroků hledání konce hrany (2..12). 12 = původní chování. Nižší číslo
+//   zkracuje nejdelší případ (dlouhý schod se vyhladí jen v dosahu kroků) a šetří čtení textury.
+// FXAA_GREEN_AS_LUMA: 1 = jas se bere jen ze zeleného kanálu místo vážené sumy RGB. Ušetří výpočet
+//   jasu a hlavně (jen Vulkan GLSL) umožní načíst okolí přes textureGather: 3 čtení místo 5 pro
+//   pixel bez hrany. Cena: hrany, které se liší jen v červené/modré (červená|modrá), se nezjistí.
+#ifndef FXAA_SEARCH_STEPS
+#define FXAA_SEARCH_STEPS 12
+#endif
+#ifndef FXAA_GREEN_AS_LUMA
+#define FXAA_GREEN_AS_LUMA 0
+#endif
+
 /*------------------------------------------------------------------------------
 							 [GLOBALS|FUNCTIONS]
 ------------------------------------------------------------------------------*/
@@ -77,6 +90,11 @@ static constexpr sampler MAIN_SAMPLER(coord::normalized, address::clamp_to_edge,
 #define FXAA_HLSL_4 1
 #define FXAA_GATHER4_ALPHA 0
 
+#elif (FXAA_GLSL_VK == 1 && FXAA_GREEN_AS_LUMA == 1)
+// Jas je v zeleném kanálu => stačí textureGather(..., 1), žádný přepočítávací průchod není potřeba.
+#define FXAA_GATHER4_ALPHA 1
+#define FXAA_GATHER_CHANNEL 1
+
 #elif (FXAA_GLSL_130 == 1 || FXAA_GLSL_VK == 1)
 #define FXAA_GATHER4_ALPHA 0
 
@@ -113,8 +131,8 @@ struct FxaaTex { SamplerState smpl; Texture2D tex; };
 
 #if (FXAA_GATHER4_ALPHA == 1)
 // use #extension GL_ARB_gpu_shader5 : enable
-#define FxaaTexAlpha4(t, p) textureGather(t, p, 3)
-#define FxaaTexOffAlpha4(t, p, o) textureGatherOffset(t, p, o, 3)
+#define FxaaTexAlpha4(t, p) textureGather(t, p, FXAA_GATHER_CHANNEL)
+#define FxaaTexOffAlpha4(t, p, o) textureGatherOffset(t, p, o, FXAA_GATHER_CHANNEL)
 #endif
 
 #elif defined(__METAL_VERSION__)
@@ -128,7 +146,11 @@ struct FxaaTex { SamplerState smpl; Texture2D tex; };
 #endif
 
 #define FxaaEdgeThreshold 0.063
-#define FxaaEdgeThresholdMin 0.00
+// Absolutní práh kontrastu (v jasu 0..1). Původně 0.00, takže i šum o 1-2 úrovně z 255 byl "hrana"
+// (v testu 14 čtení textury na pixel místo 5). 4/255 odfiltruje šum a dither, skutečné hrany zůstanou.
+#ifndef FxaaEdgeThresholdMin
+#define FxaaEdgeThresholdMin 0.0156
+#endif
 #define FXAA_QUALITY_P0 1.0
 #define FXAA_QUALITY_P1 1.5
 #define FXAA_QUALITY_P2 2.0
@@ -148,8 +170,12 @@ struct FxaaTex { SamplerState smpl; Texture2D tex; };
 ------------------------------------------------------------------------------*/
 float RGBLuminance(float3 color)
 {
+#if (FXAA_GREEN_AS_LUMA == 1)
+	return color.g;
+#else
 	const float3 lumCoeff = float3(0.2126729, 0.7151522, 0.0721750);
 	return dot(color.rgb, lumCoeff);
+#endif
 }
 
 float3 RGBGammaToLinear(float3 color, float gamma)
@@ -199,6 +225,21 @@ float FxaaLuma(float4 rgba)
 	return rgba.w; 
 }
 
+// Jeden krok hledání konce hrany. Čistě preprocesorové makro, takže funguje stejně v GLSL, HLSL
+// i Metalu.
+#define FXAA_SEARCH_STEP(PK) \
+	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy)); \
+	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy)); \
+	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5; \
+	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5; \
+	doneN = abs(lumaEndN) >= gradientScaled; \
+	doneP = abs(lumaEndP) >= gradientScaled; \
+	if(!doneN) posN.x -= offNP.x * PK; \
+	if(!doneN) posN.y -= offNP.y * PK; \
+	doneNP = (!doneN) || (!doneP); \
+	if(!doneP) posP.x += offNP.x * PK; \
+	if(!doneP) posP.y += offNP.y * PK;
+
 float4 FxaaPixelShader(float2 pos, FxaaTex tex, float2 fxaaRcpFrame, float fxaaSubpix, float fxaaEdgeThreshold, float fxaaEdgeThresholdMin)
 {
 	float2 posM;
@@ -243,7 +284,9 @@ float4 FxaaPixelShader(float2 pos, FxaaTex tex, float2 fxaaRcpFrame, float fxaaS
 	float rangeMaxScaled = rangeMax * fxaaEdgeThreshold;
 	float rangeMaxClamped = max(fxaaEdgeThresholdMin, rangeMaxScaled);
 
-	bool earlyExit = range < rangeMaxClamped;
+	// "<=": u čistě černého okolí je range == rangeMaxClamped == 0; s "<" se neukončilo, běžela plná
+	// cesta (12 čtení) a dělilo se nulou (1.0/range).
+	bool earlyExit = range <= rangeMaxClamped;
 	#if (FxaaEarlyExit == 1)
 	if(earlyExit) { return rgbyM; }
 	#endif
@@ -331,149 +374,61 @@ float4 FxaaPixelShader(float2 pos, FxaaTex tex, float2 fxaaRcpFrame, float fxaaS
 	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P1;
 	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P1;
 
+	// Hledání konce hrany. Tělo kroku je makro FXAA_SEARCH_STEP; kroky 2..FXAA_SEARCH_STEPS jsou
+	// do sebe vnořené (pokračuje se, dokud některá strana není hotová). 12 kroků = původní chování.
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P2;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P2;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P2;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P2;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P2)
+#if (FXAA_SEARCH_STEPS >= 3)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P3;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P3;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P3;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P3;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P3)
+#if (FXAA_SEARCH_STEPS >= 4)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P4;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P4;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P4;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P4;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P4)
+#if (FXAA_SEARCH_STEPS >= 5)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P5;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P5;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P5;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P5;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P5)
+#if (FXAA_SEARCH_STEPS >= 6)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P6;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P6;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P6;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P6;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P6)
+#if (FXAA_SEARCH_STEPS >= 7)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P7;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P7;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P7;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P7;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P7)
+#if (FXAA_SEARCH_STEPS >= 8)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P8;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P8;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P8;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P8;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P8)
+#if (FXAA_SEARCH_STEPS >= 9)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P9;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P9;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P9;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P9;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P9)
+#if (FXAA_SEARCH_STEPS >= 10)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P10;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P10;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P10;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P10;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P10)
+#if (FXAA_SEARCH_STEPS >= 11)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P11;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P11;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P11;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P11;
-
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P11)
+#if (FXAA_SEARCH_STEPS >= 12)
 	if(doneNP) {
-	if(!doneN) lumaEndN = FxaaLuma(FxaaTexTop(tex, posN.xy));
-	if(!doneP) lumaEndP = FxaaLuma(FxaaTexTop(tex, posP.xy));
-	if(!doneN) lumaEndN = lumaEndN - lumaNN * 0.5;
-	if(!doneP) lumaEndP = lumaEndP - lumaNN * 0.5;
-	doneN = abs(lumaEndN) >= gradientScaled;
-	doneP = abs(lumaEndP) >= gradientScaled;
-	if(!doneN) posN.x -= offNP.x * FXAA_QUALITY_P12;
-	if(!doneN) posN.y -= offNP.y * FXAA_QUALITY_P12;
-	doneNP = (!doneN) || (!doneP);
-	if(!doneP) posP.x += offNP.x * FXAA_QUALITY_P12;
-	if(!doneP) posP.y += offNP.y * FXAA_QUALITY_P12;
-	}}}}}}}}}}}
+	FXAA_SEARCH_STEP(FXAA_QUALITY_P12)
+	}
+#endif
+	}
+#endif
+	}
+#endif
+	}
+#endif
+	}
+#endif
+	}
+#endif
+	}
+#endif
+	}
+#endif
+	}
+#endif
+	}
+#endif
+	}
 
 	float dstN = posM.x - posN.x;
 	float dstP = posP.x - posM.x;
@@ -536,9 +491,9 @@ float4 FxaaPass(float4 FxaaColor, float2 uv0, texture2d<float> tex)
 
 void main()
 {
-	vec4 color = texture(TextureSampler, PSin_t);
-	color      = PreGammaPass(color);
-	color      = FxaaPass(color, PSin_t);
+	// PreGammaPass se zde dřív volal, ale jeho výsledek FxaaPass zahodil (FxaaPixelShader čte
+	// texturu sám), takže šlo o mrtvý kód. Funkce zůstávají definované kvůli HLSL/Metal větvím.
+	vec4 color = FxaaPass(vec4(0.0), PSin_t);
 
 	SV_Target0 = float4(color.rgb, 1.0);
 }

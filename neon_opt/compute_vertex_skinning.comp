@@ -1,0 +1,92 @@
+#version 460
+// ============================================================================
+// Compute Shader: Vertex Skinning - GPU parallel skinning
+// ============================================================================
+// Mirrors neon_vertex_skinning.h MeshSkinner::skin_batch8()
+// Supports 4-bone influence, SOA layout for coalesced access
+// ============================================================================
+
+layout(set = 0, binding = 0, std430) readonly buffer BoneMatrices {
+    mat4 bone_matrices[];      // [num_bones] column-major
+};
+
+layout(set = 0, binding = 1, std430) readonly buffer VertexInput {
+    vec4 positions[];          // [num_vertices] vec4(x,y,z,1)
+    vec4 normals[];            // [num_vertices] vec4(x,y,z,0)
+    vec4 weights[];            // [num_vertices] vec4(w0,w1,w2,w3)
+    uvec4 bones[];             // [num_vertices] uvec4(b0,b1,b2,b3)
+};
+
+layout(set = 0, binding = 2, std430) writeonly buffer VertexOutput {
+    vec4 out_positions[];      // [num_vertices] skinned position
+    vec4 out_normals[];        // [num_vertices] skinned normal
+};
+
+layout(push_constant) uniform PushConstants {
+    uint32_t vertex_count;
+    uint32_t num_bones;
+    uint32_t pad[2];
+} params;
+
+const uint32_t LOCAL_SIZE = 256;
+
+// Matrix * vec4 (column-major mat4)
+vec4 mat4_mul_vec4(mat4 m, vec4 v) {
+    return vec4(
+        dot(m[0], v),
+        dot(m[1], v),
+        dot(m[2], v),
+        dot(m[3], v)
+    );
+}
+
+// Matrix3x3 * vec3 (upper 3x3 of mat4)
+vec3 mat3_mul_vec3(mat4 m, vec3 v) {
+    return vec3(
+        dot(m[0].xyz, v),
+        dot(m[1].xyz, v),
+        dot(m[2].xyz, v)
+    );
+}
+
+void main() {
+    uint32_t idx = gl_GlobalInvocationID.x;
+    if (idx >= params.vertex_count) return;
+    
+    // Load vertex data
+    vec4 pos = positions[idx];      // w=1
+    vec4 nrm = normals[idx];        // w=0
+    vec4 w = weights[idx];          // bone weights
+    uvec4 b = bones[idx];           // bone indices
+    
+    // Accumulate skinned position
+    vec4 skinned_pos = vec4(0.0);
+    vec3 skinned_nrm = vec3(0.0);
+    
+    // Bone 0
+    mat4 m0 = bone_matrices[b.x];
+    skinned_pos += w.x * mat4_mul_vec4(m0, pos);
+    skinned_nrm += w.x * mat3(m0) * nrm.xyz;
+    
+    // Bone 1
+    mat4 m1 = bone_matrices[b.y];
+    skinned_pos += w.y * mat4_mul_vec4(m1, pos);
+    skinned_nrm += w.y * mat3(m1) * nrm.xyz;
+    
+    // Bone 2
+    mat4 m2 = bone_matrices[b.z];
+    skinned_pos += w.z * mat4_mul_vec4(m2, pos);
+    skinned_nrm += w.z * mat3(m2) * nrm.xyz;
+    
+    // Bone 3
+    mat4 m3 = bone_matrices[b.w];
+    skinned_pos += w.w * mat4_mul_vec4(m3, pos);
+    skinned_nrm += w.w * mat3(m3) * nrm.xyz;
+    
+    // Normalize normal
+    skinned_nrm = normalize(skinned_nrm);
+    
+    // Store
+    out_positions[idx] = vec4(skinned_pos.xyz, 1.0);
+    out_normals[idx] = vec4(skinned_nrm, 0.0);
+}
