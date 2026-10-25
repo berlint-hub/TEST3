@@ -3,6 +3,11 @@ Fanouskovska cestina do Vampire: The Masquerade - Redemption
 Preklad: Mrazik | Diakritika, grafika: Top Games
 ======================================================================
 
+NEJJEDNODUSSI CESTA: v koreni repa (o slozku vys) je Instalovat_cestinu.bat
+- poklepej na nej, otevre se instalator (instalator_cestiny.py), kde slozku
+hry vyberes rucne a originaly se samy zazalohuji. Rucni kopirovani nize
+je jen zalozni postup.
+----------------------------------------------------------------------
 JAK NAINSTALOVAT (rucne, bez puvodniho instalatoru)
 ----------------------------------------------------------------------
 1) DPORUCENO NEJDRIV: zazalohuj si ve slozce hry puvodni slozky
