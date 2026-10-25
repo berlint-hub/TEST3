@@ -1,0 +1,135 @@
+Vampire The Masquerade - Cz Patch 1.0 Full
+Fanouskovska cestina do Vampire: The Masquerade - Redemption
+Preklad: Mrazik | Diakritika, grafika: Top Games
+======================================================================
+
+JAK NAINSTALOVAT (rucne, bez puvodniho instalatoru)
+----------------------------------------------------------------------
+1) DPORUCENO NEJDRIV: zazalohuj si ve slozce hry puvodni slozky
+   'strings' a 'ui' (staci je prekopirovat jinam). Cestina se pak
+   da kdykoli vratit zpatky prekopirovanim zalohy.
+2) Slozky 'strings' a 'ui' z tohoto balicku prekopiruj do KORENE
+   instalace hry (tam, kde uz stejne slozky jsou) a vsechno prepsat.
+3) Ve hre mej nastavenou 32bit hloubku barev a zapnute zobrazovani
+   32bit textur. 16bit hloubka neni timto patchem podporovana
+   (poznaka primo z puvodniho instalatoru).
+
+CO SE PREPISE
+----------------------------------------------------------------------
+Kazdy z 96 souboru nize nahradi stejnojmenny anglicky original
+na stejne ceste ve slozce hry (prepis 1:1, cele soubory).
+Nic jineho se nemeni - zadny .exe ani .dll patch neobsahuje.
+
+strings\  (23 souboru)
+    chronicles.nls                             848 B
+    credits.nls                              12869 B
+    effects.nls                               8972 B
+    game.nls                                 43453 B
+    game.nvo                                221752 B
+    london.nls                                8826 B
+    london.ntx                                7543 B
+    mp_ctd.nls                                4532 B
+    mp_ctd.ntx                                6382 B
+    mp_ctd.nvo                               21543 B
+    mp_lot.nls                               10172 B
+    mp_lot.ntx                                3132 B
+    mp_lot.nvo                               31004 B
+    mp_salon.nls                               559 B
+    new_york.nls                              9329 B
+    new_york.ntx                              5598 B
+    prague.nls                               18551 B
+    prague.ntx                                7549 B
+    prague2.nls                               5338 B
+    prague2.ntx                               5568 B
+    system.nls                               37382 B
+    vienna.nls                               10219 B
+    vienna.ntx                                 567 B
+
+ui\  (6 souboru)
+    DefaultFont.nfd                          16296 B
+    defaultFont10.nfd                        16296 B
+    defaultFont15.nfd                        28964 B
+    defaultFont20.nfd                        43512 B
+    morpheus15.nfd                           34773 B
+    morpheus20.nfd                           55439 B
+
+ui\materials\  (67 souboru)
+    CharacterPane01.tga                     196626 B
+    CharacterPane01MD.tga                   196626 B
+    CharacterPane02MD.tga                    49170 B
+    CharacterPane03.tga                      49170 B
+    CharacterPane03MD.tga                    49170 B
+    CharacterSelectMP_01.tga                196626 B
+    CharacterSelectMP_02.tga                196626 B
+    CharacterSelectMP_04.tga                 98322 B
+    CommunicatingMenu01.tga                  24594 B
+    CommunicatingMenu02.tga                   6162 B
+    OpsControl01.tga                        196626 B
+    OpsControl02.tga                        196626 B
+    OpsControl04.tga                         98322 B
+    OpsControl05.tga                         98322 B
+    OpsDisplay01.tga                        196626 B
+    OpsDisplay02.tga                        196626 B
+    OpsDisplay05.tga                         98322 B
+    OpsDisplayAdv01.tga                     196626 B
+    OpsDisplayAdv02.tga                     196626 B
+    OpsDisplayAdv03.tga                      98322 B
+    OpsDisplayAdv04.tga                      98322 B
+    OpsDisplayAdv05.tga                      98322 B
+    OpsDisplayAdv06.tga                      49170 B
+    OpsDisplayAdv07.tga                      49170 B
+    OpsDisplayAdv08.tga                      49170 B
+    OpsDisplayAdv09.tga                      24594 B
+    OpsGameplay02.tga                       196626 B
+    OpsSound02.tga                          196626 B
+    OpsSound05.tga                           98322 B
+    charFaithLabel.tga                        3888 B
+    charManaLabel.tga                         4473 B
+    loadMenu01.tga                           24594 B
+    loadMenu02.tga                            6162 B
+    mapLondonEast02.tga                     196626 B
+    mapLondonEast03.tga                      98322 B
+    mapLondonWest01.tga                     196626 B
+    mapNYCdocks01.tga                       196626 B
+    mapNYCmidtown01.tga                     196626 B
+    mapPragueNQ01.tga                       196626 B
+    mapPragueOT01.tga                       196626 B
+    mapPragueOT02.tga                       196626 B
+    mapTemesvar07.tga                        49170 B
+    mapVienna08.tga                          49170 B
+    mapVienna09.tga                          24594 B
+    mpChat01.tga                            196626 B
+    mpChat02.tga                            196626 B
+    mpChat03.tga                             98322 B
+    mpCreateGame01.tga                      196626 B
+    mpCreateGame02.tga                      196626 B
+    mpCreateRoom01.tga                      196626 B
+    mpCreateRoom02.tga                      196626 B
+    mpCreateRoom03.tga                       98322 B
+    mpPlayerCreate_01.tga                   196626 B
+    mpPlayerCreate_02.tga                   196626 B
+    mpPlayerCreate_04.tga                    98322 B
+    mpPlayerCreate_05.tga                    98322 B
+    mpcrExistingRoomsTitle.tga                5778 B
+    mpcrRoomNameTitle.tga                     5778 B
+    pauseMenu01.tga                          24594 B
+    pauseMenu02.tga                           6162 B
+    spLoad02.tga                            196626 B
+    spSave02.tga                            196626 B
+    stControlsPane01.tga                    196626 B
+    wonLogin01.tga                          196626 B
+    wonLogin02.tga                          196626 B
+    wonMOTD01.tga                           196626 B
+    wonMOTD02.tga                           196626 B
+
+POZNAMKY
+----------------------------------------------------------------------
+- Puvodni instalator slozku hry hledal sam v registrech Windows
+  (HKLM\Software\Activision\Vampire: The Masquerade - Redemption
+  \v1.0\INSTALLDIR). Pri rucni instalaci ji proste najdi sam.
+- Texty (.ntx/.nls/.nvo) jsou ulozene v kodovani Windows-1250,
+  presne jak hra ocekava. Neukladej je v editoru do UTF-8,
+  rozbila by se diakritika.
+- Soubory .nfd jsou fonty s doplnenymi ceskymi znaky, .tga jsou
+  obrazky menu s ceskymi popisky.
+- Kontrolni soucty vsech souboru najdes v MANIFEST.txt.
