@@ -153,3 +153,16 @@ POZNAMKY
 - Soubory .nfd jsou fonty s doplnenymi ceskymi znaky, .tga jsou
   obrazky menu s ceskymi popisky.
 - Kontrolni soucty vsech souboru najdes v MANIFEST.txt.
+
+SPOUSTENI PRES AUTORUN / WINE / JINY LAUNCHER (dulezite!)
+----------------------------------------------------------------------
+Hra si nastaveni i savy uklada vuci PRACOVNIMU ADRESARI procesu
+(masquerade.ini pres GetCurrentDirectory, savy jako relativni
+SaveGames\...). Kdyz launcher nastavi pracovni adresar jinam
+nez do slozky hry, nastaveni a savy skonci tam - nebo zapis selze.
+
+Proto jsou v koreni balicku spoustece: zkopiruj spustit_hru.py
++ Spustit_Vampire.bat (pro Wine: spustit_vampire.sh) primo DO
+slozky hry a svuj autorun/launcher nasmeruj na ne misto na
+Vampire.exe. Spoustec pracovni adresar vynuti na slozku hry,
+pripravi SaveGames a odemkne soubory k zapisu.
