@@ -176,3 +176,12 @@ Nastaveni (masquerade.ini) i savy (SaveGames) pak vzdy zustanou
 ve slozce hry, at hru spusti autorun/Wine/zastupce s jakymkoli
 pracovnim adresarem. Original si nech jako zalohu; portable verzi
 dej do slozky hry a spoustej ji. Zdroj patche: patch_vampire_portable.py.
+
+Vampire_portable.exe - verze 2 (oprava "options se neukladaji")
+----------------------------------------------------------------------
+Hra options normalne zapisuje jen pri radnem ukonceni (render pres
+atexit, ostatni v shutdown sekvenci) - kdyz launcher/frontend
+proces zabije, zapis neprobehne. Verze 2 proto options zapise
+hned pri odchodu z obrazovky Options (tlacitko Done i ESC)
+a pri startu navic odemkne masquerade.ini, kdyby byl Jen-pro-cteni.
+Chovani pri beznem ukonceni pres Quit se nemeni.
