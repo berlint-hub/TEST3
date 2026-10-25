@@ -1,32 +1,39 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Binární patch Vampire: The Masquerade - Redemption (Vampire.exe):
-hra si hned při startu sama nastaví pracovní adresář na složku,
-kde leží její EXE (SetCurrentDirectoryA na adresář z GetModuleFileNameA).
+Binární patch Vampire: The Masquerade - Redemption (Vampire.exe) -> "portable" verze.
 
-Proč: hra ukládá nastavení i savy vůči pracovnímu adresáři procesu
-  - masquerade.ini = GetCurrentDirectoryA + "masquerade.ini" (0x4ceca0),
-  - savy = relativní "SaveGames\SP%d\..." (mainSave.cpp, 0x428df2),
-  - i herní data čte relativně.
-Když launcher (autorun/Wine frontend/zástupce) nastaví jiný pracovní
-adresář, options i savy skončí jinde. Po patchi je to jedno - hra
-si pracovní adresář srovná sama, žádný Python ani wrapper netřeba.
+Řeší dva problémy s ukládáním (ověřeno analýzou kódu hry):
 
-Jak patch funguje (minimální zásah, jen 3 změny):
-  1) AddressOfEntryPoint se přesměruje na náš ~160 B stub ve volném
-     místě na konci .text (slack za VirtualSize),
-  2) .text VirtualSize se zarovná na SizeOfRawData, aby stub byl mapovaný,
-  3) stub: GetModuleFileNameA -> smaže jméno exe z cesty ->
-     GetProcAddress(GetModuleHandleA("KERNEL32.dll"),
-     "SetCurrentDirectoryA") -> SetCurrentDirectoryA(složka exe) ->
-     skok na původní entry point. Při jakékoli chybě stub tiše
-     pokračuje původním startem. Stub je position-independent
-     (delta přes call/pop), takže funguje i při relokaci image.
+1) ŠPATNÁ SLOŽKA: hra ukládá nastavení i savy vůči pracovnímu adresáři
+   procesu (masquerade.ini = GetCurrentDirectoryA + jméno, savy =
+   relativní "SaveGames\\..."). Když launcher (autorun/Wine frontend)
+   nastaví jiný pracovní adresář, soubory skončí jinde.
+   => Stub na entry pointu hře nastaví pracovní adresář na složku,
+      kde leží její EXE (GetModuleFileNameA + SetCurrentDirectoryA),
+      a zároveň odemkne masquerade.ini (SetFileAttributesA NORMAL),
+      aby atribut Jen-pro-čtení (z kopie z CD/ISO) neblokoval zápis.
 
-Výstup je vždy Vampire_portable.exe (originál zůstává nedotčený).
-Patch je staticky ověřený (pefile + disassembler + emulace stubu),
-ale v této dílně nejde spustit - před použitím si originál zazálohuj.
+2) ZÁPIS AŽ PŘI ČISTÉM UKONČENÍ: options hra zapisuje do
+   masquerade.ini jen při řádném shutdownu:
+     - render options: přes atexit() (registrace na 0x4c212a),
+     - gameOptions + zvuk: v hlavní shutdown sekvenci (0x42cf70/0x42cf98).
+   Když frontend proces zabije (typické pro Wine launchery), zápis
+   nikdy neproběhne a options se "neukládají", přestože savy fungují
+   (ty se píšou hned). => Hook: tři cesty zavření obrazovky Options
+   (tlačítko Done 0x414d22, ESC/zavření 0x414c82, shutdown obrazovky
+   0x414c12) nově před svým posledním krokem zavolají náš cave stub,
+   který okamžitě zapíše všechny tři skupiny nastavení (stejné
+   funkce, jaké hra volá při shutdownu: 0x4c2140 render, 0x427850
+   gameOptions, 0x49e520 zvuk) a teprve pak pokračuje původním kódem.
+
+Zásahy (nic jiného se nemění): AddressOfEntryPoint -> EP stub v cave
+na konci .text; .text VirtualSize zarovnaná na SizeOfRawData (aby byl
+slack mapovaný); 3x rel32 u hookovaných callů. Oba stuby jsou
+position-independent (delta přes call/pop) a při jakékoli chybě tiše
+pokračují původním tokem. Výstup je vždy Vampire_portable.exe,
+originál zůstává nedotčený. Patch je ověřený staticky i emulací
+(Unicorn), ale hru tu spustit nejde - originál si zazálohuj.
 
 Použití: python3 patch_vampire_portable.py Vampire.exe [-o vystup.exe]
 """
@@ -37,103 +44,174 @@ import sys
 from pathlib import Path
 
 EXPECTED_SHA256 = "dd647078a6bf1ed9e1f36e6fe2d37bbd7fe2e1543aca220a3b5d9302dfa2b886"
-IMAGE_BASE = 0x400000
-ORIG_EP_VA = 0x4DF343            # původní entry point
-IAT_GetModuleFileNameA = 0x4EB064
-IAT_GetModuleHandleA = 0x4EB0A8
-IAT_GetProcAddress = 0x4EB148
-KERNEL32_NAME_VA = 0x4F1E0A      # řetězec "KERNEL32.dll" v import deskriptoru
-CAVE_RVA = 0xEAEE0               # .text RVA 0x1000 + VirtualSize 0xe9ee0
-CAVE_FILE_OFF = 0xEAEE0          # .text RawPtr 0x1000 + 0xe9ee0
-CAVE_SIZE = 0x120                # 288 B slacku do konce raw .text
+IB = 0x400000
+ORIG_EP_VA = 0x4DF343
+IAT_GMFN = 0x4EB064          # GetModuleFileNameA
+IAT_GMH = 0x4EB0A8           # GetModuleHandleA
+IAT_GPA = 0x4EB148           # GetProcAddress
+KERNEL32_NAME_VA = 0x4F1E0A  # "KERNEL32.dll" v import deskriptoru
+INI_NAME_VA = 0x52DA28       # "masquerade.ini"
+CAVE_RVA = 0xEAEE0
+CAVE_OFF = 0xEAEE0
+CAVE_SIZE = 0x120
 TEXT_NEW_VSIZE = 0xEA000
 
+SAVE_RENDER = 0x4C2140       # atexit-funkce: mov ecx,0x6a49a0; jmp SaveRenderOptions
+SAVE_GAMEOPT = 0x427850      # thiscall(ecx = 0x613cb8)
+SAVE_AUDIO = 0x49E520        # thiscall(ecx = audio objekt)
+GAMEOPT_STRUCT = 0x613CB8
+AUDIO_OBJ_PTR = 0x659C88     # *ptr na audio objekt
+AUDIO_INITED = 0x659C90      # flag "audio bezi"
+HOOK_ORIG = 0x402420         # puvodni cil hookovanych callu (tail krok Options teardownu)
+HOOK_SITES = (0x414C12, 0x414C82, 0x414D22)
 
-def build_stub(cave_va):
-    """Sestaví stub; vrací (bytes, offset_jmp_eax). Dvoufázové skoky přes fixupy."""
-    code = bytearray()
-    fixups = []  # (offset_rel32_policka, label)
-    labels = {}
 
-    def emit(b):
-        code.extend(b)
+def _rel8(cur_end, target):
+    d = target - cur_end
+    assert -128 <= d <= 127, f"rel8 mimo dosah: {d}"
+    return d & 0xFF
 
-    def mark(name):
-        labels[name] = len(code)
 
-    def jz32(label):
-        emit(b"\x0f\x84")
-        fixups.append((len(code), label))
-        emit(b"\x00\x00\x00\x00")
+def build_ep_stub(cave_va):
+    c = bytearray()
+    labels, fix8 = {}, []
 
-    emit(b"\x53")                                # push ebx
-    emit(b"\x56")                                # push esi
-    emit(b"\x57")                                # push edi
-    emit(b"\x55")                                # push ebp
-    emit(b"\xe8\x00\x00\x00\x00")                # call next
-    pop_off = len(code)                          # sem ukazuje call
-    emit(b"\x5b")                                # pop ebx  (ebx = runtime VA tehle instrukce)
-    emit(b"\x81\xeb" + struct.pack("<I", cave_va + pop_off))  # sub ebx, linkVA -> delta
-    emit(b"\x81\xec\x04\x01\x00\x00")            # sub esp, 0x104   (buffer = esp)
-    # GetModuleFileNameA(NULL, buf, 0x104)
-    emit(b"\x8d\x04\x24")                        # lea eax, [esp]
-    emit(b"\x68\x04\x01\x00\x00")                # push 0x104
-    emit(b"\x50")                                # push eax (buf)
-    emit(b"\x6a\x00")                            # push 0 (hModule)
-    emit(b"\x8d\x83" + struct.pack("<I", IAT_GetModuleFileNameA))  # lea eax,[ebx+IAT]
-    emit(b"\x8b\x00")                            # mov eax, [eax]
-    emit(b"\xff\xd0")                            # call eax
-    # najdi poslední '\' v buf (inline strrchr; eax = poslední výskyt, edi skenuje)
-    emit(b"\x8d\x3c\x24")                        # lea edi, [esp]
-    emit(b"\x33\xc0")                            # xor eax, eax
+    def e(b):
+        c.extend(b)
+
+    def mark(n):
+        labels[n] = len(c)
+
+    def jz8(n):
+        e(b"\x74")
+        fix8.append((len(c), n))
+        e(b"\x00")
+
+    def jmp8(n):
+        e(b"\xeb")
+        fix8.append((len(c), n))
+        e(b"\x00")
+
+    def jne8(n):
+        e(b"\x75")
+        fix8.append((len(c), n))
+        e(b"\x00")
+
+    e(b"\x53\x56\x57\x55")                              # push ebx,esi,edi,ebp
+    e(b"\xe8\x00\x00\x00\x00")                          # call $+5
+    pop_off = len(c)
+    e(b"\x5b")                                          # pop ebx
+    e(b"\x81\xeb" + struct.pack("<I", cave_va + pop_off))  # sub ebx, linkVA = delta
+    e(b"\x81\xec\x04\x01\x00\x00")                      # sub esp, 0x104
+    e(b"\x8d\x04\x24")                                  # lea eax, [esp] (buf)
+    e(b"\x68\x04\x01\x00\x00\x50\x6a\x00")               # push 0x104, push eax, push 0
+    e(b"\x8b\x83" + struct.pack("<I", IAT_GMFN))        # mov eax, [ebx+IAT GetModuleFileNameA]
+    e(b"\xff\xd0")                                      # call eax
+    e(b"\x8d\x3c\x24")                                  # lea edi, [esp]
+    e(b"\x33\xc0")                                      # xor eax, eax (posledni '\')
     mark("scan")
-    emit(b"\x8a\x17")                            # mov dl, [edi]
-    emit(b"\x84\xd2")                            # test dl, dl
-    jz_done_pos = len(code)
-    emit(b"\x74\x00")                            # jz done (rel8, dopocitam)
-    emit(b"\x80\xfa\x5c")                        # cmp dl, '\'
-    emit(b"\x75\x02")                            # jne +2 (preskoc mov eax,edi)
-    emit(b"\x8b\xc7")                            # mov eax, edi
-    emit(b"\x47")                                # inc edi
-    jmp_pos = len(code)
-    emit(b"\xeb\x00")                            # jmp scan (rel8, dopocitam)
+    e(b"\x8a\x17")                                      # mov dl, [edi]
+    e(b"\x84\xd2")                                      # test dl, dl
+    jz8("done")
+    e(b"\x80\xfa\x5c")                                  # cmp dl, '\'
+    jne8("next")
+    e(b"\x8b\xc7")                                      # mov eax, edi
+    mark("next")
+    e(b"\x47")                                          # inc edi
+    jmp8("scan")
     mark("done")
-    code[jz_done_pos + 1] = (labels["done"] - (jz_done_pos + 2)) & 0xFF
-    code[jmp_pos + 1] = (labels["scan"] - (jmp_pos + 2)) & 0xFF
-    emit(b"\x85\xc0")                            # test eax, eax
-    jz32("skip")                                 # bez backslashe nic nedelame
-    emit(b"\xc6\x00\x00")                        # mov byte [eax], 0  (usekni jmeno exe)
-    # GetModuleHandleA("KERNEL32.dll")
-    emit(b"\x8d\x83" + struct.pack("<I", KERNEL32_NAME_VA))   # lea eax,[ebx+name]
-    emit(b"\x50")                                # push eax
-    emit(b"\x8d\x83" + struct.pack("<I", IAT_GetModuleHandleA))
-    emit(b"\x8b\x00\xff\xd0")                    # mov eax,[eax]; call eax
-    emit(b"\x85\xc0")                            # test eax, eax
-    jz32("skip")
-    # GetProcAddress(h, "SetCurrentDirectoryA")
-    str_fix = len(code) + 2                      # imm32 v lea ecx nize
-    emit(b"\x8d\x8b\x00\x00\x00\x00")            # lea ecx, [ebx+STR] (VA dopocitam)
-    emit(b"\x51")                                # push ecx (lpProcName)
-    emit(b"\x50")                                # push eax (hModule)
-    emit(b"\x8d\x83" + struct.pack("<I", IAT_GetProcAddress))
-    emit(b"\x8b\x00\xff\xd0")
-    emit(b"\x85\xc0")                            # test eax, eax
-    jz32("skip")
-    # SetCurrentDirectoryA(buf) - esp ted ukazuje na buf
-    emit(b"\x54")                                # push esp
-    emit(b"\xff\xd0")                            # call eax
+    e(b"\x85\xc0")                                      # test eax, eax
+    jz8("skip")
+    e(b"\xc6\x00\x00")                                  # mov byte [eax], 0
+    # esi = GetModuleHandleA("KERNEL32.dll")
+    e(b"\x8d\x83" + struct.pack("<I", KERNEL32_NAME_VA))
+    e(b"\x50")
+    e(b"\x8b\x83" + struct.pack("<I", IAT_GMH))
+    e(b"\xff\xd0")
+    e(b"\x85\xc0")                                      # test eax, eax
+    jz8("skip")
+    e(b"\x8b\xf0")                                      # mov esi, eax
+    # ebp = GetProcAddress(esi, "SetCurrentDirectoryA")
+    str1_fix = len(c) + 2
+    e(b"\x8d\x8b\x00\x00\x00\x00")                      # lea ecx, [ebx+STR1]
+    e(b"\x51\x56")                                      # push ecx, push esi
+    e(b"\x8b\x83" + struct.pack("<I", IAT_GPA))
+    e(b"\xff\xd0")
+    e(b"\x8b\xe8")                                      # mov ebp, eax
+    # eax = GetProcAddress(esi, "SetFileAttributesA")
+    str2_fix = len(c) + 2
+    e(b"\x8d\x8b\x00\x00\x00\x00")                      # lea ecx, [ebx+STR2]
+    e(b"\x51\x56")
+    e(b"\x8b\x83" + struct.pack("<I", IAT_GPA))
+    e(b"\xff\xd0")
+    # SetCurrentDirectoryA(buf), eax (SetFileAttributesA ptr) drzime pres push/pop
+    e(b"\x50")                                          # push eax
+    e(b"\x85\xed")                                      # test ebp, ebp
+    jz8("nosetcd")
+    e(b"\x8d\x4c\x24\x04")                              # lea ecx, [esp+4] (= buf)
+    e(b"\x51")                                          # push ecx
+    e(b"\xff\xd5")                                      # call ebp
+    mark("nosetcd")
+    e(b"\x58")                                          # pop eax
+    # SetFileAttributesA("masquerade.ini", FILE_ATTRIBUTE_NORMAL=0x80)
+    e(b"\x85\xc0")                                      # test eax, eax
+    jz8("skip")
+    e(b"\x68\x80\x00\x00\x00")                          # push 0x80
+    e(b"\x8d\x8b" + struct.pack("<I", INI_NAME_VA))     # lea ecx, [ebx+"masquerade.ini"]
+    e(b"\x51")                                          # push ecx
+    e(b"\xff\xd0")                                      # call eax
     mark("skip")
-    emit(b"\x81\xc4\x04\x01\x00\x00")            # add esp, 0x104
-    emit(b"\x8d\x83" + struct.pack("<I", ORIG_EP_VA))  # lea eax,[ebx+origEP]
-    emit(b"\x5d\x5f\x5e\x5b")                    # pop ebp, edi, esi, ebx
-    jmp_eax_off = len(code)
-    emit(b"\xff\xe0")                            # jmp eax
-    str_off = len(code)
-    emit(b"SetCurrentDirectoryA\x00")
-    struct.pack_into("<I", code, str_fix, cave_va + str_off)
-    for pos, label in fixups:
-        struct.pack_into("<i", code, pos, labels[label] - (pos + 4))
-    return bytes(code), jmp_eax_off
+    e(b"\x81\xc4\x04\x01\x00\x00")                      # add esp, 0x104
+    e(b"\x8d\x83" + struct.pack("<I", ORIG_EP_VA))      # lea eax, [ebx+origEP]
+    e(b"\x5d\x5f\x5e\x5b")                              # pop ebp,edi,esi,ebx
+    jmp_eax_off = len(c)
+    e(b"\xff\xe0")                                      # jmp eax
+    str1_off = len(c)
+    e(b"SetCurrentDirectoryA\x00")
+    str2_off = len(c)
+    e(b"SetFileAttributesA\x00")
+    struct.pack_into("<I", c, str1_fix, cave_va + str1_off)
+    struct.pack_into("<I", c, str2_fix, cave_va + str2_off)
+    for pos, name in fix8:
+        c[pos] = _rel8(pos + 1, labels[name])
+    return bytes(c), jmp_eax_off
+
+
+def build_hook_stub(hook_va):
+    """SaveAllOptions + tail-jmp na puvodni cil. Vstup: zasobnik i registry
+    patri puvodnimu callee (0x402420) - vse zachovame (pushad/pushfd)."""
+    c = bytearray()
+
+    def e(b):
+        c.extend(b)
+
+    def rel32(tgt):
+        return struct.pack("<i", tgt - (hook_va + len(c) + 5))
+
+    e(b"\x60")                                          # pushad
+    e(b"\x9c")                                          # pushfd
+    e(b"\xe8\x00\x00\x00\x00")                          # call $+5
+    pop_off = len(c)
+    e(b"\x5b")                                          # pop ebx
+    e(b"\x81\xeb" + struct.pack("<I", hook_va + pop_off))  # ebx = delta
+    e(b"\xe8" + rel32(SAVE_RENDER))                     # SaveRenderOptions()
+    e(b"\x8d\x8b" + struct.pack("<I", GAMEOPT_STRUCT))  # lea ecx, [ebx+struct]
+    e(b"\xe8" + rel32(SAVE_GAMEOPT))                    # SaveGameOptions()
+    e(b"\x83\xbb" + struct.pack("<I", AUDIO_INITED) + b"\x00")  # cmp dword [ebx+inited], 0
+    je1 = len(c)
+    e(b"\x74\x00")                                      # je tail
+    e(b"\x8b\x8b" + struct.pack("<I", AUDIO_OBJ_PTR))   # mov ecx, [ebx+objptr]
+    e(b"\x85\xc9")                                      # test ecx, ecx
+    je2 = len(c)
+    e(b"\x74\x00")                                      # je tail
+    e(b"\xe8" + rel32(SAVE_AUDIO))                      # SaveAudioOptions()
+    tail = len(c)
+    c[je1 + 1] = _rel8(je1 + 2, tail)
+    c[je2 + 1] = _rel8(je2 + 2, tail)
+    e(b"\x9d")                                          # popfd
+    e(b"\x61")                                          # popad
+    e(b"\xe9" + rel32(HOOK_ORIG))                       # jmp 0x402420 (puvodni cil)
+    return bytes(c)
 
 
 def patch(inp, out, force=False):
@@ -143,51 +221,64 @@ def patch(inp, out, force=False):
     sha = hashlib.sha256(data).hexdigest()
     print(f"Vstup: {inp} ({len(data)} B) sha256 {sha[:16]}...")
     if sha != EXPECTED_SHA256 and not force:
-        print("CHYBA: jiná verze Vampire.exe, než na kterou byl patch odladěný "
-              f"(čekané sha256 {EXPECTED_SHA256[:16]}...). Pokračovat jen s --force.")
+        print("CHYBA: jiná verze Vampire.exe, než na kterou byl patch odladěný. "
+              "Pokračovat jen s --force.")
         return 1
 
     pe = pefile.PE(data=bytes(data), fast_load=False)
-    ep = pe.OPTIONAL_HEADER.AddressOfEntryPoint
-    if IMAGE_BASE + ep != ORIG_EP_VA:
-        print(f"CHYBA: neočekávaný entry point 0x{IMAGE_BASE + ep:x}")
+    if IB + pe.OPTIONAL_HEADER.AddressOfEntryPoint != ORIG_EP_VA:
+        print("CHYBA: neočekávaný entry point.")
         return 1
     sect = pe.sections[0]
     assert sect.Name.rstrip(b"\0") == b".text"
-    cave = bytes(data[CAVE_FILE_OFF:CAVE_FILE_OFF + CAVE_SIZE])
-    if set(cave) > {0}:
-        print("CHYBA: code cave na konci .text není prázdná - patch ruším.")
+    if set(data[CAVE_OFF:CAVE_OFF + CAVE_SIZE]) > {0}:
+        print("CHYBA: code cave na konci .text není prázdná.")
         return 1
-    if data[KERNEL32_NAME_VA - IMAGE_BASE:KERNEL32_NAME_VA - IMAGE_BASE + 12] != b"KERNEL32.dll":
-        print("CHYBA: na očekávaném místě není řetězec KERNEL32.dll.")
+    if data[KERNEL32_NAME_VA - IB:KERNEL32_NAME_VA - IB + 12] != b"KERNEL32.dll":
+        print("CHYBA: chybí řetězec KERNEL32.dll na očekávaném místě.")
         return 1
-    for iat, name in ((IAT_GetModuleFileNameA, "GetModuleFileNameA"),
-                      (IAT_GetModuleHandleA, "GetModuleHandleA"),
-                      (IAT_GetProcAddress, "GetProcAddress")):
-        hint_rva = struct.unpack_from("<I", data, iat - IMAGE_BASE)[0]
-        nm = bytes(data[hint_rva + 2:data.find(b"\x00", hint_rva + 2)]).decode()
+    if data[INI_NAME_VA - IB:INI_NAME_VA - IB + 15] != b"masquerade.ini\x00":
+        print("CHYBA: chybí řetězec masquerade.ini na očekávaném místě.")
+        return 1
+    for iat, name in ((IAT_GMFN, "GetModuleFileNameA"), (IAT_GMH, "GetModuleHandleA"),
+                      (IAT_GPA, "GetProcAddress")):
+        hint = struct.unpack_from("<I", data, iat - IB)[0]
+        nm = bytes(data[hint + 2:data.find(b"\x00", hint + 2)]).decode()
         if nm != name:
-            print(f"CHYBA: IAT 0x{iat:x} ukazuje na {nm!r}, čekal jsem {name!r}.")
+            print(f"CHYBA: IAT 0x{iat:x} = {nm!r}, čekal jsem {name!r}.")
+            return 1
+    for site in HOOK_SITES:
+        off = site - IB
+        if data[off] != 0xE8 or site + 5 + struct.unpack_from("<i", data, off + 1)[0] != HOOK_ORIG:
+            print(f"CHYBA: na hook místě 0x{site:x} není call 0x{HOOK_ORIG:x}.")
             return 1
 
-    stub, jmp_eax_off = build_stub(IMAGE_BASE + CAVE_RVA)
-    assert len(stub) <= CAVE_SIZE, f"stub {len(stub)} B se nevejde do cave {CAVE_SIZE} B"
-    print(f"Stub: {len(stub)} B (cave {CAVE_SIZE} B) @ VA 0x{IMAGE_BASE + CAVE_RVA:x}")
+    cave_va = IB + CAVE_RVA
+    ep_stub, jmp_eax_off = build_ep_stub(cave_va)
+    hook_off = (len(ep_stub) + 15) & ~15
+    hook_va = cave_va + hook_off
+    hook_stub = build_hook_stub(hook_va)
+    total = hook_off + len(hook_stub)
+    assert total <= CAVE_SIZE, f"stuby {total} B > cave {CAVE_SIZE} B"
+    print(f"EP stub {len(ep_stub)} B @0x{cave_va:x}, hook stub {len(hook_stub)} B "
+          f"@0x{hook_va:x} (cave {CAVE_SIZE} B)")
 
-    # 1) stub do cave
-    data[CAVE_FILE_OFF:CAVE_FILE_OFF + len(stub)] = stub
-    # 2) .text VirtualSize -> SizeOfRawData (aby byl slack mapovaný)
+    data[CAVE_OFF:CAVE_OFF + len(ep_stub)] = ep_stub
+    data[CAVE_OFF + hook_off:CAVE_OFF + total] = hook_stub
     struct.pack_into("<I", data, sect.get_file_offset() + 8, TEXT_NEW_VSIZE)
-    # 3) AddressOfEntryPoint -> cave
-    ep_off = pe.OPTIONAL_HEADER.get_file_offset() + 16
-    struct.pack_into("<I", data, ep_off, CAVE_RVA)
+    ep_field_off = pe.OPTIONAL_HEADER.get_file_offset() + 16
+    struct.pack_into("<I", data, ep_field_off, CAVE_RVA)
+    for site in HOOK_SITES:
+        struct.pack_into("<i", data, site - IB + 1, hook_va - (site + 5))
 
     Path(out).write_bytes(bytes(data))
     print(f"Zapsáno: {out} ({len(data)} B) sha256 {hashlib.sha256(data).hexdigest()[:16]}...")
-    return verify(inp, out, stub, jmp_eax_off, ep_off, sect.get_file_offset() + 8)
+    return verify(inp, out, ep_stub, jmp_eax_off, hook_off, hook_stub,
+                  ep_field_off, sect.get_file_offset() + 8)
 
 
-def verify(orig_path, patched_path, stub, jmp_eax_off, ep_off, vsize_off):
+def verify(orig_path, patched_path, ep_stub, jmp_eax_off, hook_off, hook_stub,
+           ep_field_off, vsize_off):
     import pefile
     import capstone
 
@@ -203,36 +294,45 @@ def verify(orig_path, patched_path, stub, jmp_eax_off, ep_off, vsize_off):
     new = Path(patched_path).read_bytes()
     check(len(orig) == len(new), "velikost souboru se nezměnila")
     diff = {i for i in range(len(orig)) if orig[i] != new[i]}
-    allowed = set(range(CAVE_FILE_OFF, CAVE_FILE_OFF + len(stub))) \
-        | set(range(ep_off, ep_off + 4)) | set(range(vsize_off, vsize_off + 4))
+    allowed = set(range(CAVE_OFF, CAVE_OFF + hook_off + len(hook_stub))) \
+        | set(range(ep_field_off, ep_field_off + 4)) \
+        | set(range(vsize_off, vsize_off + 4))
+    for site in HOOK_SITES:
+        allowed |= set(range(site - IB + 1, site - IB + 5))
     extra = diff - allowed
-    check(not extra, f"rozdíly jen na povolených místech (EP, VSize, cave); navíc: "
-                     f"{sorted(hex(x) for x in extra)[:5]}")
+    check(not extra, f"rozdíly jen na povolených místech; navíc: {sorted(hex(x) for x in extra)[:5]}")
     pe = pefile.PE(data=new)
-    check(pe.OPTIONAL_HEADER.AddressOfEntryPoint == CAVE_RVA, "entry point = stub")
+    check(pe.OPTIONAL_HEADER.AddressOfEntryPoint == CAVE_RVA, "entry point = EP stub")
     check(pe.sections[0].Misc_VirtualSize == TEXT_NEW_VSIZE, ".text VirtualSize zarovnaná")
+    hook_va = IB + CAVE_RVA + hook_off
+    for site in HOOK_SITES:
+        rel = struct.unpack_from("<i", new, site - IB + 1)[0]
+        check(site + 5 + rel == hook_va, f"hook 0x{site:x} -> cave stub 0x{hook_va:x}")
 
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
-    cave_va = IMAGE_BASE + CAVE_RVA
-    insns = list(md.disasm(new[CAVE_FILE_OFF:CAVE_FILE_OFF + len(stub)], cave_va))
-    n_bytes = sum(i.size for i in insns)
-    # instrukce konci jmp eax; za ni jsou data (string) - disasm se muze splest, kontrolujeme prefix
-    code_insns = []
+    cave_va = IB + CAVE_RVA
+    ins = []
     acc = 0
-    for i in insns:
-        code_insns.append(i)
+    for i in md.disasm(new[CAVE_OFF:CAVE_OFF + len(ep_stub)], cave_va):
+        ins.append(i)
         acc += i.size
         if acc >= jmp_eax_off + 2:
             break
-    check(acc == jmp_eax_off + 2, f"stub se cely disasembluje ({acc} B kodu)")
-    check(code_insns[-1].mnemonic == "jmp" and code_insns[-1].op_str == "eax",
-          "poslední instrukce stubu je jmp eax (návrat na původní EP)")
-    calls = sum(1 for i in code_insns if i.mnemonic == "call" and i.op_str == "eax")
-    check(calls == 4, f"4 volání Win32 API přes call eax (nalezeno {calls})")
-    str_ok = new[CAVE_FILE_OFF + len(stub) - 21:CAVE_FILE_OFF + len(stub)] == b"SetCurrentDirectoryA\x00"
-    check(str_ok, "řetězec SetCurrentDirectoryA na konci stubu")
-    for i in code_insns:
-        print(f"    0x{i.address:x}: {i.mnemonic:8s} {i.op_str}")
+    check(acc == jmp_eax_off + 2 and ins[-1].mnemonic == "jmp" and ins[-1].op_str == "eax",
+          "EP stub: celý se disasembluje a končí jmp eax")
+    check(sum(1 for i in ins if i.mnemonic == "call") >= 5, "EP stub: volání API/funkcí >= 5")
+    for i in ins:
+        print(f"    EP 0x{i.address:x}: {i.mnemonic:8s} {i.op_str}")
+    ins2 = list(md.disasm(new[CAVE_OFF + hook_off:CAVE_OFF + hook_off + len(hook_stub)], hook_va))
+    tot2 = sum(i.size for i in ins2)
+    check(tot2 == len(hook_stub), f"hook stub: celý se disasembluje ({tot2} B)")
+    check(ins2[-1].mnemonic == "jmp" and int(ins2[-1].op_str, 16) == HOOK_ORIG,
+          f"hook stub: končí jmp 0x{HOOK_ORIG:x} (původní cíl)")
+    calls = [int(i.op_str, 16) for i in ins2 if i.mnemonic == "call" and i.op_str.startswith("0x")]
+    check(SAVE_RENDER in calls and SAVE_GAMEOPT in calls and SAVE_AUDIO in calls,
+          "hook stub: volá SaveRender + SaveGameOptions + SaveAudioOptions")
+    for i in ins2:
+        print(f"    HK 0x{i.address:x}: {i.mnemonic:8s} {i.op_str}")
     print("VÝSLEDEK:", "OK" if ok else "SELHALO - VÝSTUP NEPOUŽÍVAT")
     return 0 if ok else 2
 
