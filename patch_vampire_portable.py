@@ -43,7 +43,10 @@ import struct
 import sys
 from pathlib import Path
 
-EXPECTED_SHA256 = "dd647078a6bf1ed9e1f36e6fe2d37bbd7fe2e1543aca220a3b5d9302dfa2b886"
+EXPECTED_SHA256 = {
+    "dd647078a6bf1ed9e1f36e6fe2d37bbd7fe2e1543aca220a3b5d9302dfa2b886",  # Vampire.exe (GOG)
+    "41dec009af2524aba1219f768ca311c4a09ca9973751e109009fa882696b9e49",  # Vampire_aor.exe (Age of Redemption)
+}
 IB = 0x400000
 ORIG_EP_VA = 0x4DF343
 IAT_GMFN = 0x4EB064          # GetModuleFileNameA
@@ -220,7 +223,7 @@ def patch(inp, out, force=False):
     data = bytearray(Path(inp).read_bytes())
     sha = hashlib.sha256(data).hexdigest()
     print(f"Vstup: {inp} ({len(data)} B) sha256 {sha[:16]}...")
-    if sha != EXPECTED_SHA256 and not force:
+    if sha not in EXPECTED_SHA256 and not force:
         print("CHYBA: jiná verze Vampire.exe, než na kterou byl patch odladěný. "
               "Pokračovat jen s --force.")
         return 1
@@ -341,7 +344,7 @@ def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     force = "--force" in sys.argv
     inp = Path(args[0]) if args else Path("Vampire.exe")
-    out = Path("Vampire_portable.exe")
+    out = inp.with_name(inp.stem + "_portable.exe")
     if "-o" in sys.argv:
         out = Path(sys.argv[sys.argv.index("-o") + 1])
     if not inp.is_file():
