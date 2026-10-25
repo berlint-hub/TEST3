@@ -1,0 +1,1017 @@
+// ****************************************************************************
+//
+// GAME.NLS
+//
+// General purpose string table
+//
+// Leave the object messages at the top, it is easier to select them... [YB]
+//
+// ****************************************************************************
+//
+// ............................................................................ 
+// Objects
+// ............................................................................ 
+// these should disappear
+_ACTOR                          Actor, needs final definition!
+_ITEM                           Item, needs final definition!
+_PROP                           Prop, needs final definition!
+_REGION                         Region, needs final definition!
+_PROJECTILE                     Projectile, needs final definition!
+_EMITTER                        Emitter, needs final definition!
+
+
+// place party members first here
+
+CHRISTOF                        Christof
+CHRIS                           Chris
+ERIK                            Erik
+SERENA                          Serena
+WILHEM                          Wilhem
+PINK                            Pink
+LILY                            Lily
+SAMUEL                          Samuel
+
+// then cast actors
+ABDUL                           Abdul Al-Hazim
+AHZRA                           Ahzra
+ALEXANDRA                       Alexandra Ruthven
+ALLESANDRO                      Allesandro Giovanni
+ANEZKA                          Aneûka
+ANEZKAHEAD                      Diary Speaker
+ARCHBISHOP                      Arcibiskup Geza
+BRANDL                          Princ Brandl
+ARDAN                           Ardan
+COSMAS                          Cosmas
+COUNTORSI                       HrabÏ Orsi
+ORSI                            Orsi
+DARKKNIGHT                      Temn˝ germ·nsk˝ rytÌ¯
+DEVNULL                         Dev/Null
+ECATERINA                       Jekaterina
+ECAT                            Jekaterina
+EMELIAGERARD                    Emelia Gerard
+ETRIUS                          Etrius
+FATHERLEOPOLD                   Otec Leopold
+FREDVARNEY                      Fred Varney
+FRIEDRICH                       Friedrich
+GEZA                            Arcibiskup Geza
+GARINOL                         Garinol
+GEORGETHORNE                    George Thorne
+INTERPOLAGENT                   Agent Interpolu
+GEN_DA_MAGICSHOP                ObchodnÌk s magiÌ
+GEN_DA_WEAPSHOP                 ObchodnÌk se zbranÏmi
+GEN_MD_MAGICSHOP                ObchodnÌk s magiÌ
+GEN_MD_WEAPSHOP                 ObchodnÌk se zbranÏmi
+HANK                            Hank Winchester
+HERMIT                          LesnÌ poustevnÌk
+ILIG                            Ilig
+JOSEF                           Josef
+KAZI                            Kazi
+LIBUSSA                         Libuöe
+LUCRETIA                        Lucretia
+LUTHERBLACK                     Luther
+MAQQABAH                        Maqqabah Golem
+MENDEL                          Mendel
+MERCURIO                        Mercurio
+NOSFERATUBOSS                   Othelios
+OTTO                            Otto
+PRINCERUDOLF                    Princ Brandl
+SUMNER                          Sumner Montague
+TETA                            Teta
+UNORNA                          Unorna
+UNORNAACTOR                     Unorna
+UNDERPRINCE                     PodcenÏnn˝
+VACLAV                          V·clav
+VIRSTANIA                       Virstania
+VUKODLAK                        Vukodlak
+ZIL                             Zil
+ZULO                            Zulo
+STORYTELLER                     VypravÏË
+
+
+// other actors
+PLAYER							Hr·Ë
+
+BARKEEP                         V˝ËepnÌ
+BARTENDER                       Barman
+BOBBIE                          Bobbie
+BROTHELPATRON                   Z·kaznÌk bordelu
+BEGGAR                          éebr·k
+CAITIFF		                    Caitiff
+CAPPA1                          Cappadocian
+CAPPA2                          Cappadocian
+CORPSEMINION                    Mrtvola posluhovaËe
+CLUBTENDANCER                   TaneËnÌk
+DABART1                         Barman
+DABART2                         Barman
+MDBART1                         Barman
+DANCER                          TaneËnÌk
+DANOS	                          Nosferatu
+DATREM2	                       Tremere
+DRUNK                           Opilec
+GIO		                       Giovanni
+GOTHGIRL                        Vandalka
+GOON                            Rv·Ë
+GHOUL                           DÈmon
+HIGHWAYMAN                      LoupeûnÌk
+HWMEN			                    LoupeûnÌk
+HOMELESSLADY                    BezdomovkynÏ
+INTERPOL1							  Agent Interpolu
+KNIGHTOFSTJOHN                  RytÌ¯ Sv Johna
+LADY                            PanÌ
+LONDON1								  Obyvatel Lond˝na
+MDNOS1								  Nosferatu
+MDTZIM								  Tzimisce
+MDVICT1								  Victim
+MDVICT2								  Victim
+DAVICT1								  Victim
+MERCHANT                        Kupec
+MILKMAID                        DojiËka
+MONK                            Mnich
+MUGGER                          ZlodÏj
+NUN                             Jeptiöka
+NYPD                            Policista
+NYC1									  Obyvatel NYC
+NYC2									  Obyvatel NYC
+NYCPD                           Policista
+OLDMAN                          Star˝ muû
+ORDEROFHERMES                   ÿ·d Herm˘
+ORVUS                           Orvus
+PED                             Chodec
+PRAGUE1								  Obyvatel Prahy
+PRAGUE2								  Obyvatel Prahy
+PRAGUE3								  Obyvatel Prahy
+PRAGUE4								  Obyvatel Prahy
+PRAGUEREB	                    Praûsk˝ rebel
+PRAGUESOLDIER                   Voj·k
+PRAGUEMERCHANT						  Kupec
+PROSTITUTE                      Prostitutka
+PROST1	                       Prostitutka
+PROST2	                       Prostitutka
+PROST3	                       Prostitutka
+PREMYSL                         P¯emysl Revenant
+REV1			                    Revenant
+REV2			                    Revenant
+REV3			                    Revenant
+REV4			                    Revenant
+RUDOLFGUARD                     Princova str·û
+SETITE2								  Setite
+SOLDIER                         Voj·k
+SOCIETY1			                 »len Klubu Leopold
+SOCIETY2			                 »len Klubu Leopold
+SOCIETY3			                 »len Klubu Leopold
+STJOHN			                 RytÌ¯ Sv Johna
+STJOHN1			                 RytÌ¯ Sv Johna
+STJOHN2			                 RytÌ¯ Sv Johna
+STJOHN3			                 RytÌ¯ Sv Johna
+STJOHN4			                 RytÌ¯ Sv Johna
+STRANGER								  Cizinec
+TEUTONIC			                 Germ·nsk˝ rytÌ¯
+TEUTONICKNIGHT                  Germ·nsk˝ rytÌ¯
+TEUTONICLORD                    Germ·nsk˝ p·n
+TEUTONICCAPTAIN                 Germ·nsk˝ kapit·n
+TREMEREAPPRENTICE               UËeÚ Tremere
+TREMERENEONATE                  Novorozen˝ Tremere
+TREMEREREGENT                   Regnt Tremere
+TREMERELORD                     P·n Tremere
+TREMEREPONTIFEX                 Tremere Pontifex
+TREMERECOUNCILOR                RadnÌ Tremere
+VIENNAGUARD                     Str·û
+WEAPONSMITH                     KovozbranÌ¯
+WORKER                          PracovnÌk laborato¯e
+WRAITH                          P¯Ìzrak
+VENTRUE								  Ventrue
+VIENNA1								  Obyvatel VÌÔnÏ
+VIRST									  Virstania
+ZOMBU                           Zombu
+ZOMBUEXP1                       Pokus Zombu
+ZOMBUEXP2                       Pokus Zombu
+
+WOLFFORM								  Forma vlka
+ASTRALPROJECTION					  Psychick· forma
+
+// monsters/animals
+ALLIGATOR                       DÈmon Alig·tora
+BAT                             Netop˝r
+CAT                             KoËka
+CROW                            Vr·na
+DEMONHOUND                      DÈmonick˝ pes
+ELEMENTAL                       Element
+GARGOYLE                        Gargoyla
+GHOUL                           DÈmon
+GHOULSPIDER                     PavouËÌ dÈmon
+HOPPER                          Skokan
+SPIDERSACK                      VajeËn˝ vak
+GIANTCOBRA                      Velk· Kobra
+GOLEM                           Golem
+HORSE                           K˘Ú
+LASOMBRAGHOUL                   DÈmon Lasombry
+RAT                             KrysÌ dÈmon
+RATLEADER                       V˘dce krysÌch dÈmon˘
+SKELETON                        Kostlivec
+SMALLRAT                        Krysa
+SPIDER                          Pavouk
+SZLACHTA                        älechta
+VIPER                           Zmije
+VOZHD                           Vozhd
+WARGHOUL                        DÈmon v·lky
+WEREWOLF                        Vlkodlak
+WOLF                            Vlk
+
+// Items
+GOLDBAG                         PytlÌk zlata
+VITAE                           L·hev ûivota
+VITAEUNIDENTIFIED               Nezn·m˝ ûivot
+VITAEDISEASED                   Nemocn˝ ûivot
+VITAEANTEDELUVIAN               P¯edpotopnÌ ûivot
+VITAEELDER                      StaröÌ ûivot
+VITAEFAE                        Sk¯etÌ ûivot
+VITAEKINDRED                    P¯Ìbuzn˝ ûivot
+VITAEWEREWOLF                   VlkodlaËÌ ûivot
+BLOODPEARL                      Perla krve
+BLOODSTONE                      K·men krve
+BLOODPOUCH                      V·Ëek krve
+PLASMABAG                       Vak plazmy
+POTIONHEALTH                    UzdravujÌcÌ balz·m
+POTIONMAJORHEALTH               UzdravujÌcÌ elixÌr
+POTIONMINORHEALTH               LÈËiv· mast  
+POTIONMANA                      ElixÌr many
+POTIONDISEASE                   VakcÌna nemoci
+POTIONPOISON                    Protijed
+
+// Armors
+PADDEDCLOTHING                  VycpanÈ öaty
+LEATHERCLOTHING                 KoûenÈ brnÏnÌ
+STUDDEDLEATHER                  OkovanÈ koûenÈ brnÏnÌ
+SCALEMAIL                       äupinov˝ krun˝¯
+CHAINMAIL                       ÿetÏzov˝ krun˝¯
+HALFPLATE                       PoloviËnÌ pl·t
+PLATEMAIL                       Krun˝¯
+CHESTPLATE                      HrudnÌ pl·t
+LEATHERVEST                     Koûen· vesta
+LEATHERJACKET                   KoûenÈ sako
+REINFORCEDCLOTH                 Vyztuûen˝ pl·öù
+ARMORTSHIRT                     ObrnÏnÈ triko
+LIGHTBALLVEST                   Lehk· balistick· vesta
+MEDUIMBALLVEST                  St¯ednÌ balistick· vesta
+FLAKJACKET                      PalebnÈ sako
+TACTJACKET                      TaktickÈ sako
+TAILOREDARMOR                   Krun˝¯ na mÌru
+NOMEXSUIT                       Ohnivzdorn˝ oblek
+RAGS                            Hadry
+CLOAK                           Pl·öù
+
+// Shields
+FOOTMANSHIELD                   Sluh˘v ötÌt
+CAVALRYSHIELD                   ätÌt kavalerie
+LARGESHIELD                     Velk˝ ötÌt
+BUCKLER                         Kulat˝ ötÌt
+SHIELD                          ätÌt
+SHIELDELEC                      Ochrann˝ ötÌt
+SHIELDFIRE                      Ochrann˝ ötÌt
+SHIELDSUN                       Ochrann˝ ötÌt
+SHIELDCOLD                      Ochrann˝ ötÌt
+GREATSHIELD                     Velk˝ ötÌt
+GREATSHIELDELEC                 Ochrann˝ velk˝ ötÌt
+GREATSHIELDFIRE                 Ochrann˝ velk˝ ötÌt
+GREATSHIELDSUN                  Ochrann˝ velk˝ ötÌt
+GREATSHIELDCOLD                 Ochrann˝ velk˝ ötÌt
+RIOTSHIELD                      Obrann˝ ötÌt
+
+// head gear
+SKULLCAP                        Kapuce
+LIGHTHELM                       Lehk· helma
+LIGHTHELMELEC                   Ochrann· lehk· helma
+LIGHTHELMFIRE                   Ochrann· lehk· helma
+LIGHTHELMSUN                    Ochrann· lehk· helma
+LIGHTHELMCOLD                   Ochrann· lehk· helma
+FULLHELM                        Helmice
+FULLHELMELEC                    Ochrann· helmice
+FULLHELMFIRE                    Ochrann· helmice
+FULLHELMSUN                     Ochrann· helmice
+FULLHELMCOLD                    Ochrann· helmice
+MOTOHELM                        Motork·¯sk· p¯ilba
+ARMYHELM                        Helma
+SWATHELM                        SWAT p¯ilba
+GOGGLES                         LehkÈ kouzelnÈ br˝le
+
+// neck wear
+NECKGUARD                       Chr·niË krku
+CHAINS                          ÿetÏzy
+CHOKER                          N·hrdelnÌk
+NECKLACE                        N·hrdelnÌk
+GOLDNECKLACE                    Zlat˝ n·hrdelnÌk
+SILVERNECKLACE                  St¯Ìbrn˝ n·hrdelnÌk
+DIAMONDNECKLACE                 Diamantov˝ n·hrdelnÌk
+
+// hand wear
+GAUNTLETS                       Rukavice
+GAUNTLETSHEAVY                  TÏûkÈ rukavice
+GAUNTLETSELEC                   OchrannÈ rukavice
+GAUNTLETSFIRE                   OchrannÈ rukavice
+GAUNTLETSCOLD                   OchrannÈ rukavice
+LEATHERGLOVES                   KoûenÈ rukavice
+GLOVESELEC                      OchrannÈ rukavice
+GLOVESFIRE                      OchrannÈ rukavice
+GLOVESCOLD                      OchrannÈ rukavice
+BRACELETS                       N·ramek
+GOLDBRACELETS                   Zlat˝ n·ramek
+SILVERBRACELETS                 St¯Ìbrn˝ n·ramek
+DIAMONDBRACELETS                Diamantov˝ n·ramek
+
+// rings
+DIAMONDRING                     Diamnatov˝ prsten
+GOLDRING                        Zlat˝ prsten
+ONYXBAND                        Onyxov˝ krouûek
+PEWTERRING                      CÌnov˝ prsten
+SILVERRING                      St¯Ìbrn˝ prsten
+RING                            Prsten
+
+// Weapons - swords
+BASTARDSWORD                    Bastard˘v meË
+BROADSWORD                      äirok˝ meË
+CLAYMORE                        äavle
+FALCHION                        Zak¯iven˝ meË
+FLAMBERGE                       Flamberg
+GREATSWORD                      Velk˝ meË
+RAPIER                          RapÌr
+SCIMITAR                        Scimitar
+MACHETE                         MaËeta
+
+// Enhanced swords
+BROADSWORDRUSTY                 Rezav˝ öirok˝ meË
+BASTARDSWORDFINE                PÏkn˝ bastard˘v meË
+BROADSWORDFINE                  PÏkn˝ öirok˝ meË
+CLAYMOREFINE                    PÏkn· öavle
+FALCHIONFINE                    PÏkn˝ zak¯iven˝ meË
+FLAMBERGEFINE                   PÏkn˝ flamberg
+GREATSWORDFINE                  PÏkn˝ velk˝ meË
+RAPIERFINE                      PÏkn˝ rapÌr
+SCIMITARFINE                    PÏkn˝ scimitar
+BASTARDSWORDEXQ                 SkvÏl˝ bastard˘v meË
+BROADSWORDEXQ                   SkvÏl˝ öirok˝ meË
+CLAYMOREEXQ                     SkvÏl· öavle
+FALCHIONEXQ                     SkvÏl˝ zak¯iven˝ meË
+FLAMBERGEEXQ                    SkvÏl˝ Flamberg
+GREATSWORDEXQ                   SkvÏl˝ velk˝ meË
+RAPIEREXQ                       SkvÏl˝ rapÌr
+SCIMITAREXQ                     SkvÏl˝ scimitar
+BROADSWORDSILVER                St¯Ìbrn˝ öirok˝ meË
+
+// Axes
+BATTLEAXE                       BitevnÌ sekera
+HANDAXE                         RuËnÌ sekera
+AXE                             RuËnÌ sekera
+
+// Enhanced axes
+AXEFINE                         PÏkn· sekera
+AXEEXQ                          SkvÏl· sekera
+AXERUSTY                        Rezav· sekera
+AXESILVER                       St¯Ìbrn· sekera
+BATTLEAXEFINE                   PÏkn· bitevnÌ sekera
+BATTLEAXEEXQ                    SkvÏl· bitevnÌ sekera
+
+// Daggers
+DAGGER                          D˝ka
+DIRK                            D˝ka
+MORODAGGER                      D˝ka
+POIGNARD                        Poignard
+STAKE                           KolÌk
+BROKENBOTTLE                    Rozbit· l·hev
+
+// Enhanced Daggers
+DAGGERRUSTY                     Rezav· d˝ka
+DAGGERFINE                      PÏkn· d˝ka
+DIRKFINE                        PÏkn· d˝ka
+MORODAGGERFINE                  PÏkn· d˝ka
+POIGNARDFINE                    PÏkn˝ Poignard
+DAGGEREXQ                       SkvÏl· d˝ka
+DIRKEXQ                         SkvÏl· d˝ka
+POIGNARDEXQ                     SkvÏl˝ Poignard
+MORODAGGEREXQ                   SkvÏl· d˝ka
+DAGGERPOISON                    Otr·ven· d˝ka
+DIRKPOISON                      Otr·ven· d˝ka
+MORODAGGERPOISON                Otr·ven· d˝ka
+POIGNARDPOISON                  Otr·ven˝ Poignard
+DAGGERSILVER                    St¯Ìbrn· d˝ka
+
+// Blunt weapons
+MACE                            Palice
+POINTYMACE                      äpiËat· palice
+WARHAMMER                       V·leËnÈ kladivo
+CLUB                            H˘l
+LEADPIPE                        OlovÏn· trubka
+BASEBALLBAT                     HlinÌkov· p·lka
+BRASSKNUCKLES                   Boxer
+SAPGLOVES                       PobitÈ rukavice
+
+// Enhanced blunt weapons
+MACEFINE                        PÏkn· palice
+POINTYMACEFINE                  PÏkn· öpiËat· palice
+WARHAMMERFINE                   PÏknÈ v·leËnÈ kladivo
+MACEEXQ                         SkvÏl· palice
+POINTYMACEEXQ                   SkvÏl· öpiËat· palice
+WARHAMMEREXQ                    SkvÏlÈ v·leËnÈ kladivo
+
+// Archery
+LONGBOW                         Dlouh˝ luk
+LONGBOWINC                      Z·paln˝ dlouh˝ luk
+SHORTBOW                        Kr·tk˝ luk
+SHORTBOWINC                     Z·paln˝ kr·tk˝ luk
+CROSSBOW                        Kuöe
+CROSSBOWINC                     Z·paln· kuöe
+CROSSBOWSILVER                  St¯Ìbrn· kuöe
+CROSSBOWMAG                     Ho¯ËÌkov· kuöe
+COMPOUNDBOW                     Skl·dacÌ luk
+COMPOUNDBOWMAG                  Ho¯ËÌkov˝ skl·dacÌ Luk
+
+// Polearms
+HALBERD                         Halapartna
+HALBERDFINE                     PÏkn· halapartna
+HALBERDEXQ                      SkvÏl· halapartna
+BASTION                         Baöta
+BASTIONFINE                     PÏkn· baöta
+BASTIONEXQ                      SkvÏl· baöta
+SPEAR                           KopÌ
+SPEARFINE                       PÏknÈ kopÌ
+SPEAREXQ                        SkvÏlÈ kopÌ
+LANCE                           OötÏp
+LANCEFINE                       PÏkn˝ oötÏp
+LANCEEXQ                        SkvÏl˝ oötÏp
+PITCHFORK                       Vidle
+POLEAXE                         Sekerka
+POLEAXEFINE                     PÏkn· sekerka
+POLEAXEEXQ                      SkvÏl· sekerka
+QUARTERSTAFF                    Obuöek
+
+// firearms
+REVOLVER                        Revolver
+REVOLVERSIGHTED                 Pozoruhodn˝ revolver
+REVOLVERMODIFIED                Upraven˝ revolver
+PISTOL                          Pistole
+PISTOLSIGHTED                   Pozoruhodn· pistole
+PISTOLMODIFIED                  Upraven· pistole
+PISTOLDRAGONSBREATH             Pistole draËÌ dech
+SUBMACHINEGUN                   Samopal
+SUBMACHINEGUNMODIFIED           Upraven˝ samopal
+RIFLE                           Puöka
+RIFLESIGHTED                    Pozoruhodn· puöka
+RIFLEMODIFIED                   Upraven· puöka
+ASSAULTRIFLE                    ⁄toËn· puöka
+ASSAULTRIFLESIGHTED             Pozoruhodn· ˙toËn· puöka
+ASSAULTRIFLEMODIFIED            Upraven· ˙toËn· puöka
+SHOTGUN                         Brokovnice
+SHOTGUNMODIFIED                 Upraven· brokovnice
+ROCKETLAUNCHER                  Raketomet
+STAKEGUN                        KolÌkov· zbraÚ
+GRENADELAUNCHER                 Gran·tomet
+FLAMETHROWER                    Plamenomet
+CHAINSAW                        ÿetÏzov· pila
+CHAINGUN                        ÿetÏzov· zbraÚ
+CHAINGUNMODIFIED                Upraven· ¯etÏzov· zbraÚ
+INCINERATOR                     SpalovaË
+TASER                           Taser
+
+// ammo
+ARROW                           äÌp
+ARROWS05                        äÌpy
+ARROWS10                        äÌpy
+ARROWS20                        äÌpy
+ARROWINC                        Z·paln˝ öÌp
+ARROWSINC05                     Z·palnÈ öÌpy
+ARROWSINC10                     Z·palnÈ öÌpy
+ARROWSINC20                     Z·palnÈ öÌpy
+ARROWMAG                        Ho¯ËÌkovÈ öÌpy
+ARROWSMAG05                     Ho¯ËÌkovÈ öÌpy
+ARROWSMAG10                     Ho¯ËÌkovÈ öÌpy
+ARROWSMAG20                     Ho¯ËÌkovÈ öÌpy
+ASSAULTRIFLECLIP20              Klip ˙toËnÈ puöky
+ASSAULTRIFLECLIP40              Klip ˙toËnÈ puöky
+BOLT                            äipka kuöe
+BOLTS05                         äipky kuöe
+BOLTS10                         äipky kuöe
+BOLTS20                         äipky kuöe
+BOLTINC                         Z·paln· öipka
+BOLTSINC05                      Z·palnÈ öipky
+BOLTSINC10                      Z·palnÈ öipky
+BOLTSINC20                      Z·palnÈ öipky
+BOLTSILVER                      St¯ÌbrnÈ öipky
+BOLTMAG                         Ho¯ËÌkov· öipka
+BOLTMAG05                       Ho¯ËÌkovÈ öipky
+BOLTMAG10                       Ho¯ËÌkovÈ öipky
+BOLTMAG20                       Ho¯ËÌkovÈ öipky
+CHAINGUNROUNDS50                Z·sobnÌk ¯etÏzovÈ zbranÏ
+CHAINGUNROUNDS100               Z·sobnÌk ¯etÏzovÈ zbranÏ
+LAUNCHGRENADES                  Gran·ty
+NAPALMTANK10                    Kanistry napalmu
+NAPALMTANK20                    Kanistry napalmu
+PISTOLCLIP                      Z·sobnÌk pistole
+PISTOLCLIPDRAGON                Z·sobnÌk draËÌho dechu
+POWERCEL12                      Energetony
+POWERCEL24                      Energetony
+REVOLVERROUNDS                  Z·sobnÌky revolveru
+RIFLECLIP11                     Z·sobnÌk puöky
+RIFLECLIP22                     Z·sobnÌk puöky
+ROCKETPACK01                    Raketa
+ROCKETPACK03                    Rakety
+SHOTGUNSHELLS10                 Patrony brokovnice
+SHOTGUNSHELLS20                 Patrony brokovnice
+STAKEGUNPACK01                  Pakl kolÌk˘
+STAKEGUNPACK05                  Pakl kolÌk˘
+STAKEGUNPACK10                  Pakl kolÌk˘
+STAKEGUNPACK20                  Pakl kolÌk˘
+SUBMACHINEGUNCLIP16             Z·sobnÌk samopalu
+SUBMACHINEGUNCLIP32             Z·sobnÌk samopalu
+
+// quick use weapons
+GREEKFIRE                       ÿeck˝ oheÚ
+SHURIKEN                        äurikeny
+THROWINGKNIVES                  VrhacÌ noûe
+MOLOTOVCOCKTAIL                 Molotov koktejl
+FRAGGRENADE                     T¯Ìötiv˝ gran·t
+CONCGRENADE                     OmraËujÌcÌ gran·t
+CHEMGRENADE                     Chemick˝ gran·t
+PHOSGRENADE                     Fosforov˝ gran·t
+SATCHELCHARGE                   N·loû
+NAPALBOMB                       Napalmov· bomba
+HOLYWATER                       SvÏcen· voda
+WAXENPOETICA                    Voskov· poetika
+
+// utility items
+FLASHLIGHT                      Baterka
+FLARE                           SvÏtlice
+CELPHONE                        Telefon
+MOTIONDETECTOR                  Detektor pohybu
+THERMALDETECTOR                 Detektor teploty
+
+// treasure
+DIAMONDS                        Diamanty
+EMERALDS                        Smaragdy
+RUBIES                          RubÌny
+SAPPHIRES                       SafÌry
+GOLDCOINS                       Zlaù·ky
+SILVERCOINS                     St¯ÌbrÚ·ky
+BONDS                           Dluhopisy
+CASH                            Hotovost
+GOLDBULLION                     ZlatÈ cihly
+GOLDWATCH                       ZlatÈ hodinky
+SILVERWATCH                     St¯ÌbrnÈ hodinky
+
+// orphaned :(
+MAGNUM                          Magnum
+BRONZEARMOR                     Bronzov˝ krun˝¯
+COMPOSITEBOW                    Skl·dacÌ luk
+SCYTHE                          Kosa
+ARMOR                           Krun˝¯
+PUNCH                           Vrt·k
+DEMOSHIELD                      ätÌt
+WOODBUCKLER                     D¯evÏn˝ ötÌt
+SUNSHIELD                       SluneËnÌ ötÌt
+NORMANSHIELD                    Normansk˝ ötÌt
+
+// Projectiles
+XBOW_BOLT                       äipka kuöe
+ARROW                           äÌp
+
+// kindred artifacts
+AINKURNSWORD                    MeË Ainkurn
+MONOCLECLARITY_NI               Monokl
+MONOCLECLARITY                  Monokl jasnosti
+ARGENTBATON_NI                  H˘l
+ARGENTBATON                     H˘l Argent
+GANGRELEYE_NI                   SecvrklÈ oko
+GANGRELEYE                      Oko Gangrel
+SIREFINGER_NI                   Ukazov·Ëek
+SIREFINGER                      Sir˘v ukazov·Ëek
+BESERKERFANG_NI                 Tes·k
+BESERKERFANG                    Beserker tes·k
+BLACKGLOVES_NI                  Rukavice
+BLACKGLOVES                     »ernÈ rukavice
+HEARTSHIELD_NI                  Pl·t
+HEARTSHIELD                     HrudnÌ ötÌt
+CONCOCTION                      SmÌch·nÌ
+FEMURELDER_NI                   StehennÌ kost
+FEMURELDER                      StehennÌ kost staröÌho Tzimisce
+GIANTSBLOOD                     Obrova krev
+HANDCONRAD_NI                   Scvrkl· ruka
+HANDCONRAD                      Ruka konrada
+IVORYBOW                        Slonovinov˝ luk
+JORUM                           Jorum
+TONGUE                          Jazyk
+CLOAKSHADOWS                    Pl·öù neviditelnosti
+
+// lesser kindred artifacts
+AMULET                          Amulet
+AMULETDISCIPLINE                UËednick˝ amulet
+AMULETCONTROL                   Vyrovnan˝ amulet
+AMULETINT                       Amulet rozumu
+AMULETPER                       Amulet post¯ehu
+AMULETWIT                       Amulet d˘vtipu
+BLOODRING                       Krvav˝ prsten
+BLOODBRACELET                   Krvav˝ n·ramek
+BLOODNECKLACE                   Krvav˝ n·hrdelnÌk
+BRACELETCONTROL                 Vyrovnan˝ n·ramek
+BRACELETDISCIPLINE              UËednick˝ n·ramek
+GAUNTLETACCURACY                P¯esnÈ rukavice
+GAUNTLETDEX                     Rukavice obratnosti
+GAUNTLETDODGE                   Uh˝bacÌ rukavice
+GAUNTLETFORTITUDE               Rukavice stateËnosti
+GAUNTLETPOWER                   Rukavice moci
+GAUNTLETSTA                     Rukavice vytrvalosti
+GAUNTLETSTR                     Rukavice sÌly
+RINGAPP                         Prsten vzhledu
+RINGCHA                         Prsten osobnÌho kouzla
+RINGMAN                         Prsten manipulace
+RINGCONTROL                     Vyrovnan˝ prsten
+RINGDISCIPLINE                  UËednick˝ prsten
+
+// lesser artifact weapons
+WARHAMMERBERSERKER              Berserker kladivo
+BATTLEAXEBERSERKER              Berserker sekera
+BROADSWORDHOLY                  Poûehnan˝ öirok˝ meË
+GREATSWORDHOLY                  Poûehnan˝ velk˝ meË
+MACEHOLY                        Poûehnan· palice
+POINTYMACEHOLY                  Poûehnan· öpiËat· palice
+BROADSWORDDREAD                 DÏsiv˝ öirok˝ meË
+CLAYMOREDREAD                   DÏsiv· öavle
+FALCHIONDREAD                   DÏsiv˝ zak¯iven˝ meË
+FLAMBERGEDREAD                  DÏsiv˝ Flamberg
+GREATSWORDDREAD                 DÏsiv˝ velk˝ meË
+AXEEVIL                         Sekera Zla
+SCIMITARFLAME                   Ohniv˝ Scimitar
+BROADSWORDFLAME                 Ohniv˝ öirok˝ meË
+
+// lesser artifact armor
+LIGHTHELMHOLY                   Poûehnan· lehk· helma
+LIGHTHELMUNHOLY                 Zkaûen· lehk· helma
+FULLHELMHOLY                    Poûehnan· helmice
+FULLHELMUNHOLY                  Zkaûen· helmice
+SHIELDHOLY                      Poûehnan˝ ötÌt
+SHIELDUNHOLY                    Zkaûen˝ ötÌt
+GREATSHIELDHOLY                 Poûehnan˝ velk˝ ötÌt
+GREATSHIELDUNHOLY               Zkaûen˝ velk˝ ötÌt
+LEATHERCLOTHINGHOLY             Poûehnan˝ koûen˝ krun˝¯
+STUDDEDLEATHERHOLY              Poûehnan˝ okovan˝ koûen˝ krun˝¯
+SCALEMAILHOLY                   Poûehnan˝ öupinov˝ krun˝¯
+CHAINMAILHOLY                   Poûehnan˝ ¯etÏzov˝ krun˝¯
+HALFPLATEHOLY                   Poûehnan˝ poloviËnÌ pl·t
+PLATEMAILHOLY                   Poûehnan˝ krun˝¯
+LEATHERCLOTHINGUNHOLY           Zkaûen˝ koûen˝ krun˝¯
+STUDDEDLEATHERUNHOLY            Zkaûen˝ okovan˝ koûen˝ krun˝¯
+SCALEMAILUNHOLY                 Zkaûen˝ öupinov˝ krun˝¯
+CHAINMAILUNHOLY                 Zkaûen˝ ¯etÏzov˝ krun˝¯
+HALFPLATEUNHOLY                 Zkaûen˝ poloviËnÌ pl·t
+PLATEMAILUNHOLY                 Zkaûen˝ krun˝¯
+
+// kine artifacts
+HOLYRELIC                       Svat· relikvie
+ORBULAIN                        Orb Ulaina
+GRIFFINRING                     Griffin˘v prsten
+GAROUCLAW                       Garou˘v dr·p
+OILSTGEORGE                     Olej Sv. George
+RINGCHRYSOSTOM                  Prsten Chrysostomu
+MARTYRFIRE                      MuËednick˝ oheÚ
+DAGGERTHORNS                    D˝ka Thornu
+DOLOROUSNAIL                    Truchliv˝ h¯eb
+HOLYSTATUETTE                   Svat· soöka
+HOLYDAVID                       Svat· Davidova hvÏzda
+HOLYCROSS                       Svat˝ k¯Ìû
+
+// books, scrolls, journals
+BOOK                            Kniha
+BOOKS                           Knihy
+SCROLL                          Svitek
+JOURNAL                         DenÌk
+DOCUMENT                        Dokument
+
+THELONIUSJOURNAL                Thelonius˘v denÌk
+LECOMTELETTER                   LeComteovo psanÌ
+ANEZKALETTER                    Dopis od Aneûky
+ANEZKALETTER2                   Dopis od Aneûky
+CUTHBERTLETTER                  Dopis Sira Cuthberta Christofi
+LEDGER                          Velk· Alova kniha
+
+COUNCILPROC1                    Prohl·öenÌ Rady #1
+COUNCILPROC2                    Prohl·öenÌ Rady #2
+COUNCILPROC3                    Prohl·öenÌ Rady #3
+COUNCILPROC4                    Prohl·öenÌ Rady #4
+LIBUSSAREPORT1                  Zpr·va Libuöe #1
+LIBUSSAREPORT2                  Zpr·va Libuöe #2
+LIBUSSAREPORT3                  Zpr·va Libuöe #3
+LIBUSSAREPORT4                  Zpr·va Libuöe #4
+
+SOCWORKJOURNAL1                 Z·znam denÌku dÏlnÌka #1
+SOCWORKJOURNAL2                 Z·zanm denÌku dÏlnÌka #2
+SOCDOC1                         Vytiskl· data #1
+SOCDOC2                         Vytiskl· data #2
+SOCDOC3                         Vytiskl· data #3
+SOCDOC4                         Z·znam denÌku Allatiuse #1
+SOCDOC5                         Z·znam denÌku Allatiuse #2
+SOCDOC6                         Z·znam denÌku Allatiuse #3
+SOCDOC7                         Z·znam denÌku Allatiuse #4
+SOCDOC8                         Z·znam denÌku Allatiuse #5
+SOCDOC9                         Z·zanm denÌku Allatiuse #6
+
+// discipline scrolls
+SCROLLACIDICTOUCH               Svitek Dotyku kyseliny
+SCROLLATROPHY                   Svitek ZakrnÏnÌ
+SCROLLAURAPERCEPTION            Svitek Aury post¯ehu
+SCROLLAWAKEN                    Svitek ProcitnutÌ
+SCROLLAWE                       Svitek ⁄cty
+SCROLLBECKONING                 Svitek P¯ivol·nÌ
+SCROLLBLACKDEATH                Svitek »ernÈ smrti
+SCROLLBLOODDEXTERITY            Svitek KrvavÈ obratnosti
+SCROLLBLOODHEALING              Svitek KrvavÈho uzdravov·nÌ
+SCROLLBLOODSTAMINA              Svitek KrvavÈ vytrvalosti
+SCROLLBLOODOFPOTENCY            Svitek KrvavÈ moci
+SCROLLBLOODRAGE                 Svitek KrvavÈho bÏsnÏnÌ
+SCROLLBLOODSTRENGTH             Svitek KrvavÈ sÌly
+SCROLLCALLLIGHTNING             Svitek P¯ivol·nÌ blesku
+SCROLLCELERITY                  Svitek Hbitosti
+SCROLLCAULDRONOFBLOOD           Svitek Kotle krve
+SCROLLCLOAKOFSHADOWS            Svitek Pl·ötÏ stÌn˘
+SCROLLCLOAKTHEGATHERING         Svitek Pl·ötÏ shrom·ûdÏnÌ
+SCROLLCOMMAND                   Svitek Ovl·dnutÌ
+SCROLLDARKHUNTER                Svitek TemnÈho lovce
+SCROLLDECAY                     Svitek Rozkladu
+SCROLLDRAWINGOUT                Svitek Odesl·nÌ p¯Ìöery
+SCROLLDREADGAZE                 Svitek DÏsivÈho pohledu
+SCROLLEARTHMELD                 Svitek TavenÌ zemÏ
+SCROLLENTRANCEMENT              Svitek VstoupenÌ
+SCROLLEYESOFCHAOS               Svitek OËÌ chaosu
+SCROLLEYESOFTHEBEAST            Svitek OËÌ p¯Ìöery
+SCROLLEYESOFTHESERPENT          Svitek OËÌ hada
+SCROLLFERALCLAWS                Svitek KrutÈho dr·pu
+SCROLLFERALWHISPERS             Svitek KrutÈho öepotu
+SCROLLFIREBALL                  Svitek OhnivÈ koule
+SCROLLFIRESTORM                 Svitek OhnivÈ bou¯e
+SCROLLFLAMERING                 Svitek OhnivÈho kruhu
+SCROLLFORTITUDE                 Svitek StateËnosti
+SCROLLHATCHVIPER                Svitek VylÌhnutÌ zmije
+SCROLLHEARTOFSTONE              Svitek KamennÈho srdce
+SCROLLHEIGHTENEDSENSES          Svitek Zv˝öenÌ smysl˘
+SCROLLIGNOREFLAME               Svitek P¯ehlÌûenÌ plamene
+SCROLLIMMOLATE                  Svitek ObÏtov·nÌ
+SCROLLMAJESTY                   Svitek Vzneöenosti
+SCROLLMESMERIZE                 Svitek HypnÛzy
+SCROLLMISTFORM                  Svitek Tvorby mlhy
+SCROLLPASSION                   Svitek V·önÏ
+SCROLLPLAGUEWIND                Svitek MorovÈho vÏtru
+SCROLLPOSSESSION                Svitek Posedlosti
+SCROLLPOTENCE                   Svitek Moci
+SCROLLPRISONOFICE               Svitek VÏzenÌ ledu
+SCROLLPSYCHICPROJECTION         Svitek PsychickÈ p¯edstavy
+SCROLLQUELLBEAST                Svitek UklidnÏnÌ p¯Ìöery
+SCROLLSHAMBLINGHORDES           Svitek äourajÌcÌch se hord
+SCROLLSHAPEOFTHEBEAST           Svitek Vytvo¯enÌ p¯Ìöery
+SCROLLSKINOFTHEADDER            Svitek ZmijÌ k˘ûe
+SCROLLSPIRITSTOUCH              Svitek Dotyku ducha
+SCROLLSUBSUMESPIRIT             Svitek Za¯azenÌ ducha
+SCROLLSUMMONELEMENTAL           Svitek Vyvol·nÌ elementu
+SCROLLSUMMONSOUL                Svitek Vyvol·nÌ duöe
+SCROLLFORGETFULMIND             Svitek ZapomnÏtlivÈ mysli
+SCROLLTHEHAUNTING               Svitek StraöenÌ
+SCROLLTHEFTVITAE                Svitek KradenÌ ûivota
+SCROLLTONGUEOFTHEASP            Svitek Jazyku Asp
+SCROLLTORCH                     Svitek PochodnÏ
+SCROLLTURNTODUST                Svitek Obr·cenÌ v prach
+SCROLLVIGORMORTIS               Svitek Vigor Mortis
+SCROLLVOICEOFMADNESS            Svitek Hlasu öÌlenstvÌ
+SCROLLWALKTHEABYSS              Svitek Ch˘ze do propasti
+
+// numina scrolls
+NUMSCROLLFLASH                  Svitek Z·blesku
+NUMSCROLLINVISIBILITY           Svitek Neviditelnosti
+NUMSCROLLPRAYER					  Svitek modlenÌ
+NUMSCROLLTRUEFAITH              Svitek PravÈ vÌry
+NUMSCROLLTRUESIGHT              Svitek PravÈho pohledu
+
+// discipline tomes
+TOMEANIMALISM                   Kniha éivoËiöna
+TOMEAUSPEX                      Kniha Auspex
+TOMEBLOODPATH                   Kniha Kouzel - Krvav· magie
+TOMECELERITY                    Kniha Hbitosti
+TOMEDEMENTATION                 Kniha Slabomyslnosti
+TOMEDOMINATE                    Kniha Ovl·dnutÌ
+TOMEFORTITUDE                   Kniha StateËnosti
+TOMEHANDSOFDESTRUCTION          Kniha Kouzel - Ruce zniËenÌ
+TOMELUREOFFLAMES                Kniha Kouzel - Kouzlo plamen˘
+TOMEMORTIS                      Kniha ⁄mrtÌ
+TOMENUMINA                      Kniha Numiny
+TOMEOBFUSCATE                   Kniha ZatemnÏnÌ
+TOMEOBTENEBRATION               Kniha Obtenebrace
+TOMEPOTENCE                     Kniha SÌly
+TOMEPRESENCE                    Kniha P¯Ìtomnosti
+TOMEPROTEAN                     Kniha Protest˘
+TOMERITUALS                     Kniha Kouzel - KrvavÈ ritu·ly
+TOMESERPENTIS                   Kniha Serpentis
+TOMEFAITH                       Kniha VÌry
+
+// containers
+CHEST                           Pokladnice
+FOOTLOCKER                      Sk¯ÌÚka
+SUITCASE                        Kufr
+CRATE                           Bedna
+CARDBOARDBOX                    Lepenkov· kKrabice
+
+// quest Items
+LOCKET                          MedailÛn Sv. Jude
+NODFRAGMENT                     Kniha kousku Nodu
+SHEM                            Maqqabah˘v äÈm
+ECATERINAVITAE                  Ecaterinin ûivot
+RELIQUARY                       Relikvi·¯ Sv. George
+INVITATION                      Pozv·nka na slavnost Orsiho
+SHACKLES                        Lutherova pouta
+SKYLIGHTKEY                     KlÌË svÏtlÌku Stephansdomu
+ARCANULUM                       Kusy Arcanula
+TREMEREAMULET                   Amulet Tremere
+ETRIUSJOURNAL                   DenÌk Etriuse
+IRONKEY                         éelezn˝ klÌË k Lond˝nskÈ vÏûi
+LUCRETIAHEART                   Srdce Lucretie
+INTERPOLID                      ID Interpolu
+TRANSMITTER                     Dev/Null r·diov˝ vysÌlaË
+ACCESSCODE                      Giovanniho p¯ÌstupovÈ kÛdy ke skladu
+ORSIPORTRAIT                    Orsiho krevnÌ portrÈt
+BLOODPALETTE                    KrevnÌ paleta
+ANATHEMAVITAE                   Ampulka ûivota Anathemy
+
+// mystery quest Items
+ARDANMANIFEST                   Ardan˘v projev
+BONEKEY                         KostnÌ klÌË
+BLOODPACT                       KrevnÌ smlouva
+GARINOLJOURNAL                  Garinol˘v denÌk
+MERCURIOPLOT                    Mercuri˘v pozemek
+LAMIASKULL                      Lebka Lamii
+
+// Haven items
+SAVE                            Uloûit
+VAULT                           Truhla
+REST                            OdpoËinek
+PORTAL                          JÌt k propasti
+
+// Props
+APPARATUSWITHCORPSE             Za¯ÌzenÌ s mrtvolou
+BANNER                          Transparent
+BARREL                          Sud
+BASKET                          Koö
+BENCH                           Lavice
+BLOODVATS                       ZniËenÈ krevnÌ n·drûe
+BOAT                            »lun
+BONES                           Kosti
+BUCKET                          KbelÌk
+CANDELABRA                      SvÌcen
+CANDLE                          SvÌce
+CARTEMPTY                       Pr·zdn˝ vozÌk
+CARTFULL                        Pln˝ vozÌk
+CHARTBRAIN                      Mozkov˝ graf
+CHARTHEART                      SrdeËnÌ graf
+CHARTMUSCLE                     Energetick˝ graf
+CHANDELIER                      Lustr
+CHEST_GOLDISH                   Zlacen· sk¯ÌÚka
+COFFIN                          Rakev
+COFFINLID                       VÌko rakve
+CORPSE                          Mrtvola
+CRUSHER                         DrtiË
+CURTAIN                         Opona
+DOOR                            Dve¯e
+FLAG                            Vlajka
+FLASK                           LahviËka
+FLASK_BLUE                      Modr· lahviËka
+FLASK_GREEN                     Zelen· lahviËka
+FLASK_RED                       Rud· lahviËka
+FLASK_TALLCYAN                  Velk· modrozelen· lahviËka
+FLASK_TALLORANGE                Velk· oranûov· lahviËka
+HOE                             Motyka
+LANTERN                         Lucerna
+MINECART                        D˘lnÌ vozÌk
+MINECART_AXEL                   Sekera
+MINECART_DAMAGED                ZniËen˝ d˘lnÌ vozÌk
+MINECART_WHEEL                  Kolo
+PICK                            Krump·Ë
+PITCHER                         Dûb·n
+SAW                             Pila
+SEWERSKIFF                      Skif
+SHOVEL                          Lopata
+SIGN                            Znak
+SKULL                           Lebka
+SKULLCANDLES                    Lebka k nasazenÌ svÌce
+STONEHAND                       Kamenn· ruka
+STONEGARGOYLE                   Kamenn· Gargoyla
+TABLE                           St˘l
+TONGS                           KleötÏ
+TREE                            Strom
+TREEROOT                        Ko¯en stromu
+
+// modern Props
+COMPUTER                        PoËÌtaË
+HANDTRUCK                       Nakl·daË
+LAMP                            Lampa
+OILDRUM                         Sud Oleje
+HAZDRUM                         Sud s hazardnÌm materi·lem
+PALETTEJACK                     Paleù·k
+PHONEBOOTH                      TelefonnÌ budka
+STANCHION                       Sloup
+STREETLIGHT                     PouliËnÌ osvÏtlenÌ
+TRASHCAN                        Popelnice
+OTTOVAN				Ottova dod·vka
+
+// ............................................................................ 
+// game messages
+// ............................................................................ 
+
+CODEX_TRAININGPICKUPSWORD       Pouûij svou myö, lev˝m klikem na meË, tento sebereö.
+CODEX_TRAININGWEARSWORD         Otev¯i Invent·¯nÌ OkÈnko a umÌsti meË do Christofovy ruky.
+CODEX_TRAININGATTACKSZLACHTA    Klikni na älechtu k za˙toËenÌ.
+
+CODEX_THREELEVERSHINT           Nep¯ibliûuj se k otev¯enÈmu svÏtlÌku.
+CODEX_FIVEBUTTONDOOR            PodÌvej se do zrcadla.
+
+STE2_BUTTON1                    TlaËÌtko 1
+STE2_BUTTON2                    TlaËÌtko 2
+STE2_BUTTON3                    TlaËÌtko 3
+STE2_BUTTON4                    TlaËÌtko 4
+STE2_BUTTON5                    TlaËÌtko 5
+
+STE3_TIMER_5_SECONDS            M·ö 5 vte¯in k aktivov·nÌ druhÈ p·ky.
+STE3_PUZZLE_COMPLETE            P·ky zapadlÈ, dve¯e otev¯enÈ.
+STE3_PUZZLE_RESET               P·ky vynulov·ny.
+
+HHX1_ARCPIECE1PLACED            Kus Arcanula umÌstÏn.
+HHX1_ARCPIECE2PLACED            Kus Arcanula umÌstÏn.
+HHX1_ARCPIECE3PLACED            Kus Arcanula umÌstÏn.
+HHX1_ARCDOOROPENED              Dve¯e Arcanula teÔ umoûÚujÌ pr˘chod do Etriusovy komnaty.
+HHX1_ARCDOORSTILLLOCKED         Dve¯e Arcanula nesch˘dnÈ - najdi kusy Arcanula k zÌsk·nÌ p¯Ìstupu.
+
+SEW1_LEVER1                     VypouötÏcÌ ventil #1
+SEW1_LEVER2                     VypouötÏcÌ ventil #2
+SEW1_LEVER1OPENED               VypouötÏcÌ ventil #1 otev¯en.
+SEW1_LEVER2OPENED               VypouötÏcÌ ventil #2 otev¯en.
+SEW1_DOOROPENED                 Pr˘chod otev¯en.
+
+SEW2_LEVER1                     ObÏhov˝ ventil #1
+SEW2_LEVER2                     ObÏhovy ventil #2
+SEW2_LEVER3                     ObÏhov˝ ventil #3
+SEW2_LEVER1OPENED               ObÏhov˝ ventil #1 otev¯en.
+SEW2_LEVER2OPENED               ObÏhov˝ ventil #2 otev¯en.
+SEW2_LEVER3OPENED               ObÏhov˝ ventil #3 otev¯en.
+SEW2_RAILPUZZLERESET            Zdroj nestabilnÌ, okruh vynulov·n.
+SEW2_RAILPUZZLESOLVED           Zdroj vypnut.
+
+JUNCTIONBOX                     FBI CC Line #204
+
+BACKTOPRAGUE_LOCKED             NenÌ moûno teÔ odejÌt.
+
+GEN_CLICKOPENDOOR               Klikni k otev¯enÌ dve¯Ì
+GEN_CLICKTURNWHEEL              Klikni k otoËenÌ kola
+GEN_CLICKPULLLEVER              Klikni k pohnutÌ s p·kou
+GEN_CLICKPUSHBUTTON             Klikni ke stisknutÌ tlaËÌtka
+GEN_DOORLOCKED			           ZamËeno...
+GEN_DOORUNLOCKED			        OdemËeno...
+GEN_DOOR                        Dve¯e
+GEN_HIDDENDOOR                  UkrytÈ dve¯e
+GEN_GATE                        Br·na
+GEN_GATELOCKED                  ZamËeno...
+GEN_ELEVATORDOOR                V˝tah
+GEN_SWITCH                      VypÌnaË
+GEN_OPENELSEWHERE               Otev¯elo se to jinde.
+
+SAVE_NOTAVAILABLE               UloûenÌ (NenÌ dostupnÈ)
+
+// ............................................................................ 
+// Chronicles
+// ............................................................................ 
+
+PRAGUE                          Praha
+VIENNA                          VÌdeÚ
+//PRAGUE2                         N·vrat do Prahy
+LONDON                          Lond˝n
+NEW_YORK                        New York
+
+// ............................................................................ 
+// scene messages
+// ............................................................................ 
+
+SCENE_ERROR_NOSHORTDESC         Nemohu najÌt kr·tk˝ popis scÈny.
+SCENE_ERROR_NOLONGDESC          Nemohu najÌt dlouh˝ popis scÈny.
+
+// ............................................................................ 
+// Shop names
+// ............................................................................ 
+
+SMITHY                          Kov·rna
+UNORNASHOP                      Unornin obchod
+WEAPONSMITHSHOP                 Kov·rna zbranÌ
+ORDEROFHERMES                   ÿ·d Herm˘
+OTTOVAN                         Ottova dod·vka
+CURIOSHOP                       StaroûitnictvÌ
+GUNHAVEN                        Azyl zbranÌ
+NEWMOON                         Nov˝ MÏsÌc
+
+// ............................................................................ 
+// misc UI
+// ............................................................................ 
+UI_NO_SCENE_LOADED				Nenahr·la se scÈna.
+
+UI_SCENE						ScÈna:
+UI_LEVEL						⁄roveÚ:
+UI_VERSION						Verze
+

@@ -1,0 +1,27 @@
+// ****************************************************************************
+//
+// CHRONICLES.NLS
+//
+// Chronicle name string table
+//
+// ****************************************************************************
+
+// ............................................................................ 
+// MP Chronicle names
+// ............................................................................ 
+
+MP_CurseDarkness     K Prokletí Temnoty
+MP_LeavesThree       Opustit Trojici
+
+MP_Prague_Null       Noèní Praha (Prázdné)
+MP_Vienna_Null       Noèní Vídeò (Prázdné)
+MP_London_Null       Noèní Londýn (Prázdné)
+MP_New_York_Null     Noèní New York (Prázdné)
+
+MP_DAInn             Hostinec Temných Vìkù (Prázdný Salon)
+MP_PrinceMansion     Princovo Sídlo (Prázdný Salon)
+MP_RaveClub          Rave Klub (Prázdný Salon)
+
+
+
+

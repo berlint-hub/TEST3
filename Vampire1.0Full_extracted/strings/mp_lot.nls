@@ -1,0 +1,235 @@
+// ****************************************************************************
+//
+// MP_LOT.NLS
+//
+// Leaves of Three-specific string table
+//
+// ****************************************************************************
+
+
+// ............................................................................ 
+// Actors
+// ............................................................................ 
+ARIANNA                         Arianna
+BILL                            Bill Campbell
+DOMINIC                         Dominic
+JOHNSTON                        Johnston
+HEAVYG                          HeavyG
+TRACI                           Traci
+LUCINDE                         Lucinde
+LUKE                            Luke
+MICHAELA                        Michaela
+MIRABILIS                       Mirabilis
+MRSCHRECK                       Mr. Schreck
+SHRECK	                       Mr. Schreck
+SMASHFACE	                    Rozbitej Ksicht
+
+// ............................................................................ 
+// Quests
+// ............................................................................ 
+
+Q_GREETPRIMOGEN_S               Setk·nÌ s Primogenem v Barclay Vestibulu.
+Q_GREETPRIMOGEN_L               Po prohlÈdnutÌ svÈho azylu, se vraù do JiûnÌho Vestibulu Barclay k setk·nÌ s Billem a promluv si o p¯Ìchodu do Primogenu.
+Q_RETURNTOHAVEN_S               N·vrat do tvÈho azylu.
+Q_RETURNTOHAVEN_L               Vraù se do svÈho hotelovÈho pokoje v JiûnÌm Barclay a odpoËiÚ si.
+Q_FINDDOMINIC_S                 NajÌt Dominica.
+Q_FINDDOMINIC_L                 Najdi Dominic˘v Chudinsk˝ Pokoj v Centru New Yorku.
+Q_BLOODPACT_S                   NajÌt Smlouvu Krve.
+Q_BLOODPACT_L                   Najdi a zÌskej zpÏt Smlouvu Krve z ˙trob skladiötÏ.
+Q_INVADEWAREHOUSE_S             P¯epadnout Dominicovo SkladiötÏ.
+Q_INVADEWAREHOUSE_L             P¯epadni Dominicovo SkladiötÏ v Centru New Yorku.
+Q_SEWERPASSAGE_S                Vstoupit do Vestibulu Barclay z Kan·l˘.
+Q_SEWERPASSAGE_L                Pouûij Kan·ly k nalezenÌ tajnÈho vchodu do Vestibulu Barclay.
+
+
+// ............................................................................ 
+// Level Names
+// ............................................................................ 
+BARCLAYLOBBY					JiûnÌ Vestibul Barclay
+NEWYORKDOCKS					Centrum New Yorku (Oblast Dok˘)
+NEWYORKUPTOWN					Okraj New Yorku
+FACTORY1						Tov·rna Patro 1
+FACTORY2						Tov·rna Patro 2
+FACTORY3						Tov·rna Patro 3
+FACTORY4						Tov·rna Patro 4
+SEWERS1							Kan·ly Patro 1
+SEWERS2							Kan·ly Patro 2
+SEWERS3							Kan·ly Patro 3
+SEWERS4							Kan·ly Patro 4
+WAREHOUSE1						SkladiötÏ Patro 1
+WAREHOUSE2						SkladiötÏ Patro 2
+WAREHOUSE3						SkladiötÏ Patro 3
+GUNHAVEN						Azyl ZbranÌ
+NEWMOON							Nov˝ MÏsÌc
+APARTMENT						OpuötÏn˝ Byt
+SLUMROOM						Chudinsk˝ Pokoj
+SUITEHAVEN						ÿada ⁄tulk˘ v JiûnÌm Barclay
+
+// ............................................................................ 
+// Scenes
+// ............................................................................ 
+
+DOCK_LOT_1_1S					Centrum New Yorku (Oblast Dok˘)
+DOCK_LOT_1_1L                   Scene 1.1 - Centrum New Yorku (Oblast Dok˘)
+UTWN_LOT_1_1S					Okraj New Yorku
+UTWN_LOT_1_1L					Scene 1.1 - Okraj New Yorku 
+GUNH_LOT_1_1S					Azyl ZbranÌ
+GUNH_LOT_1_1L					Scene 1.1 - Azyl ZbranÌ
+NEWM_LOT_1_1S					Nov˝ MÏsÌc
+NEWM_LOT_1_1L					Scene 1.1 - Nov˝ MÏsÌc
+LOBY_LOT_1_1S					JiûnÌ Vestibul Barclay
+LOBY_LOT_1_1L					Scene 1.1 - JiûnÌ Vestibul Barclay
+SUIT_LOT_1_1S					ÿada ⁄tulk˘
+SUIT_LOT_1_1L					Scene 1.1 - ÿada ⁄tulk˘
+LOBY_LOT_2_1S					JiûnÌ Vestibul Barclay 
+LOBY_LOT_2_1L                   Scene 2.1 - JiûnÌ Vestibul Barclay
+LOBY_LOT_3_1S                   JiûnÌ Vestibul Barclay
+LOBY_LOT_3_1L                   Scene 3.1 - JiûnÌ Vestibul Barclay
+LOBY_LOT_5_1S                   JiûnÌ Vestibul Barclay
+LOBY_LOT_5_1L                   Scene 5.1 - JiûnÌ Vestibul Barclay
+FAC1_LOT_5_1S					Tov·rna Patro 1
+FAC1_LOT_5_1L                   Scene 5.1 - Tov·rna Patro 1
+FAC2_LOT_5_1S                   Tov·rna Patro 2
+FAC2_LOT_5_1L                   Scene 5.1 - Tov·rna Patro 2
+FAC3_LOT_5_1S                   Tov·rna Patro 3
+FAC3_LOT_5_1L                   Scene 5.1 - Tov·rna Patro 3
+FAC4_LOT_5_1S                   Tov·rna Patro 4
+FAC4_LOT_5_1L                   Scene 5.1 - Tov·rna Patro 4
+SLUM_LOT_7_1S					Chudinsk˝ Pokoj
+SLUM_LOT_7_1L                   Scene 7.1 - Chudinsk˝ Pokoj
+DEVN_LOT_8_1S					OpuötÏn˝ Byt
+DEVN_LOT_8_1L                   Scene 8.1 - OpuötÏn˝ Byt
+UTWN_LOT_9_1S					Okraj New Yorku  
+UTWN_LOT_9_1L                   Scene 9.1 - Okraj New Yorku
+WAR1_LOT_11_1S					SkladiötÏ Patro 1
+WAR1_LOT_11_1L                  Scene 11.1 - SkladiötÏ Patro 1
+WAR2_LOT_11_1S                  SkladiötÏ Patro 2
+WAR2_LOT_11_1L                  Scene 11.1 - SkladiötÏ Patro 2
+WAR3_LOT_11_1S                  SkladiötÏ Patro 3
+WAR3_LOT_11_1L                  Scene 11.1 - SkladiötÏ Patro 3
+LOBY_LOT_12_1S					JiûnÌ Vestibul Barclay
+LOBY_LOT_12_1L                  Scene 12.1 - JiûnÌ Vestibul Barclay
+SEW1_LOT_12_1S					Kan·ly Patro 1
+SEW1_LOT_12_1L                  Scene 12.1 - Kan·ly Patro 1
+SEW2_LOT_12_1S                  Kan·ly Patro 2
+SEW2_LOT_12_1L                  Scene 12.1 - Kan·ly Patro 2
+SEW3_LOT_12_1S                  Kan·ly Patro 3
+SEW3_LOT_12_1L                  Scene 12.1 - Kan·ly Patro 3
+SEW4_LOT_12_1S                  Kan·ly Patro 4
+SEW4_LOT_12_1L                  Scene 12.1 - Kan·ly Patro 4
+
+// ............................................................................ 
+// ST Scene advancement labels
+// ............................................................................ 
+
+LOT_SCENE_1_1					P¯edvol·nÌ
+LOT_SCENE_2_1 					P¯Ìchody
+LOT_SCENE_3_1 					Konkl·va
+LOT_SCENE_4_1 					Trefa
+LOT_SCENE_5_1 					ObÏtnÌ Ber·nci
+LOT_SCENE_6_1 					⁄tÏk
+LOT_SCENE_7_1 					Smlouva Krve
+LOT_SCENE_8_1 					T¯i Sestry
+LOT_SCENE_9_1 					ZpovÏÔ
+LOT_SCENE_10_1 				œ·blova Dohoda
+LOT_SCENE_11_1 				äÌlen· Tvrz
+LOT_SCENE_12_1 				Tajn˝ Pr˘chod
+LOT_SCENE_13_1 				Evidence
+
+// ............................................................................ 
+// Map labels
+// ............................................................................ 
+
+mapNYDocksMain       Centrum New Yorku (Oblast Dok˘)
+mapGiovanniWarehouse SkladiötÏ
+mapSewers            NYC Kan·ly
+mapDevNulls          OpuötÏn˝ Byt
+mapGunHaven          Azyl ZbranÌ
+mapNYMidtownMain     Okraj New Yorku
+mapCathedralOfFlesh  Katedr·la
+mapOrsisFactory      Tov·rna
+mapBarclaySouth      JiûnÌ Barclay
+mapNewMoon           Nov˝ MÏsÌc
+
+// ............................................................................ 
+// Description ID for Doors/Exits
+// ............................................................................ 
+
+DOCK_EXIT_DESC_1        Azyl ZbranÌ
+DOCK_EXIT_DESC_1_L      Azyl ZbranÌ (ZamËeno)
+DOCK_EXIT_DESC_2        Kan·ly
+DOCK_EXIT_DESC_2_L      Kan·ly (ZamËeno)
+DOCK_EXIT_DESC_3        Okraj New Yorku
+DOCK_EXIT_DESC_3_L      Okraj New Yorku (ZamËeno)
+DOCK_EXIT_DESC_4        OpuötÏn˝ Byt
+DOCK_EXIT_DESC_4_L      OpuötÏn˝ Byt (ZamËeno)
+DOCK_EXIT_DESC_5        SkladiötÏ
+DOCK_EXIT_DESC_5_L      SkladiötÏ (ZamËeno)
+DOCK_EXIT_DESC_6        Chudinsk˝ Pokoj
+DOCK_EXIT_DESC_6_L      Chudinsk˝ Pokoj (ZamËeno)
+                        
+UTWN_EXIT_DESC_0	      Taxi do Dok˘ New Yorku
+UTWN_EXIT_DESC_0_L	   Taxi do Dok˘ New Yorku (ZamËeno)
+UTWN_EXIT_DESC_2        Vestibul JiûnÌho Barclay
+UTWN_EXIT_DESC_2_L      Vestibul JiûnÌho Barclay (ZamËeno)
+UTWN_EXIT_DESC_3        Orsiho Tov·rna
+UTWN_EXIT_DESC_3_L      Orsiho Tov·rna (ZamËeno)
+UTWN_EXIT_DESC_4        Nov˝ MÏsÌc
+UTWN_EXIT_DESC_4_L      Nov˝ MÏsÌc (ZamËeno)
+                        
+FAC1_EXIT_DESC_0	   Tov·rna Mezipatro 1
+FAC1_EXIT_DESC_0_L	Tov·rna Mezipatro 1 (ZamËeno)
+FAC1_EXIT_DESC_1	   Tov·rna Mezipatro 2
+FAC1_EXIT_DESC_1_L	Tov·rna Mezipatro 2 (ZamËeno)
+FAC2_EXIT_DESC_0	   Tov·rna Mezipatro 2
+FAC2_EXIT_DESC_0_L	Tov·rna Mezipatro 2 (ZamËeno)
+FAC2_EXIT_DESC_1	   Tov·rna Mezipatro 3
+FAC2_EXIT_DESC_1_L	Tov·rna Mezipatro 3 (ZamËeno)
+FAC3_EXIT_DESC_0	   Tov·rna Mezipatro 3
+FAC3_EXIT_DESC_0_L	Tov·rna Mezipatro 3 (ZamËeno)
+FAC3_EXIT_DESC_1	   Tov·rna Mezipatro 4
+FAC3_EXIT_DESC_1_L	Tov·rna Mezipatro 4 (ZamËeno)
+
+FAC4_EXIT_DESC_0	   Okraj New Yorku
+FAC4_EXIT_DESC_0_L	Okraj New Yorku (ZamËeno)
+FAC4_EXIT_DESC_1	   K Tov·rnÏ Patro 1
+FAC4_EXIT_DESC_1_L	K Tov·rnÏ Patro 1 (ZamËeno)
+FAC4_EXIT_DESC_3	   K Tov·rnÏ Patro 2
+FAC4_EXIT_DESC_3_L	K Tov·rnÏ Patro 2 (ZamËeno)
+FAC4_EXIT_DESC_5	   K Tov·rnÏ Patro 3
+FAC4_EXIT_DESC_5_L	K Tov·rnÏ Patro 3 (ZamËeno)
+
+LOBY_EXIT_DESC_1        Okraj New Yorku
+LOBY_EXIT_DESC_1_L      Okraj New Yorku (ZamËeno)
+LOBY_EXIT_DESC_3        Kan·ly
+LOBY_EXIT_DESC_3_L      Kan·ly (ZamËeno)
+LOBY_EXIT_DESC_4        ÿada ⁄tulk˘
+LOBY_EXIT_DESC_4_L      ÿada ⁄tulk˘ (ZamËeno)
+                        
+SEW1_EXIT_DESC_0        Doky New Yorku
+SEW1_EXIT_DESC_1	      Dol˘ do Kan·l˘ New Yorku 2
+SEW2_EXIT_DESC_0	      Nahoru do Kan·l˘ New Yorku 1
+SEW2_EXIT_DESC_1	      Dol˘ do Kan·l˘ New Yorku 3 
+SEW3_EXIT_DESC_0	      Nahoru do Kan·l˘ New Yorku 2
+SEW3_EXIT_DESC_1	      Dol˘ do Kan·l˘ New Yorku 4 
+SEW4_EXIT_DESC_0	      Nahoru do Kan·l˘ New Yorku 3                        
+SEW4_EXIT_DESC_1        Vestibul JiûnÌho Barclay
+                        
+WAR1_EXIT_DESC_1        Doky New Yorku
+WAR1_EXIT_DESC_2	      Dol˘ do SkladiötÏ 2
+WAR2_EXIT_DESC_1	      Nahoru do SkladiötÏ 1
+WAR2_EXIT_DESC_2	      Dol˘ do SkladiötÏ 3
+WAR3_EXIT_DESC_1	      Nahoru do SkladiötÏ 2
+WAR3_EXIT_DESC_2	      Nahoru do SkladiötÏ 1
+
+GUNH_EXIT_DESC_1        Doky New Yorku
+                        
+NEWM_EXIT_DESC_1        Okraj New Yorku
+                        
+DEVN_EXIT_DESC_1        Doky New Yorku
+                        
+SLUM_EXIT_DESC_1        Doky New Yorku
+SLUM_EXIT_DESC_1_L      Doky New Yorku (ZamËeno)
+                        
+SUIT_EXIT_DESC_1        Vestibul JiûnÌho Barclay
+SUIT_EXIT_DESC_1_L      Vestibul JiûnÌho Barclay (ZamËeno)

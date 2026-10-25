@@ -1,0 +1,199 @@
+// ****************************************************************************
+//
+// LONDON.NLS
+//
+// London-specific string table
+//
+// ****************************************************************************
+
+// ............................................................................ 
+// Quests
+// ............................................................................ 
+
+Q_ESCAPESOCIETY_S				Útìk z Klubu Leopold.
+Q_ESCAPESOCIETY_L				Osvoboï se ze spárù Lovce Vampírù a uteè do ulic Londýna.
+Q_FINDSHIPPINGSOURCE_S			Najít zdroj nákladù.
+Q_FINDSHIPPINGSOURCE_L			Prozkoumej Londýn a najdi klíè k pozemní pøepravì z Prahy.
+Q_INFILTRATESETITE_S			Vniknout do doupìte Setitù.
+Q_INFILTRATESETITE_L			Vnikni do azylu Setitù ukrytého uvnitø divadla ve Východním Londýnì.
+Q_FINDHEART_S					Najít Srdce Lucretie.
+Q_FINDHEART_L					Získej Srdce Lucretie z Londýnské Vìže ve Východním Londýnì.
+Q_RETURNHEART_S					Vrátit ho Lucretii.
+Q_RETURNHEART_L 		        Vymìò ho s Lucretií za zjištìní, kde se nachází náklad a osvoboï Lily z jejího Krvavého Pouta.
+Q_BOARDMAGDELENA_S		        Nalodìní na Sv. Magdelenu.
+Q_BOARDMAGDELENA_L		        Propliž se palubou nákladní lodi Sv. Magdelena ve Východním Londýnì, a odpluj do Ameriky.
+
+// ............................................................................ 
+// Levels
+// ............................................................................ 
+SOCIETYOFLEOPOLD3				Klub Leopold 3
+SOCIETYOFLEOPOLD2				Klub Leopold 2
+SOCIETYOFLEOPOLD1				Klub Leopold 1
+WESTLONDON						Západní Londýn
+EASTLONDON						Východní Londýn
+TOWEROFLONDON1					Londýnská Vìž 1
+TOWEROFLONDON2					Londýnská Vìž 2
+TOWEROFLONDON3                  Londýnská Vìž 3
+TOWEROFLONDON4                  Londýnská Vìž 4
+BRIDGE							Pøístavní Most
+BROTHEL							Dìjištì Bordel
+SETITETEMPLE1					Setite Chrám 1
+SETITETEMPLE2					Setite Chrám 2
+SETITETEMPLE3					Setite Chrám 3
+SETITETEMPLE4					Setite Chrám 4
+CURIOSHOP						Starožitnictví
+CLUBTENEBRAE					Klub Tenebrae
+CARGOSHIP						Nákladní Loï Sv. Magdalena
+
+// ............................................................................ 
+// Scenes
+// ............................................................................ 
+
+SOC3_27_2S						Klub Leopold 3
+SOC3_27_2L                      Scéna 27.2 - Klub Leopold 3
+SOC2_27_2S                      Klub Leopold 2
+SOC2_27_2L                      Scéna 27.2 - Klub Leopold 2
+SOC1_27_2S                      Klub Leopold 1
+SOC1_27_2L                      Scéna 27.2 - Klub Leopold 1
+WEST_28_1S                      Západní Londýn
+WEST_28_1L                      Scéna 28.1 - Západní Londýn
+WEST_28_4S                      Západní Londýn
+WEST_28_4L                      Scéna 28.4 - Západní Londýn
+EAST_28_1S                      Východní Londýn
+EAST_28_1L                      Scéna 28.1 - Východní Londýn
+EAST_28_4S                      Východní Londýn
+EAST_28_4L                      Scéna 28.4 - Východní Londýn
+HAVN_28_1S						Pøístavní Most
+HAVN_28_1L						Scéna 28.1 - Pøístavní Most
+HAVN_28_4S						Pøístavní Most
+HAVN_28_4L						Scéna 28.4 - Pøístavní Most
+TEN1_28_1S						Klub Tenebrae
+TEN1_28_1L						Scéna 28.1 - Klub Tenebrae
+CURI_28_4S						Starožitnictví
+CURI_28_4L						Scéna 28.4 - Starožitnictví
+BROT_29_1S						Dìjištì Bordel
+BROT_29_1L						Scéna 29.1 - Dìjištì Bordel
+SET1_29_2S						Setite Chrám 1
+SET1_29_2L						Scéna 29.2 - Setite Chrám 1
+SET2_29_2S						Setite Chrám 2
+SET2_29_2L						Scéna 29.2 - Setite Chrám 2 
+SET3_29_2S						Setite Chrám 3
+SET3_29_2L                      Scéna 29.2 - Setite Chrám 3
+SET4_29_2S						Setite Chrám 4
+SET4_29_2L                      Scéna 29.2 - Setite Chrám 4
+EAST_30_1S                      Východní Londýn
+EAST_30_1L                      Scéna 30.1 - Východní Londýn
+TOL1_30_1S						Londýnská Vìž 1
+TOL1_30_1L						Scéna 30.1 - Londýnská Vìž 1
+TOL2_30_1S						Londýnská Vìž 2
+TOL2_30_1L						Scéna 30.1 - Londýnská Vìž 2
+TOL3_30_1S						Londýnská Vìž 3
+TOL3_30_1L						Scéna 30.1 - Londýnská Vìž 3
+TOL4_30_1S						Londýnská Vìž 4
+TOL4_30_1L						Scéna 30.1 - Londýnská Vìž 4
+BROT_31_1S						Dìjištì Bordel
+BROT_31_1L						Scéna 31.1 - Dìjištì Bordel
+SET4_31_1S						Setite Bordel 4
+SET4_31_1L						Scéna 31.1 - Setite Bordel 4
+EAST_32_1S                      Východní Londýn
+EAST_32_1L                      Scéna 32.1 - Východní Londýn
+CARG_32_1S						Nákladní Loï Sv. Magdalena
+CARG_32_1L                      Scéna 32.1 - Nákladní Loï Sv. Magdalena
+
+// ............................................................................ 
+// Map labels
+// ............................................................................ 
+
+mapLondonEastMain          Východní Londýn
+mapSetiteBrothel           Dìjištì Bordel
+mapStMagdalena             Nákladní Loï Sv. Magdalena
+mapBridgeHaven             Pøístavní Most
+mapTowerOfLondon           Londýnská Vìž
+mapLondonWestMain          Západní Londýn
+mapCurioShop               Starožitnictví
+mapSocietyOfLeopold        Klub Leopold
+mapClubTenebrae            Klub Tenebrae
+
+// ............................................................................ 
+// Description ID for Doors/Exits
+// ............................................................................ 
+
+SOC1_EXIT_DESC_1           Západní Londýn
+SOC1_EXIT_DESC_1_L         Západní Londýn (Zamèeno)
+SOC3_EXIT_DESC_1				Nahoru do Klubu Leopolda 2
+SOC3_EXIT_DESC_1_L			Nahoru do Klubu Leopolda 2 (Zamèeno)
+SOC2_EXIT_DESC_1				Dolù do Klubu Leopolda 3
+SOC2_EXIT_DESC_1_L			Dolù do Klubu Leopolda 3 (Zamèeno)
+SOC2_EXIT_DESC_2				Nahoru do Klubu Leopolda 1
+SOC2_EXIT_DESC_2_L			Nahoru do Klubu Leopolda 1 (Zamèeno)
+SOC1_EXIT_DESC_2				Dolù do Klubu Leopolda 2
+SOC1_EXIT_DESC_2_L			Dolù do Klubu Leopolda 2 (Zamèeno)
+
+WEST_EXIT_DESC_0           Klub Leopolda
+WEST_EXIT_DESC_0_L         Klub Leopolda (Zamèeno)
+WEST_EXIT_DESC_1           Starožitnictví
+WEST_EXIT_DESC_1_L         Starožitnictví (Zamèeno)
+WEST_EXIT_DESC_2				Podzemí k Východnímu Londýnu
+WEST_EXIT_DESC_2_L			Podzemí k Východnímu Londýnu (Zamèeno)
+WEST_EXIT_DESC_3           Klub Tenebrae
+WEST_EXIT_DESC_3_L         Klub Tenebrae (Zamèeno)
+
+EAST_EXIT_DESC_0	        	Podzemí Západního Londýna
+EAST_EXIT_DESC_0_L	      Podzemí Západního Londýna (Zamèeno)
+EAST_EXIT_DESC_1           Londýnská Vìž
+EAST_EXIT_DESC_1_L         Londýnská Vìž (Zamèeno)
+EAST_EXIT_DESC_2           Pøístavní Most
+EAST_EXIT_DESC_2_L         Pøístavní Most (Zamèeno)
+EAST_EXIT_DESC_3           Nákladní Loï
+EAST_EXIT_DESC_3_L         Nákladní Loï (Zamèeno)
+EAST_EXIT_DESC_4           Bordel
+EAST_EXIT_DESC_4_L         Bordel (Zamèeno)
+
+TOL1_EXIT_DESC_0           Východní Londýn
+TOL1_EXIT_DESC_0_L         Východní Londýn (Zamèeno)
+TOL1_EXIT_DESC_1           Nahoru do Londýnské Vìže 2
+TOL1_EXIT_DESC_1_L         Nahoru do Londýnské Vìže 2 (Zamèeno)
+TOL2_EXIT_DESC_0           Dolù do Londýnské Vìže 1
+TOL2_EXIT_DESC_0_L         Dolù do Londýnské Vìže 1 (Zamèeno)
+TOL2_EXIT_DESC_1           Nahoru do Londýnské Vìže 3
+TOL2_EXIT_DESC_1_L         Nahoru do Londýnské Vìže 3 (Zamèeno)
+TOL3_EXIT_DESC_0           Dolù do Londýnské Vìže 2
+TOL3_EXIT_DESC_0_L         Dolù do Londýnské Vìže 2 (Zamèeno)
+TOL3_EXIT_DESC_1           Nahoru do Londýnské Vìže 4
+TOL3_EXIT_DESC_1_L         Nahoru do Londýnské Vìže 4 (Zamèeno)
+TOL4_EXIT_DESC_0           Dolù do Londýnské Vìže 3
+TOL4_EXIT_DESC_0_L         Dolù do Londýnské Vìže 3 (Zamèeno)
+
+
+BROT_EXIT_DESC_1           Východní Londýn
+BROT_EXIT_DESC_1_L         Východní Londýn (Zamèeno)
+BROT_EXIT_DESC_2           Setite Chrám
+BROT_EXIT_DESC_2_L         Setite Chrám (Zamèeno)
+
+SET1_EXIT_DESC_1           Bordel
+SET1_EXIT_DESC_1_L         Bordel (Zamèeno)
+SET1_EXIT_DESC_2				Dolù do Chrámu Setite 2
+SET1_EXIT_DESC_2_L			Dolù do Chrámu Setite 2 (Zamèeno)
+SET2_EXIT_DESC_1				Nahoru do Chrámu Setite 1
+SET2_EXIT_DESC_1_L			Nahoru do Chrámu Setite 1 (Zamèeno)
+SET2_EXIT_DESC_2				Dolù do Chrámu Setite 3
+SET2_EXIT_DESC_2_L			Dolù do Chrámu Setite 3 (Zamèeno)
+SET3_EXIT_DESC_1				Nahoru do Chrámu Setite 2
+SET3_EXIT_DESC_1_L			Nahoru do Chrámu Setite 2 (Zamèeno)
+SET3_EXIT_DESC_2				Dolù do Chrámu Setite 4
+SET3_EXIT_DESC_2_L			Dolù do Chrámu Setite 4 (Zamèeno)
+SET4_EXIT_DESC_1				Nahoru do Chrámu Setite 3
+SET4_EXIT_DESC_1_L		   Nahoru do Chrámu Setite 3 (Zamèeno)
+
+CARG_EXIT_DESC_1           Východní Londýn
+CARG_EXIT_DESC_1_L         Východní Londýn (Zamèeno)
+
+HAVN_EXIT_DESC_1           Východní Londýn
+HAVN_EXIT_DESC_1_L         Východní Londýn (Zamèeno)
+
+CURI_EXIT_DESC_1           Západní Londýn
+CURI_EXIT_DESC_1_L         Západní Londýn (Zamèeno)
+
+TEN1_EXIT_DESC_1           Západní Londýn
+TEN1_EXIT_DESC_1_L         Západní Londýn (Zamèeno)
+

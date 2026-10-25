@@ -1,0 +1,364 @@
+// ****************************************************************************
+//
+// CREDITS.NLS
+//
+// Game credits string table
+//
+// ****************************************************************************
+
+CREDITS_TITLE_0000	Vampire: The Masquerade
+CREDITS_TITLE_0001	Redemption
+CREDITS_SUBTL_0002	<>
+CREDITS_TITLE_0010	AUTOØI
+CREDITS_SUBTL_0020	<>
+CREDITS_SUBTL_0030	<>
+
+// Nihilistic Credits
+CREDITS_TITLE_0040	-Nihilistic Software-
+CREDITS_SUBTL_0050	<>
+CREDITS_TITLE_0060	Vedoucí Projektu, Výtvarník
+CREDITS_SUBTL_0070	Ray Gresko
+CREDITS_SUBTL_0080	<>
+CREDITS_TITLE_0090	Hlavní Programátor
+CREDITS_SUBTL_0000	Robert Huebner
+CREDITS_SUBTL_0010	<>
+CREDITS_TITLE_0020	Hlavní Návrháø Levelù
+CREDITS_SUBTL_0030	Steve Tietze
+CREDITS_SUBTL_0040	<>
+CREDITS_TITLE_0050	Hlavní Grafik
+CREDITS_SUBTL_0060	Maarten Kraaijvanger
+CREDITS_SUBTL_0070	<>
+CREDITS_TITLE_0080	Návrháø
+CREDITS_SUBTL_0090	Jacob Stephens
+CREDITS_SUBTL_0100	<>
+CREDITS_TITLE_0110	Programátoøi
+CREDITS_SUBTL_0120	Yves Borckmans
+CREDITS_SUBTL_0130	Ingar Shu
+CREDITS_SUBTL_0140	<>
+CREDITS_TITLE_0150	Tvùrci Levelù
+CREDITS_SUBTL_0160	Steve Thoms
+CREDITS_SUBTL_0170	Brent McLeod
+CREDITS_SUBTL_0180	<>
+CREDITS_TITLE_0190	Grafici
+CREDITS_SUBTL_0200	Yujin Kiem
+CREDITS_SUBTL_0210	Anthony Chiang
+CREDITS_SUBTL_0220	Richard Servande
+CREDITS_SUBTL_0230	<>
+CREDITS_SUBTL_0240	<>
+
+// External Credits
+CREDITS_TITLE_0250   -Externí Vývoj-
+CREDITS_SUBTL_0260	<>
+CREDITS_TITLE_0270   Interaktivní Scénáø, Pøíbìh
+CREDITS_TITLE_0271   Rozšíøené Hlasové Pokyny 
+CREDITS_SUBTL_0280	Daniel Greenberg 
+CREDITS_SUBTL_0290	<>
+CREDITS_TITLE_0300   Video Scény
+CREDITS_SUBTL_0310	Oholoko Productions, Inc.
+CREDITS_SUBTL_0320	<>
+CREDITS_TITLE_0330   Zvuk a Mixáž
+CREDITS_SUBTL_0340   Nick Peck, Perceptive Sound Design
+CREDITS_SUBTL_0350	<>
+CREDITS_TITLE_0360   Hudba Temných Vìkù, Záznam Rozhovorù
+CREDITS_SUBTL_0370   Kevin Manthei, KMM Produkce
+CREDITS_SUBTL_0380	<>
+CREDITS_TITLE_0390   Moderní Denní Hudba
+CREDITS_SUBTL_0400   Chris Collins and Greg Forsberg, Youth Engine
+CREDITS_SUBTL_0410	<>
+CREDITS_TITLE_0420   Rozšíøená Moderní Hudba
+CREDITS_SUBTL_0430   Rob Ross, Sound endeavourS, Inc.
+CREDITS_SUBTL_0440	<>
+CREDITS_TITLE_0450   Rozšíøené Grafické Koncepty
+CREDITS_SUBTL_0460   Peter Chan
+CREDITS_SUBTL_0470   Patrick Lambert
+CREDITS_SUBTL_0480   Seung Hong
+CREDITS_SUBTL_0490   Kyushik Shim
+CREDITS_SUBTL_0500   Manuel Planck, Famous Frames, Inc.
+CREDITS_SUBTL_0510   Ronald Kee, Oholoko Produkce, Inc.
+CREDITS_SUBTL_0520	<>
+CREDITS_SUBTL_0530   QERadiant zdrojový kód licencován od id Software, Inc.
+CREDITS_SUBTL_0540	<>
+CREDITS_SUBTL_0541	Nìkteré nástroje založené na èásteèné práci
+CREDITS_SUBTL_0542   FreeType Týmu (www.freetype.org)
+CREDITS_SUBTL_0543	<>
+CREDITS_TITLE_0544   Stránky
+CREDITS_SUBTL_0545	Don Crew (Aristotle)
+CREDITS_SUBTL_0546	Scott St. Jean (Trail)
+CREDITS_SUBTL_0547	<>
+CREDITS_TITLE_0550   Hlasy Hercù
+CREDITS_SUBTL_0570	Nicholas Guest
+CREDITS_SUBTL_0580	Michael Benyear
+CREDITS_SUBTL_0590	Maggie Baird
+CREDITS_SUBTL_0600	Curtis Armstrong
+CREDITS_SUBTL_0610	Tara Charendoff
+CREDITS_SUBTL_0620	Joe Alaskey
+CREDITS_SUBTL_0630	Kevin Killebrew
+CREDITS_SUBTL_0640	Christine Burke
+CREDITS_SUBTL_0650	Mary Elizabeth McGlynn
+CREDITS_SUBTL_0660	John Vickery
+CREDITS_SUBTL_0670	Tom Wyner
+CREDITS_SUBTL_0680	Dan Woren
+CREDITS_SUBTL_0690	John Rafter Lee
+CREDITS_SUBTL_0700	Jason Spivak
+CREDITS_SUBTL_0710	Melodee Spevak
+CREDITS_SUBTL_0720	Robert Neches
+CREDITS_SUBTL_0730	Greg Ellis
+CREDITS_SUBTL_0740	Mary Weiss
+CREDITS_SUBTL_0741	<>
+CREDITS_TITLE_0742	Testování
+CREDITS_SUBTL_0743   David Silverstein
+CREDITS_SUBTL_0744   Joe Shackelford
+CREDITS_SUBTL_0745   Mark Cooke
+CREDITS_SUBTL_0746	<>
+CREDITS_SUBTL_0750	<>
+
+// White Wolf Credits
+CREDITS_TITLE_0751   -White Wolf Vydavatelství, Inc.-
+CREDITS_SUBTL_0752   Steve Wieck, Prezident
+CREDITS_SUBTL_0753   Chris McDonough, Vedoucí Poèítaèových Projektù
+CREDITS_SUBTL_0754   Mike Tinney, VP of Licence/Prodej
+CREDITS_SUBTL_0755   Justin Achilli, V:tM Projekce
+CREDITS_SUBTL_0756   John Chambers, Tvorba Manuálu
+CREDITS_SUBTL_0757	<>
+CREDITS_SUBTL_0758	<>
+
+// Activision Credits
+CREDITS_TITLE_0760   -Activision, Inc.-
+CREDITS_SUBTL_0770	<>
+CREDITS_TITLE_0780   Výroba
+CREDITS_SUBTL_0790   Chris Hewish
+CREDITS_SUBTL_0800	<>
+CREDITS_TITLE_0810   Globalní Brand Manažer
+CREDITS_SUBTL_0820   John Heinecke
+CREDITS_SUBTL_0830	<>
+CREDITS_TITLE_0840   Spolupráce Tisku
+CREDITS_SUBTL_0850   Michelle Nino
+CREDITS_SUBTL_0860	<>
+CREDITS_TITLE_0870   Vedoucí Výroby
+CREDITS_SUBTL_0880   Mark Lamia
+CREDITS_SUBTL_0890	<>
+CREDITS_TITLE_0900   Spolupráce Manažera
+CREDITS_SUBTL_0910   Jamey Gottlieb
+CREDITS_SUBTL_0920	<>
+CREDITS_TITLE_0930   VP v CS/QA
+CREDITS_SUBTL_0940   Jim Summers
+CREDITS_SUBTL_0950	<>
+CREDITS_TITLE_0960   Vedoucí Plánování
+CREDITS_SUBTL_0970   Tanya Langston
+CREDITS_SUBTL_0980	<>
+CREDITS_TITLE_0990   Externí Koordinátor Testu
+CREDITS_SUBTL_1000   Stacey Drellishak
+CREDITS_SUBTL_1010	<>
+CREDITS_TITLE_1020   QA Starší Vedoucí
+CREDITS_SUBTL_1030   Nadine Theuzillot
+CREDITS_SUBTL_1040	<>
+CREDITS_TITLE_1050   QA Vedoucí Projektu
+CREDITS_SUBTL_1060   Eric Lee
+CREDITS_SUBTL_1080	<>
+CREDITS_TITLE_1090	Zajištìní Testerù
+CREDITS_SUBTL_1100   Siôn Rodriguez y Gibson
+CREDITS_SUBTL_1110   Aaron Gray
+CREDITS_SUBTL_1120   Jim Hudson
+CREDITS_SUBTL_1130   Glenn Ige
+CREDITS_SUBTL_1140   Steve Rosenthal
+CREDITS_SUBTL_1150   Mike Stefan
+CREDITS_SUBTL_1160   Chris Toft
+CREDITS_SUBTL_1170   Jon Virtes
+CREDITS_SUBTL_1180	<>
+CREDITS_TITLE_1190	QA Testeøi
+CREDITS_SUBTL_1200   Siôn Rodriquez y Gibson
+CREDITS_SUBTL_1201   Jon Virtes
+CREDITS_SUBTL_1202   Glen ViStante
+CREDITS_SUBTL_1203   Eric Zimmerman
+CREDITS_SUBTL_1204   Erin Martel
+CREDITS_SUBTL_1205   Jeff Barthel
+CREDITS_SUBTL_1206   Matthew Beal
+CREDITS_SUBTL_1207   Ilya Berelson
+CREDITS_SUBTL_1208   Steve Boisvert
+CREDITS_SUBTL_1209   Alex Coleman
+CREDITS_SUBTL_1210   Claude Conkrite
+CREDITS_SUBTL_1211   Dan Carreker
+CREDITS_SUBTL_1212   Nick Castaneda
+CREDITS_SUBTL_1213   John Cung
+CREDITS_SUBTL_1214   Mark Douglas
+CREDITS_SUBTL_1215   Marat Gleyzer
+CREDITS_SUBTL_1216   Luke Grannis
+CREDITS_SUBTL_1217   Hector Guerrero
+CREDITS_SUBTL_1218   David Hakim
+CREDITS_SUBTL_1229   Keith Harris
+CREDITS_SUBTL_1220   Adam Hartsfield
+CREDITS_SUBTL_1221   Thann Harvey
+CREDITS_SUBTL_1222   Joseph Hemrick
+CREDITS_SUBTL_1223   Jason Kim
+CREDITS_SUBTL_1224   Victor King
+CREDITS_SUBTL_1225   Anthony Korotko
+CREDITS_SUBTL_1226   Mike Kusupholnand
+CREDITS_SUBTL_1227   Danny Lee
+CREDITS_SUBTL_1238   Jason Levine
+CREDITS_SUBTL_1239   Linda Lozano
+CREDITS_SUBTL_1230   Jeff Moxley
+CREDITS_SUBTL_1231   Robert Nall
+CREDITS_SUBTL_1232   Mihai Pohontu
+CREDITS_SUBTL_1233   Doug Rothman
+CREDITS_SUBTL_1234   Jason Rothschild
+CREDITS_SUBTL_1235   Marco Scataglini
+CREDITS_SUBTL_1236   Sean Shaughnessy
+CREDITS_SUBTL_1247   Chad Siedhoff
+CREDITS_SUBTL_1248   Jeff Spierer
+CREDITS_SUBTL_1249   Jef Sedivy
+CREDITS_SUBTL_1240   Dave Stolfa
+CREDITS_SUBTL_1241   Sami Tanamly
+CREDITS_SUBTL_1242   Ron Weibel
+CREDITS_SUBTL_1243   Yon Vo
+CREDITS_SUBTL_1600	<>
+CREDITS_TITLE_1610	Tvúrce Sítì
+CREDITS_SUBTL_1620   Chris Keim
+CREDITS_SUBTL_1630	<>
+CREDITS_TITLE_1640	Vedoucí Testu Kompability
+CREDITS_SUBTL_1650   Neil Barizo
+CREDITS_SUBTL_1651	<>
+CREDITS_TITLE_1652  Testeøi Kompability
+CREDITS_SUBTL_1653	Jason Kim
+CREDITS_SUBTL_1654  Linda Lozano
+CREDITS_SUBTL_1655	Mike Harris
+CREDITS_SUBTL_1660	<>
+CREDITS_TITLE_1670	QA Speciální Díky
+CREDITS_SUBTL_1680   Eric Zala
+CREDITS_SUBTL_1690   Matt Powers
+CREDITS_SUBTL_1700   Sam Nouriani
+CREDITS_SUBTL_1710   Tim Vanlaw
+CREDITS_SUBTL_1720   Jason Wong
+CREDITS_SUBTL_1730   John Sherwood
+CREDITS_SUBTL_1740   Aaron King
+CREDITS_SUBTL_1750   Todd Komesu
+CREDITS_SUBTL_1760   Bob McPherson
+CREDITS_SUBTL_1770   Gary Bolduc
+CREDITS_SUBTL_1780   Marietta Pashayan
+CREDITS_SUBTL_1790   Chris Keim
+CREDITS_SUBTL_1800   Indra Gunawan
+CREDITS_SUBTL_1810   Joule Middleton
+CREDITS_SUBTL_1820   Jeff Poffenbarger
+CREDITS_SUBTL_1830   Joe Favazza
+CREDITS_SUBTL_1840   Ben DeGuzman
+CREDITS_SUBTL_1850   Jenny Cassell
+CREDITS_SUBTL_1860	<>
+CREDITS_TITLE_1870	Skupina vydání kódu
+CREDITS_SUBTL_1880   Juan Valdes
+CREDITS_SUBTL_1890	<>
+CREDITS_TITLE_1900   Nahrávání Hlasu/Technická Úprava
+CREDITS_SUBTL_1910   Brian Bright
+CREDITS_SUBTL_1920   Bill Black, Big Fat Kitty Produkce
+CREDITS_SUBTL_1930   Kenny Ramirez
+CREDITS_SUBTL_1940	<>
+CREDITS_SUBTL_1950	<>
+
+// Manual credits
+CREDITS_TITLE_2000	-Manuál-
+CREDITS_SUBTL_2010	<>
+CREDITS_TITLE_2020	Autoøi
+CREDITS_SUBTL_2030   Chris Hewish
+CREDITS_SUBTL_2040   Siôn Rodriguez y Gibson
+CREDITS_SUBTL_2050   Glenn Ige
+CREDITS_SUBTL_2060   White Wolf Staff
+CREDITS_SUBTL_2070	<>
+CREDITS_TITLE_2080	Struèný Pøíbìh
+CREDITS_SUBTL_2090   Daniel Greenberg
+CREDITS_SUBTL_2100	<>
+CREDITS_TITLE_2110	Ilustrace Struèného Pøíbìhu
+CREDITS_SUBTL_2120   Richard Servande
+CREDITS_SUBTL_2130	<>
+CREDITS_SUBTL_2135	<>
+
+// WON credits
+CREDITS_TITLE_2140   -WON.net-
+CREDITS_SUBTL_2150	<>
+CREDITS_TITLE_2160	Producenti
+CREDITS_SUBTL_2170	Ross Perez
+CREDITS_SUBTL_2180	Scott Warren
+CREDITS_SUBTL_2190	<>
+CREDITS_TITLE_2200	Plánovaní
+CREDITS_SUBTL_2209	Erik De Bonte 
+CREDITS_SUBTL_2210	Mike Nicolino
+CREDITS_SUBTL_2211	<>
+CREDITS_TITLE_2212	Zajištìní Kvality 
+CREDITS_SUBTL_2213	Eric Harmon
+CREDITS_SUBTL_2214	David Cain
+CREDITS_SUBTL_2215	<>
+CREDITS_SUBTL_2216	<>
+
+// Localization
+CREDITS_TITLE_2230	Koordinace Lokalizace
+CREDITS_SUBTL_2235	Stephanie O'Malley
+CREDITS_SUBTL_2240	<>
+CREDITS_TITLE_2241	Kontrola Lokalizace UK
+CREDITS_SUBTL_2242	Peter Lykke Nielsen
+CREDITS_SUBTL_2243	<>
+CREDITS_SUBTL_2350	<>
+
+// Special Thanks
+CREDITS_TITLE_2700   -Nihilistic Speciálnì Dìkuje-
+CREDITS_SUBTL_2710   Všem našim rodinám a pøátelùm
+CREDITS_SUBTL_2720   Roland Tietze
+CREDITS_SUBTL_2730   Kim, Connor a Logan Gresko
+CREDITS_SUBTL_2740   Dianne Kilty
+CREDITS_SUBTL_2750   Bihyu Lin
+CREDITS_SUBTL_2755	Jean Xiong
+CREDITS_SUBTL_2760   Brandie Marie Weaver
+CREDITS_SUBTL_2770   Cathy Wauters
+CREDITS_SUBTL_2780   Borckmans rodina
+CREDITS_SUBTL_2790   Rosemary McBride
+CREDITS_SUBTL_2792   Beth Thoms
+CREDITS_SUBTL_2794   Minnesotan Thoms Rodina
+CREDITS_SUBTL_2796	Elizabeth a Dan Huebner
+CREDITS_SUBTL_2810   <>
+CREDITS_SUBTL_2820   Mitch Lasky, Scott Lahman, Matt Candler - Activision, Inc.
+CREDITS_SUBTL_2825   George Rose, Michael Hand, Michael Larson, Peter Karpas - Activision, Inc.
+CREDITS_SUBTL_2830   John Carmack a Todd Hollenshead - id Software
+CREDITS_SUBTL_2840   Mike Wilson, Harry Miller - Gathering of Developers, Inc.
+CREDITS_SUBTL_2850   Scott Miller a George Broussard - 3DRealms, Inc.
+CREDITS_SUBTL_2860   Gary McTaggart a Charlie Brown - Valve Software
+CREDITS_SUBTL_2870   Kalani Streicher a Ed Kilham - Ronin Entertainment
+CREDITS_SUBTL_2880   Jason Robar, Charles Boyd, Phil Taylor a Jason White - Microsoft Corporation
+CREDITS_SUBTL_2890   Všichni ve Factor5 Software
+CREDITS_SUBTL_2891	3DFX, nVidia, AMD, Matrox, a Intel pro jejich pokraèující podporu
+CREDITS_SUBTL_2900   <>
+CREDITS_SUBTL_2901   Alan Yu, Alex Dunne a tým ve CMP Game Group
+CREDITS_SUBTL_2902   Duncan Brown (za návštìvu ranèe!)
+CREDITS_SUBTL_2910   Ron Kee (za zmínìní Ricka!)
+CREDITS_SUBTL_2920   Ira Rothken, Rothken Law Firm
+CREDITS_SUBTL_2930   Scott Porter, Porter Accountancy
+CREDITS_SUBTL_2940   Brian Diggs
+CREDITS_SUBTL_2950   Marilena Morini
+CREDITS_SUBTL_2960   Mike Stefan
+CREDITS_SUBTL_2961   Ed Kane
+CREDITS_SUBTL_2970	<>
+CREDITS_SUBTL_2980	Speciální díky všem Fanouškùm Vampíra,
+CREDITS_SUBTL_2990	kteøí podporovali tento projekt!
+CREDITS_SUBTL_3000	<>
+CREDITS_SUBTL_3010	Žádné šlechtì nebylo vyrobením této hry ublíženo.
+CREDITS_SUBTL_3020	<>
+CREDITS_SUBTL_3030	Ok, no možná jedné nebo dvìma...
+CREDITS_SUBTL_3040	<>
+CREDITS_SUBTL_3050	<>
+
+// License/Copyrights
+CREDITS_SUBTL_3100	Použita Bink Video Technologie.  Copyright (C) 1997-2000 by RAD Game Tools, Inc.
+CREDITS_SUBTL_3102	<>
+CREDITS_SUBTL_3105	Vampire: The Masquerade, White Wolf a World of Darkness jsou zaregistrované
+CREDITS_SUBTL_3110	obchodní znaèky a Vampire: The Masquerade - Redemption je obchodní znaèka
+CREDITS_SUBTL_3120   White Wolf Vydavatelství, Inc.
+CREDITS_SUBTL_3130	<>
+CREDITS_SUBTL_3140   (c) 2000 White Wolf Publishing, Inc.
+CREDITS_SUBTL_3150   (c) 2000 Nihilistic Software, Inc.
+CREDITS_SUBTL_3160	<>
+CREDITS_SUBTL_3170   Vydáno a prodáváno Activisionem.
+CREDITS_SUBTL_3180   (c) 2000 Activision, Inc.
+CREDITS_SUBTL_3190   Všechna práva vyhrazena.
+CREDITS_SUBTL_3200	<>
+CREDITS_SUBTL_3210	<>
+CREDITS_SUBTL_3220	<>
+
+// Dedication
+CREDITS_SUBTL_3200   Vìnováno s milou vzpomínkou, Paul Kraaijvanger Sr.
+
+

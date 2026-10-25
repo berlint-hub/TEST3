@@ -1,0 +1,234 @@
+// ****************************************************************************
+//
+// VIENNA.NLS
+//
+// Vienna-specific string table
+//
+// ****************************************************************************
+
+// ............................................................................ 
+// Quests
+// ............................................................................ 
+
+Q_ORSIPARTY_S                   Zùèastnit se veèírku Hrabìte Orsiho.
+Q_ORSIPARTY_L                   Vstup do Orsiho Sídla ze Západní Ringstrasse a vmísi se.
+Q_INFILTRATE_S                  Najít Tajnı Vchod k Hodinám.
+Q_INFILTRATE_L                  Pohybuj se po støechách z Vnitøního Stradtu k Prùèelí Hodin.
+Q_DESTROYLUTHER_S               Najít Luthera Blacka.
+Q_DESTROYLUTHER_L               Najdi Vampíøího Knìze Luthera Blacka uvnitø Kostela Stephansdomu.
+Q_ESCAPEKNIGHTBASE_S            Únik ze Základny Germánského Rytíøe.
+Q_ESCAPEKNIGHTBASE_L            Zamìstnej Rytíøe Deutschordens Kirche a uteè do Vnitøního Stradtu.
+Q_ETRIUSJOURNAL_S               Navrácení Deníku Etriuse.
+Q_ETRIUSJOURNAL_L               Dostaò se do Haus de Hexe a odemkni Arcanulum Dveøe k získání Deníku.
+Q_RETURNTOPRAGUE_S              Návrat do Prahy.
+Q_RETURNTOPRAGUE_L              Opus Vídeò Severní Branou a vra se do Prahy.
+Q_RETURNAMULET_S                Donést amulet Orvusovi.
+Q_RETURNAMULET_L                Dones Tremere Amulet Orvusovi do Vıchodní Ringstrasse.
+
+// ............................................................................ 
+// Levels
+// ............................................................................ 
+
+NORTHERNRINGSTRASSE				Severní Ringstrasse
+INNERSTRADT						Vnitøní Stradt
+OUTTERSTRADT					Vnìjší Stradt
+STEPHANSDOM1					Stephansdom 1
+STEPHANSDOM2                    Stephansdom 2
+STEPHANSDOM3                    Stephansdom 3
+EASTERNRINGSTRASSE				Vıchodní Ringstrasse
+ORDEROFHERMES					Øád Hermù
+GREENFROGINN					Hostinec U Zelené áby
+TEUTONICKNIGHTBASE1				Základna Germánského Rytíøe 1
+TEUTONICKNIGHTBASE2             Základna Germánského Rytíøe 2
+TEUTONICKNIGHTBASE3             Základna Germánského Rytíøe 3
+TEUTONICKNIGHTBASE4             Základna Germánského Rytíøe 4
+WESTERNRINGSTRASSE				Západní Ringstrasse
+ORSIMANSION						Sídlo Hrabìte Orsiho
+CHURCH							Znesvìcenı Kostel
+WEAPONSMITH						Kováøství Zbraní
+INNERHOUSE						Uvnitø Domu
+SOUTHERNRINGSTRASSE				Jiní Ringstrasse
+HAUSDEHEXE1						Haus de Hexe 1
+HAUSDEHEXE2                     Haus de Hexe 2
+HAUSDEHEXE3                     Haus de Hexe 3
+HAUSDEHEXE4                     Haus de Hexe 4
+
+// ............................................................................ 
+// Scenes
+// ............................................................................ 
+								
+ORSI_20_5S						Sídlo Hrabìte Orsiho
+ORSI_20_5L						Scéna 20.5 - Sídlo Hrabìte Orsiho
+ORDR_20_1S						Øád Hermù
+ORDR_20_1L						Scéna 20.1 - Øád Hermù
+ORDR_20_1S						Øád Hermù
+ORDR_20_1L                      Scéna 20.1 - Øád Hermù
+SOUT_20_1S						Jiní Ringstrasse
+SOUT_20_1L						Scéna 20.1 - Jiní Ringstrasse
+WEST_20_5S						Západní Ringstrasse
+WEST_20_5L						Scéna 20.5 - Západní Ringstrasse
+HAVN_20_1S						Znesvìcenı Kostel
+HAVN_20_1L						Scéna 20.1 - Znesvìcenı Kostel
+VEST_20_1S						Vıchodní Ringstrasse
+VEST_20_1L						Scéna 20.1 - Vıchodní Ringstrasse
+INNR_20_1S						Vnitøní Stradt
+INNR_20_1L						Scéna 20.1 - Vnitøní Stradt
+ROOF_20_1S						Uvnitø Domu
+ROOF_20_1L						Scéna 20.1 - Uvnitø Domu
+OUTR_20_1S						Vnìjší Stradt
+OUTR_20_1L						Scéna 20.1 - Vnìjší Stradt
+WEAP_20_2S						Kováøství Zbraní
+WEAP_20_2L						Scéna 20.1 - Kováøství Zbraní
+FROG_20_1S						Hostinec U Zelené áby 
+FROG_20_1L						Scéna 20.1 - Hostinec U Zelené áby
+FRO1_20_1S						Hostinec U Zelené áby
+FRO1_20_1L						Scéna 20.1 - Hostinec U Zelené áby
+STE1_21_1S                      Stephansdom 1
+STE1_21_1L                      Scéna 21.1 - Stephansdom 1
+STE2_21_1S                      Stephansdom 2
+STE2_21_1L                      Scéna 21.1 - Stephansdom 2
+STE3_21_1S                      Stephansdom 3
+STE3_21_1L                      Scéna 21.1 - Stephansdom 3
+TEU1_22_1S                      Základna Germánského Rytíøe 1
+TEU1_22_1L						Scéna 22.1 - Základna Germánského Rytíøe 1
+TEU2_22_1S						Základna Germánského Rytíøe 2
+TEU2_22_1L						Scéna 22.1 - Základna Germánského Rytíøe 2
+TEU3_22_1S						Základna Germánského Rytíøe 3
+TEU3_22_1L						Scéna 22.1 - Základna Germánského Rytíøe 3
+TEU4_22_1S						Základna Germánského Rytíøe 4
+TEU4_22_1L						Scéna 22.1 - Základna Germánského Rytíøe 4
+HHX1_23_1S                      Haus de Hexe 1
+HHX1_23_1L                      Scéna 23.1 - Haus de Hexe 1
+HHX2_23_1S                      Haus de Hexe 2
+HHX2_23_1L                      Scéna 23.1 - Haus de Hexe 2
+HHX3_23_1S                      Haus de Hexe 3
+HHX3_23_1L                      Scéna 23.1 - Haus de Hexe 3
+HHX4_23_1S                      Haus de Hexe 4
+HHX4_23_1L                      Scéna 23.1 - Haus de Hexe 4
+NRTH_23_1S						Severní Ringstrasse
+NRTH_23_1L						Scéna 23.1 - Severní Ringstrasse
+
+
+// ............................................................................ 
+// Map labels
+// ............................................................................ 
+
+mapOrsisMansion            Sídlo Hrabìte Orsiho
+mapWesternRingStrasse      Západní Ringstrasse
+mapSmithy                  Kováøství Zbraní
+mapDesecratedChurchHaven   Znesvìcenı Kostel
+mapNorthernRingStrasse     Severní Ringstrasse
+mapEntranceStephansdom     Stephansdom
+mapInnerStradt             Vnitøní Stradt
+mapDeutschOrdensKirche     Základna Germánského Rytíøe
+mapOuterRingStrasse        Vnìjší Stradt
+mapSouthernRingStrasse     Jiní Ringstrasse
+mapHausDeHexe              Haus de Hexe
+mapOrderOfHermes           Øád Hermù
+mapEasternRingStrasse      Vıchodní Ringstrasse
+mapGreenFrogInn            Hostinec U Zelené áby
+
+// ............................................................................ 
+// Description ID for Doors/Exits
+// ............................................................................ 
+
+NRTH_EXIT_DESC_1				Brána k Vnìjšímu Stradtu
+NRTH_EXIT_DESC_1_L			Brána k Vnìjšímu Stradtu (Zamèeno)
+NRTH_EXIT_DESC_2				Azyl Kostela
+NRTH_EXIT_DESC_2_L			Azyl Kostela (Zamèeno)
+NRTH_EXIT_DESC_3				Návrat do Prahy
+NRTH_EXIT_DESC_3_L	   	Návrat do Prahy (Zamèeno)
+					
+HAVN_EXIT_DESC_1				Severní Ringstrasse
+HAVN_EXIT_DESC_1_L   		Severní Ringstrasse (Zamèeno)
+				
+OUTR_EXIT_DESC_1				Brána k Vnitønímu Stradtu
+OUTR_EXIT_DESC_1_L			Brána k Vnitønímu Stradtu (Zamèeno)
+OUTR_EXIT_DESC_2				Nádvoøí Hrabìte Orsiho
+OUTR_EXIT_DESC_2_L			Nádvoøí Hrabìte Orsiho (Zamèeno)
+OUTR_EXIT_DESC_3				Brána k Severní Ringstrasse
+OUTR_EXIT_DESC_3_L			Brána k Severní Ringstrasse (Zamèeno)
+OUTR_EXIT_DESC_4				Brána k Vıchodní Ringstrasse
+OUTR_EXIT_DESC_4_L			Brána k Vıchodní Ringstrasse (Zamèeno)
+OUTR_EXIT_DESC_5				Brána k Jiní Ringstrasse
+OUTR_EXIT_DESC_5_L			Brána k Jiní Ringstrasse (Zamèeno)
+OUTR_EXIT_DESC_6				Kováøství Zbraní
+OUTR_EXIT_DESC_6_L			Kováøství Zbraní (Zamèeno)
+				
+INNR_EXIT_DESC_0				Brána k Vnìjší Vıchodní Ringstrasse
+INNR_EXIT_DESC_0_L			Brána k Vnìjší Vıchodní Ringstrasse (Zamèeno)
+INNR_EXIT_DESC_1				Brána k Vnitøní Západní Ringstrasse
+INNR_EXIT_DESC_1_L			Brána k Vnitøní Západní Ringstrasse (Zamèeno)
+INNR_EXIT_DESC_2				Vnitøní Dùm
+INNR_EXIT_DESC_2_L			Vnitøní Dùm (Zamèeno)
+INNR_EXIT_DESC_3				Základna Germánského Rytíøe
+INNR_EXIT_DESC_3_L			Základna Germánského Rytíøe (Zamèeno)
+INNR_EXIT_DESC_4				Tajnı vchod do Stephansdomu
+INNR_EXIT_DESC_4_L			Tajnı vchod do Stephansdomu (Zamèeno)
+INNR_EXIT_DESC_5				Vnitøní Dùm
+INNR_EXIT_DESC_5_L			Vnitøní Dùm (Zamèeno)
+				
+WEAP_EXIT_DESC_1				Vnìjší Stradt
+WEAP_EXIT_DESC_1_L			Vnìjší Stradt (Zamèeno)
+				
+ROOF_EXIT_DESC_1				Vnitøní Stradt
+ROOF_EXIT_DESC_1_L			Vnitøní Stradt (Zamèeno)
+ROOF_EXIT_DESC_2				Okno Vnitøního Domu
+ROOF_EXIT_DESC_2_L			Okno Vnitøního Domu (Zamèeno)
+				
+STE1_EXIT_DESC_0				Vnitøní Stradt
+STE1_EXIT_DESC_0_L			Vnitøní Stradt (Zamèeno)
+STE1_EXIT_DESC_1				Vchod do Stephansdomu 2
+STE2_EXIT_DESC_0				Zpìt do Stephansdomu 1
+STE2_EXIT_DESC_1				Vchod do Stephansdomu 3
+STE3_EXIT_DESC_0				Zpìt do Stephansdomu 2
+				
+EAST_EXIT_DESC_1				Brána do Vnìjšího Stradtu
+EAST_EXIT_DESC_1_L			Brána do Vnìjšího Stradtu (Zamèeno)
+EAST_EXIT_DESC_2				Hostinec U Zelené áby
+EAST_EXIT_DESC_2_L			Hostinec U Zelené áby (Zamèeno)
+EAST_EXIT_DESC_3				Øád Hermù
+EAST_EXIT_DESC_3_L			Øád Hermù (Zamèeno)
+				
+TEU1_EXIT_DESC_0				Vnitøní Stradt
+TEU1_EXIT_DESC_1				Základna Germánského Rytíøe 2
+TEU2_EXIT_DESC_0				Základna Germánského Rytíøe 1
+TEU2_EXIT_DESC_1				Základna Germánského Rytíøe 3
+TEU3_EXIT_DESC_0				Základna Germánského Rytíøe 2
+TEU3_EXIT_DESC_1				Základna Germánského Rytíøe 4
+TEU4_EXIT_DESC_0				Základna Germánského Rytíøe 3
+				
+WEST_EXIT_DESC_1				Brána do Vnìjšího Stradtu
+WEST_EXIT_DESC_1_L			Brána do Vnìjšího Stradtu (Zamèeno)
+WEST_EXIT_DESC_2		   	Sídlo Hrabìte Orsiho
+WEST_EXIT_DESC_2_L			Sídlo Hrabìte Orsiho (Zamèeno)
+				
+ORSI_EXIT_DESC_1				Západní Ringstrasse
+				
+FROG_EXIT_DESC_1				Vıchodní Ringstrasse
+				
+ORDR_EXIT_DESC_1				Vıchodní Ringstrasse
+				
+SOUT_EXIT_DESC_1				Brána k Haus de Hexe
+SOUT_EXIT_DESC_1_L			Brána k Haus de Hexe (Zamèeno)
+SOUT_EXIT_DESC_2				Brána k Vnìjšímu Stradtu
+SOUT_EXIT_DESC_2_L			Brána k Vnìjšímu Stradtu (Zmaèeno)
+SOUT_EXIT_DESC_3				Haus de Hexe
+SOUT_EXIT_DESC_3_L			Haus de Hexe (Zamèeno)
+
+HHX1_EXIT_DESC_1				Jiní Ringstrasse
+HHX1_EXIT_DESC_1_L			Jiní Ringstrasse (Zamèeno)
+HHX1_EXIT_DESC_2				Doupì Tremere Gargoyly
+HHX1_EXIT_DESC_2_L			Doupì Tremere Gargoyly (Zamèeno)
+HHX1_EXIT_DESC_3				Knihovna Tremere
+HHX1_EXIT_DESC_3_L			Knihovna Tremere (Zamèeno)
+HHX1_EXIT_DESC_4				Laboratoø Tremere
+HHX1_EXIT_DESC_4_L			Laboratoø Tremere (Zamèeno)
+
+HHX1_ARCPUZZLE             Zámek Arcanulum Dveøí
+				
+HHX2_EXIT_DESC_1				Hlavní Hala Haus de Hexe
+				
+HHX3_EXIT_DESC_1				Hlavní Hala Haus de Hexe
+				
+HHX4_EXIT_DESC_1				Hlavní Hala Haus de Hexe

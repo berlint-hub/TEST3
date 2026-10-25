@@ -1,0 +1,110 @@
+// ****************************************************************************
+//
+// MP_CTD.NLS
+//
+// To Curse The Darkness-specific string table
+//
+// ****************************************************************************
+
+// ............................................................................ 
+// Actors
+// ............................................................................ 
+MELMOTH				Melmoth
+REBECCA				Rebecca
+LECOMTE				Rene Le Comte
+BLAZEJ				Šerif Blažej
+EGLANTINE			Matka Eglantine
+RAGWICK				Ragwick
+SORVENA				Sorvena
+UDOLPHO				Udolpho
+GUARD				Strážce
+
+// ............................................................................ 
+// Quests
+// ............................................................................ 
+
+Q_MEETMELMOTH_S                 Sejít se s Beggarem v Kostelní Veži.
+Q_MEETMELMOTH_L                 Vstup do útulku Beggara pod veží kostela v Temešváru.
+Q_RETRIEVEMONOCLE_S             Získání Monoklu od Le Comtea.
+Q_RETRIEVEMONOCLE_L             Ze høbitova, vstup do katakomb pod Temešvárem, aby jsi nalezl a postavil se Le Comtemu.
+Q_RETURNTOMELMOTH_S             Návrat k Melmothovi v Kostelní Veži.
+Q_RETURNTOMELMOTH_L             Pøines Monokl Melmothovi do jeho útulku pod vìží kostela.
+
+RELIQUARYCTD                    Svatý Relikviáø
+// ............................................................................ 
+// Level Names
+// ............................................................................ 
+MOSSYHEARTH						Hostinec Mechové Srdce
+TEMESVAR						Ulice Temešváru
+SORVENACOTTAGE					Domek Sorveny
+OUBLIETTE						Oubliette
+CATACOMBS1						Katakomby 1
+CATACOMBS2    					Katakomby 2
+CATACOMBS3    					Katakomby 3
+
+// ............................................................................ 
+// Scenes
+// ............................................................................ 
+
+INN4_CTD_1_1S					Uvnitø Hostince
+INN4_CTD_1_1L					Scéna 1.1 - Uvnitø Hostince
+NQTR_CTD_1_1S					Prùzkum Temešváru
+NQTR_CTD_1_1L					Scéna 1.1 - Prùzkum Temešváru
+RABI_CTD_1_1S					Setkání se Sorvenou
+RABI_CTD_1_1L					Scéna 1.1 - Setkání se Sorvenou
+OUBL_CTD_2_1S					Setkání s Melmothem
+OUBL_CTD_2_1L					Scéna 2. 1 - Setkání s Melmothem
+JOS1_CTD_3_1S					Vyloupení Katakomb
+JOS1_CTD_3_1L					Scéna 3. 1 - Vyloupení Katakomb
+JOS2_CTD_3_1S                   Bitva v Katakombách
+JOS2_CTD_3_1L                   Scéna 3. 1 - Bitva v Katakombách
+JOS3_CTD_3_1S                   Setkání s LeComtem
+JOS3_CTD_3_1L                   Scéna 3. 1 - Setkání s LeComtem
+
+// ............................................................................ 
+// ST Scene advancement labels
+// ............................................................................ 
+
+CTD_SCENE_2_1					Úvod do Temešváru
+CTD_SCENE_3_1 					Úkol Monokl
+CTD_SCENE_5_1 					Navrácení Monoklu
+
+// ............................................................................ 
+// Map labels
+// ............................................................................ 
+
+mapCatacombs               Katakomby
+mapSorvenasCottage         Domek Sorveny
+mapOubliette               Oubliette
+mapMossyHearthInn          Hostinec Mechové Srdce
+mapTemesvar                Temešvár
+
+// ............................................................................ 
+// Description ID for Doors/Exits
+// ............................................................................ 
+
+NQTR_EXIT_DESC_0                Hlavní Brána
+NQTR_EXIT_DESC_0_L              Hlavní Brána (Zamèeno)
+NQTR_EXIT_DESC_1                Katakomby
+NQTR_EXIT_DESC_1_L              Katakomby (Zamèeno)
+NQTR_EXIT_DESC_2                Mechové Srdce
+NQTR_EXIT_DESC_2_L              Mechové Srdce (Zamèeno)
+NQTR_EXIT_DESC_3                Oubliette
+NQTR_EXIT_DESC_3_L              Oubliette (Zamèeno)
+NQTR_EXIT_DESC_4                Domek Sorveny
+NQTR_EXIT_DESC_5_L              Domek Sorveny (Zamèeno)
+
+JOS1_EXIT_DESC_0                Ulice Temešváru
+JOS1_EXIT_DESC_1                Katakomby 2
+JOS2_EXIT_DESC_0                Katakomby 1
+JOS2_EXIT_DESC_1                Katakomby 3
+JOS2_EXIT_DESC_2                (Zavalené)
+JOS3_EXIT_DESC_0                Katakomby 2
+
+INN4_EXIT_DESC_1                Ulice Temešváru
+INN4_EXIT_DESC_1_L              Ulice Temešváru (Zamèeno)
+
+RABI_EXIT_DESC_0                Ulice Temešváru
+RABI_EXIT_DESC_0_L              Ulice Temešváru (Zamèeno)
+
+JOS3_CHRONICLE			Kronika Cainea

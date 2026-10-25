@@ -1,0 +1,211 @@
+// ****************************************************************************
+//
+// EFFECTS.NLS
+//
+// Effects string table
+//
+// ****************************************************************************
+
+
+// ............................................................................ 
+// system effects
+// ............................................................................ 
+
+EF_INCREASEBLOOD                Zvyöov·nÌ Krve
+EF_DECREASEBLOOD                Sniûov·nÌ Krve
+EF_INCREASEMANA                 Zvyöov·nÌ Many
+EF_DECREASEMANA                 Sniûov·nÌ Many
+
+EF_FRENZY                       ZeöÌlenÌ
+EF_INCREASEFRENZY               Zvyöov·nÌ äÌlenstvÌ
+EF_DECREASEFRENZY               Sniûov·nÌ äÌlenstvÌ
+EF_INCREASEHUMANITY             Zvyöov·nÌ Lidskosti
+EF_DECREASEHUMANITY             Sniûov·nÌ Lidskosti
+EF_WANTED                       Hled·nÌ
+EF_MESMERIZED                   Uchv·cenÌ
+EF_AFRAID                       VydÏöenÌ
+EF_DAZED                        Om·menÌ
+EF_PET                          OblÌbenÌ
+
+EF_STAKED                       KolÌkovanÌ
+
+EF_DMG_SUN                      PoökozenÌ Sluncem
+EF_DMG_ELECTRIC                 ElektrickÈ PoökozenÌ
+
+EF_STAT_STRENGTH                STR
+EF_STAT_DEXTERITY               DEX
+EF_STAT_STAMINA                 STA
+
+EF_STAT_PERCEPTION              PER
+EF_STAT_INTELLIGENCE            INT
+EF_STAT_WITS                    WIT
+
+EF_STAT_CHARISMA                CHA
+EF_STAT_MANIPULATION            MAN
+EF_STAT_APPEARANCE              APP
+
+EF_STAT_FAITH                   FAI
+
+EF_POISON                       Otr·venÌ
+EF_DISEASE                      OnemocnÏnÌ
+
+EF_SOAK_NORMAL                  Ude¯enÌ
+EF_SOAK_LETHAL                  SmrtelnÈ
+EF_SOAK_AGGRAVATED              ZhoröenÌ
+EF_SOAK_ELECTRIC                Elektrika
+EF_SOAK_FIRE                    OheÚ
+EF_SOAK_SUN                     Slunce
+EF_SOAK_FAITH                   VÌra
+EF_SOAK_COLD                    Chlad
+EF_SOAK_POISON                  Jed
+EF_SOAK_DISEASE                 Nemoc
+
+EF_INCREASEBLOODPOOLSIZE        N·drû Krve
+EF_INCREASEMANAPOOLSIZE         N·drû Many
+
+EF_STAKEPROTECTION              Ochrana P¯ed KolÌkem
+EF_FEEDPROTECTION               Ochrana JÌdla
+
+// ............................................................................ 
+// item effects
+// ............................................................................ 
+
+
+EF_ITEM_AINKURN2                Saje Krev
+EF_ITEM_DREAD                   DÏsÌ
+EF_ITEM_FRENZY                  Berserk
+EF_ITEM_HEALTHPOTION            Zvyöuje ZdravÌ
+EF_ITEM_CUREPOISONPOTION        LÈËÌ Otravu
+EF_ITEM_CUREDISEASEPOTION       LÈËÌ Nemoc
+EF_ITEM_TASER                   Lek·
+EF_ITEM_WEREWOLFVITAE           Zvyöuje öÌlenstvÌ
+EF_ITEM_ATTACKSPEED             Zvyöuje rychlost ˙toku
+EF_ITEM_XOFFENSE                Zvyöuje ˙toËenÌ
+EF_ITEM_XDEFENSE                Zvyöuje obranu
+EF_ITEM_XDAMAGE                 Zvyöuje poökozenÌ
+EF_ITEM_XSOAK                   Zvyöuje s·nÌ
+EF_ITEM_HIDE                    ZatemÚuje
+EF_ITEM_DISCIPLINE              StojÌ krev
+EF_ITEM_NECKGUARD               ZabraÚuje probodnutÌ
+EF_ITEM_CONTROL                 Regulace öÌlenosti
+EF_ITEM_GANGRELEYE              Gangrel Oko
+EF_ITEM_HANDCONRAD              Ruka Konr·da
+EF_ITEM_WEREWOLFVITAE           VlkodlaËÌ éivot
+EF_ITEM_BLACKGLOVES				  »ernÈ Rukavice
+
+
+// ............................................................................ 
+// item effects (for rollover description)
+// ............................................................................ 
+
+ITEM_EFFECT_DREAD               Efekt: öance zp˘sobenÌ strachu v nep¯Ìteli
+ITEM_EFFECT_DISEASE             Efekt: Zp˘sobuje nemoc
+ITEM_EFFECT_BERSERK             Efekt: äance zp˘sobenÌ öÌlenstvÌ v ovl·danÈm
+ITEM_EFFECT_DRAINBLOOD          Efekt: Saje krev
+ITEM_EFFECT_ARGENTBATON         Efekt: Extra poökozenÌ Divoch˘m
+ITEM_EFFECT_GANGRELEYE          Efekt: OËi P¯Ìöery
+ITEM_EFFECT_FEMURELDER          Efekt: Extra poökozenÌ VampÌr˘m
+ITEM_EFFECT_HANDOFCONRAD        Efekt: Moc (3)
+ITEM_EFFECT_HEARTSHIELD         Efekt: KolÌkov· ochrana (100%)
+ITEM_EFFECT_SIREFINGER          Efekt: SnÌûenÌ öÌlenstvÌ (50%)
+ITEM_EFFECT_MONOCLECLARITY      Efekt: Zvyöuje vampÌ¯Ì smysly
+ITEM_EFFECT_GOGGLES             Efekt: Zvyöuje zrakovÈ smysly
+ITEM_EFFECT_GIANTSBLOOD         Efekt: Moc (5)
+ITEM_EFFECT_ANTEDELUVIAN        Efekt: +50 ke vöem fyzick˝m a duöevnÌm atribut˘m
+ITEM_EFFECT_ELDER               Efekt: +20 ke vöem fyzick˝m a duöevnÌm atribut˘m
+ITEM_EFFECT_FAE                 Efekt: +20 ke vöem duöevnÌm atribut˘m
+ITEM_EFFECT_WEREWOLF            Efekt: +20 ke vöem fyzick˝m atribut˘m
+ITEM_EFFECT_XOFFENSE            Efekt: P¯id· nositeli p¯esnost
+ITEM_EFFECT_XDEFENSE            Efekt: P¯id· nositeli obranu
+ITEM_EFFECT_XDAMAGE             Efekt: P¯id· nositeli ˙tok
+ITEM_EFFECT_XSOAK               Efekt: P¯id· nositeli s·nÌ
+ITEM_EFFECT_DISCIPLINE          Efekt: Sniûuje nositeli cenu krve
+ITEM_EFFECT_CONTROL             Efekt: Sniûuje nositeli öÌlenstvÌ
+ITEM_EFFECT_BLOOD               Efekt: ZvÏtöenÌ nositelovy krevnÌ n·drûe
+ITEM_EFFECT_BLACKGLOVES         Efekt: DivokÈ Sp·ry
+ITEM_EFFECT_NECKGUARD           Efekt: OchraÚuje nositele p¯ed VampÌ¯Ìch kousnutÌ
+
+
+// ............................................................................ 
+// discipline effects
+// ............................................................................ 
+
+
+EF_DISC_BLOODSTRENGTH           KrevnÌ sÌla
+EF_DISC_BLOODDEXTERITY          KrevnÌ obratnost
+EF_DISC_BLOODSTAMINA            KrevnÌ v˝drû
+EF_DISC_POTENCE                 Moc
+EF_DISC_FORTITUDE               StateËnost
+EF_DISC_CELERITY1               Rychlost
+EF_DISC_CELERITY2               Rychlost
+EF_DISC_OBFUSCATE               ZatemnÏnÌ
+EF_DISC_MISTFORM                Mlûn· forma
+EF_DISC_MISTFORM2               Mlûn· forma
+EF_DISC_HSENSES                 IntenzivnÏjöÌ smysly
+EF_DISC_COMMAND                 Ovl·dnutÌ
+EF_DISC_MESMERIZE               Atraktivnost
+EF_DISC_POSSESSION              Posedlost
+EF_DISC_QUELLBEAST              UklidnÏnÌ p¯Ìöery
+EF_DISC_QUELLBEAST2             UklidnÏnÌ p¯Ìöery
+EF_DISC_BLOODHEALING            KrevnÌ uzdravenÌ
+EF_DISC_DREADGAZE               DÏsiv˝ pohled
+EF_DISC_THEHAUNTING             StraöenÌ
+EF_DISC_VOICEOFMADNESS          Hlas öÌlemstvÌ
+EF_DISC_DRAWINGOUTBEAST         Odesl·nÌ p¯Ìöery
+EF_DISC_PASSION                 ZaujetÌ
+EF_DISC_THEFORGETFULMIND        ZapomnÏtliv· mysl
+EF_DISC_BECKONING               P¯ivol·nÌ
+EF_DISC_FERALWHISPERS           Krut˝ öepot
+EF_DISC_CLOAKOFSHADOWS          Pl·öù stÌn˘
+EF_DISC_CLOAKOFSHADOWS2         Pl·öù stÌn˘
+EF_DISC_CLOAKTHEGATHERING       Pl·öù shrom·ûdÏnÌ
+EF_DISC_CLOAKTHEGATHERING2      Pl·öù shrom·ûdÏnÌ
+EF_DISC_INVISIBILITY            Neviditelnost
+EF_DISC_INVISIBILITY2           Neviditelnost
+EF_DISC_PRAYER                  ModlenÌ
+EF_DISC_AWE                     ⁄cta
+EF_DISC_IGNOREFLAME             Ignoruje prudkost ohnÏ
+EF_DISC_SUMMONELEMENTAL         Vyvol· element
+EF_DISC_DARKHUNTER              Temn˝ lovec
+EF_DISC_HATCHTHEVIPER           LÌhnutÌ zmije
+EF_DISC_SUBSUMETHESPIRIT        ZahrnutÌ ducha
+EF_DISC_ENTRANCEMENT            VstoupenÌ
+EF_DISC_EYESOFTHESERPENT        OËi hada
+EF_DISC_SKINOFTHEADDER          K˘ûe zmije
+EF_DISC_HEARTOFSTONE            KamennÈ srdce
+EF_DISC_THEFTOFVITAE1           KradenÌ ûivota
+EF_DISC_THEFTOFVITAE2           KradenÌ ûivota
+EF_DISC_BLACKDEATH              »ern· smrt
+EF_DISC_BLOODRAGE1              Krvav˝ vztek
+EF_DISC_BLOODRAGE2              Krvav˝ vztek
+EF_DISC_CAULDRONOFBLOOD1        Kotel krve
+EF_DISC_CAULDRONOFBLOOD2        Kotel krve
+EF_DISC_DECAY                   Rozklad
+EF_DISC_ACIDICTOUCH             Dotyk kyseliny
+EF_DISC_TURNTODUST              Obr·tit v prach
+EF_DISC_SUMMONSOUL              Vyvol·nÌ duöe
+EF_DISC_CALLLIGHTNING           P¯ivol·nÌ blesku
+EF_DISC_PRISONOFICE1            VÏzeÚÌ ledu
+EF_DISC_PRISONOFICE2            VÏzenÌ ledu
+EF_DISC_SHAPEOFTHEBEAST         Podoba p¯Ìöery
+EF_DISC_EYESOFTHEBEAST          OËi p¯Ìöery
+EF_DISC_TRUESIGHT               Prav˝ zrak
+EF_DISC_BLOODOFPOTENCY          KrevnÌ moc
+EF_DISC_ATROPHY                 ZakrnÏnÌ
+EF_DISC_ATROPHY2                ZakrnÏnÌ
+EF_DISC_ATROPHY3                ZakrnÏnÌ
+EF_DISC_SHAMBLINGHORDES         äourajÌcÌ se hordy
+EF_DISC_VIGORMORTIS             Vigor Mortis
+EF_DISC_PSYCHICPROJECTION       Psychick· p¯edstava
+EF_DISC_MAJESTY                 Vzneöenost
+EF_DISC_MAJESTY2                Vzneöenost
+EF_DISC_EARTHMELD               TavenÌ zemÏ
+EF_DISC_TRUEFAITH               Prav· vÌra
+EF_DISC_MASK1000FACES           Maska tisÌce tv·¯Ì
+EF_DISC_TONGUEOFTHEASP1         Jazyk Aspu
+EF_DISC_TONGUEOFTHEASP2         Jazyk Aspu
+
+EF_DISC_TORCH                   PochodeÚ
+EF_DISC_FERALCLAWS              KrutÈ Sp·ry
+
+

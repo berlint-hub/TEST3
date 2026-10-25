@@ -1,0 +1,392 @@
+// ****************************************************************************
+//
+// PRAGUE.NLS
+//
+// Prague-specific string table
+//
+// ****************************************************************************
+
+
+// ............................................................................ 
+// Quests
+// ............................................................................ 
+
+Q_ECATERINAVITAE_S              Pøinést starı ivot Josefovi.
+Q_ECATERINAVITAE_L              Poádej o ivotodar starší Cainite s nádhernou tváøí a pøines ho Jozefovi do Severní Ètvrti.
+Q_GOLEM_S                       Zabít Golema.
+Q_GOLEM_L                       Zniè Golema, kterı terorizuje Severní Ètvr.
+Q_SHEMMENDEL_S                  Pøinést Šém zpátky Mendelovi.
+Q_SHEMMENDEL_L                  Dones Šém, kterı jsi našel na golemovì mrtvole, zpátky Mendelovi.
+Q_PRAGUEBYNIGHT_S               Ochránit Noèní Prahu.
+Q_PRAGUEBYNIGHT_L               Ochraò celé Staré Mìsto od pøíšer, které se plíí nocí.
+Q_SILVERMINES_S                 Zkultivovat Bonnské Støíbrné Doly.
+Q_SILVERMINES_L                 Opus Prahu skrze Severní Bránu a vstup do dolù. Pora všechna monstra, která se uvnitø zdrují.
+Q_TREMERECHANTRY_S              Napadnout Oltáø Tremere.
+Q_TREMERECHANTRY_L              Napadni Oltáø Tremere ukrytı pod lékárnou ve Zlaté Ulièce.
+Q_RELIQUARY_S                   Získat zpìt Relikviáø.
+Q_RELIQUARY_L                   Vstup do Jozefovskıch Tunelù na høbitovì v Severní Ètvrti, a získej Relikviáø od Prince Brandla.
+Q_NODFRAGMENT_S                 Navrátit èást Nodu.
+Q_NODFRAGMENT_L                 Pøejdi Juditin Most a vstup do Kláštera na Petøínì. Najdi Èást Nodu a pøines ho Ecaterine.
+Q_SHEM_S                        Pøinést Šém Garinolovi.
+Q_SHEM_L                        Dones Šém Garinolovi ven pøed Klášter na Petøínì.
+Q_GEZA_S                        Návrat k Sv. Tomáši.
+Q_GEZA_L                        Vra se do Katedrály Sv. Tomáše a promluv s Arcibiskupem Gezou.
+Q_ANEZKAVISIT_S                 Navštívit Sestru Aneku.
+Q_ANEZKAVISIT_L                 Vra se do kláštera navštívit Sestru Aneku.
+Q_LEAVEVIENNA_S                 Odejít do Vídnì Severní Branou.
+Q_LEAVEVIENNA_L                 Opus Prahu skrze Severní Bránu a pokraèuj ve svém hledání Aneky do Vídnì.
+Q_RESTTOADVANCE_S               Návrat do azylu k odpoèinku.
+Q_RESTTOADVANCE_L               Vra se odpoèinout do azylu v Univerzitì a klikni na Odpoèinkovou Rakev.
+
+// ............................................................................ 
+// Levels
+// ............................................................................ 
+CONVENT							Klášter
+CONVENTDAY						Klášter (den)
+OLDTOWNDAY						Staré Mìsto (den)
+SMITHYDAY						Kovárna (den)
+INN4STAGSDAY					Hostinec U Ètyø Jelenù (den)
+JUDITHBRIDGEDAY					Juditin Most (den)
+UNIVERSITY						Univerzita
+STTHOMAS						Katedrála Sv. Tomáše
+GOLDENLANEDAY					Zlatá Ulièka (den)
+UNORNADAY						Unornin Obchod (den)
+EASTGATE						Vıchodní Brána (den)
+EASTGATENIGHT					Vıchodní Brána
+OLDTOWN							Staré Mìsto
+SMITHY							Kovárna
+INN4STAGS						Hostinec U Ètyø Jelenù
+JUDITHBRIDGE					Juditin Most
+UNORNA							Unornin Obchod
+HAVEN							Azyl Univerzity
+PETRINHILL						Petøín
+PETRINHILLDAY					Petøín (den)
+ANEZKAROOM						Aneèin Pokoj
+NQUARTER						Severní Ètvr
+PRAGUECASTLE					Nádvoøí Praského Hradu
+PRINCEBRANDL					Pøijímací Komnata Prince Brandla
+GOLDENLANE						Zlatá Ulièka
+SILVERMINES						Støíbrné Doly 1
+SILVERMINES2                    Støíbrné Doly 2
+SILVERMINES3                    Støíbrné Doly 3
+SILVERMINES4                    Støíbrné Doly 4
+SILVERMINESNIGHT				Støíbrné Doly
+MONASTERY						Klášter 1
+MONASTERY2                      Klášter 2
+MONASTERY3                      Klášter 3
+ARDANCHANTRY					Ardanùv Oltáø 1
+ARDANCHANTRY2                   Ardanùv Oltáø 2
+ARDANCHANTRY3                   Ardanùv Oltáø 3
+ARDANCHANTRY4                   Ardanùv Oltáø 4
+JOSEFTUNNELS					Josefovské Tunely 1
+JOSEFTUNNELS2                   Josefovské Tunely 2
+JOSEFTUNNELS3                   Josefovské Tunely 3
+
+// ............................................................................ 
+// Scenes
+// ............................................................................ 
+
+CNVT_3_1S                       To ráno uvnitø Kláštera...
+CNVT_3_1L                       Scene 3.1 - Klášter
+CNVT_3_3S						<>
+CNVT_3_3L						Scene 3.3 - Klášter
+CTDY_4_1S                       Klášter
+CTDY_4_1L                       Scene 4.1 - Klášter
+HILLD_4_1S                      Petøín
+HILLD_4_1L                      Scene 4.1 - Petøín
+GOLDD_4_1S						Zlatá Ulièka 
+GOLDD_4_1L						Scene 4.1 - Zlatá Ulièka
+IN4D_4_1S                       Hostinec U Ètyø Jelenù
+IN4D_4_1L                       Scene 4.1 - Hostinec U Ètyø Jelenù
+JUDBD_4_1S						Na Juditinì Mostì
+JUDBD_4_1L						Scene 4.1 - Juditin Most
+OTDY_4_1S                       Staré Mìsto Praské
+OTDY_4_1L                       Scene 4.1 - Staré Mìsto Praské
+SMYD_4_1S                       Kovárna
+SMYD_4_1L                       Scene 4.1 - Kovárna
+STHM_4_1S                       Katedrála Sv. Tomáše
+STHM_4_1L                       Scene 4.1 - Katedrála Sv. Tomáše
+UNIV_4_1S                       Univerzita 
+UNIV_4_1L                       Scene 4.1 - Univerzita
+UNORD_4_1S						Unornin Obchod 
+UNORD_4_1L						Scene 4.1 - Unornin Obchod
+EGAT_5_1S                       Vıchodní Brána 
+EGAT_5_1L                       Scene 5.1 - Vıchodní Brána
+SIM1_5_1S                       Støíbrné Doly 1 
+SIM1_5_1L                       Scene 5.1 - Støíbrné Doly 1
+SIM2_5_1S                       Støíbrné Doly 2 
+SIM2_5_1L                       Scene 5.1 - Støíbrné Doly 2
+SIM3_5_1S                       Støíbrné Doly 3 
+SIM3_5_1L                       Scene 5.1 - Støíbrné Doly 3
+SIM4_5_1S                       Støíbrné Doly 4 
+SIM4_5_1L                       Scene 5.1 - Støíbrné Doly 4
+CTDY_6_1S                       Klášter
+CTDY_6_1L                       Scene 6.1 - Klášterní Den
+OTDY_6_1S						Staré Mìsto Praské
+OTDY_6_1L						Scene 6.1 - Staré Mìsto Praské
+SMYD_6_1S                       Kovárna
+SMYD_6_1L                       Scene 6.1 - Kovárna
+STHM_6_1S                       Katedrála Sv. Tomáše
+STHM_6_1L                       Scene 6.1 - Katedrála Sv. Tomáše
+CNVT_7_1S                       Klášter 
+CNVT_7_1L                       Scene 7.1 - Klášter
+EGNT_7_1S                       Vıchodní Brána
+EGNT_7_1L                       Scene 7.1 - Vıchodní Brána
+INN4_7_1S                       Hostinec U Ètyø Jelenù
+INN4_7_1L                       Scene 7. 1 - Hostinec U Ètyø Jelenù
+JUDB_7_1S						Juditin Most 
+JUDB_7_1L						Scene 7.1 - Juditin Most
+OLDT_7_1S                       Staré Mìsto Praské 
+OLDT_7_1L                       Scene 7.1 - Staré Mìsto Praské
+SIMN_7_1S						Støíbrné Doly 1
+SIMN_7_1L						Scene 7.1 - Støíbrné Doly 1
+SMTY_7_1S                       Kovárna 
+SMTY_7_1L                       Scene 7.1 - Kovárna
+GOLD_7_1S						Zlatá Ulièka 
+GOLD_7_1L						Scene 7.1 - Zlatá Ulièka
+GOLD_8_1S						Zlatá Ulièka 
+GOLD_8_1L						Scene 8.1 - Zlatá Ulièka
+UNOR_7_1S						Unornin Obchod 
+UNOR_7_1L						Scene 7.1 - Unornin Obchod
+HAVN_7_4S                       Azyl v Univerzitì 
+HAVN_7_4L                       Scene 7.4 - Azyl v Univerzitì
+OLDT_7_4S                       Staré Mìsto Praské 
+OLDT_7_4L                       Scene 7.4 - Staré Mìsto Praské
+HAVN_7_7S						Azyl v Univerzitì
+HAVN_7_7L						Scene 7.7 - Azyl v Univerzitì
+INN4_7_7S                       Hostinec U Ètyø Jelenù
+INN4_7_7L                       Scene 7.7  - Hostinec U Ètyø Jelenù
+OLDT_7_7S						Staré Mìsto Praské
+OLDT_7_7L						Scene 7.7 - Staré Mìsto Praské
+UNIV_7_7S                       Univerzita 
+UNIV_7_7L                       Prague 7.7 - Univerzita
+JUDB_7_8S						Juditin Most
+JUDB_7_8L						Scene 7.8 - Juditin Most
+UNIV_8_1S						Univerzita
+UNIV_8_1L						Scene 8.1 - Univerzita
+HILL_8_1S						Petøín
+HILL_8_1L						Scene 8.1 - Petøín
+HILL_7_1S						Petøín
+HILL_7_1L						Scene 7.1 - Petøín
+MON1_8_2S						Klášter 1
+MON1_8_2L						Scene 8.2 - Klášter 1
+MON2_8_2S						Klášter 2
+MON2_8_2L                       Scene 8.2 - Klášter 2
+MON3_8_3S						Klášter 3
+MON3_8_3L                       Scene 8.2 - Klášter 3
+ANZK_8_4S                       Aneèin Pokoj 
+ANZK_8_4L                       Scene 8.4 - Aneèin Pokoj
+ANZK_14_1S						<>
+ANZK_14_1L						Scene 14.1 - Aneèin Pokoj
+UNIV_9_1S                       Univerzita
+UNIV_9_1L                       Scene 9.1 - Univerzita
+HAVN_11_1S                      Azyl v Univerzitì 
+HAVN_11_1L                      Scene 11.1 - Azyl v Univerzitì 
+NQTR_11_1S						Severní Ètvr
+NQTR_11_1L						Scene 11.1 - Severní Ètvr
+OLDT_11_1S						Staré Mìsto Praské
+OLDT_11_1L						Scene 11.1 - Staré Mìsto Praské
+HILL_13_1S						Petøín
+HILL_13_1L						Scene 13.1 - Petøín
+PRIN_14_1S                      Pøijímací Komnata Prince Brandla
+PRIN_14_1L                      Scene 14.1 - Pøijímací Komnata Prince Brandla
+UNIV_14_1S                      Univerzita 
+UNIV_14_1L                      Scene 14.1 - Univerzita
+NQTR_14_3S						Severní Ètvr
+NQTR_14_3L						Scene 11.1 - Severní Ètvr
+UNIV_14_3S                      Univerzita 
+UNIV_14_3L                      Scene 14.3 - Univerzita 
+CAST_15_1S                      Nádvoøí Praského Hradu
+CAST_15_1L                      Scene 15.1 - Nádvoøí Praského Hradu
+JOS1_15_1S						Josefovské Tunely 1 
+JOS1_15_1L						Scene 15.1 - Josefovské Tunely 1
+JOS2_15_1S						Josefovské Tunely 2 
+JOS2_15_1L						Scene 15.1 - Josefovské Tunely 2
+JOS3_15_1S						Josefovské Tunely 3 
+JOS3_15_1L						Scene 15.1 - Josefovské Tunely 3
+PRIN_16_1S                      Pøijímací Komnata Prince Brandla
+PRIN_16_1L                      Scene 16.1 - Pøijímací Komnata Prince Brandla
+ARC1_17_1S						Ardanùv Oltáø 1 
+ARC1_17_1L						Scene 17.1 - Ardanùv Oltáø 1
+ARC2_17_1S						Ardanùv Oltáø 2 
+ARC2_17_1L						Scene 17.1 - Ardanùv Oltáø 2
+ARC3_17_1S						Ardanùv Oltáø 3 
+ARC3_17_1L						Scene 17.1 - Ardanùv Oltáø 3
+ARC4_17_1S						Ardanùv Oltáø 4 
+ARC4_17_1L						Scene 17.1 - Ardanùv Oltáø 4
+UNIV_18_1S                      Univerzita 
+UNIV_18_1L                      Scene 18.1 - Univerzita
+OLDT_18_1S                      Staré Mìsto Praské 
+OLDT_18_1L                      Scene 18.1 - Staré Mìsto Praské
+
+
+// ............................................................................ 
+// Map labels
+// ............................................................................ 
+
+mapOldTownCenter              Staré Mìsto Praské
+mapPrinceRudolfsChambers      Pøijímací Komnata Prince Brandla
+mapPragueCastle               Nádvoøí Praského Hradu
+mappharmacy                   Ardanùv Oltáø
+mapGoldenLane                 Zlatá Ulièka
+mapUnornas                    Unornin Obchod
+mapPetrinHillMonastery        Klášter na Petøínì
+mapJudithBridge               Juditin Most
+mapNorthGate                  K Severnímu Námìstí
+mapNorthQuarter               Severní Námìstí
+mapSmithy                     Kovárna
+mapFourStagsInn               Hostinec u Ètyø Jelenù
+mapUniversityHaven            Azyl v Univerzitì
+mapUniversity                 Univerzita
+mapConvent                    Klášter
+mapSaintThomasCathedral       Katedrála Sv. Tomáše
+mapEastGate                   Vıchodní Brána
+mapBonnSilvermines            Støíbrné Doly
+mapSouthGate                  Jiní Brána
+mapVysehradCastle             Hrad Vyšehrad
+mapNorthQuarterMain           Severní Ètvr
+mapRabbisHouse                Rabbiho Dùm
+mapJosefsTunnels              Josefovské Tunely
+
+// ............................................................................ 
+// Description ID for Doors/Exits
+// ............................................................................ 
+
+OLDT_EXIT_DESC_1                Azyl v Univerzitì
+OLDT_EXIT_DESC_1_L              Azyl v Univerzitì (Zamèeno)
+OLDT_EXIT_DESC_2                Univerzita
+OLDT_EXIT_DESC_2_L              Univerzita (Zamèeno)
+OLDT_EXIT_DESC_3                Brána k Horám Bonn
+OLDT_EXIT_DESC_3_L              Brána k Horám Bonn (Zamèeno)
+OLDT_EXIT_DESC_3b               Vıchod k Vídni
+OLDT_EXIT_DESC_3b_L             Vıchod k Vídni (Zamèeno)
+OLDT_EXIT_DESC_4                Klášter
+OLDT_EXIT_DESC_4_L              Klášter (Zamèeno)
+OLDT_EXIT_DESC_5                Katedrála Sv. Tomáše
+OLDT_EXIT_DESC_5_L              Katedrála Sv. Tomáše (Zamèeno)
+OLDT_EXIT_DESC_7                Brána k Vyšehradské Hoøe
+OLDT_EXIT_DESC_7_L              Brána k Vyšehradské Hoøe (Zamèeno)
+OLDT_EXIT_DESC_8                Brána k Juditinu Mostu
+OLDT_EXIT_DESC_8_L              Brána k Juditinu Mostu (Zamèeno)
+OLDT_EXIT_DESC_9                Kovárna
+OLDT_EXIT_DESC_9_L              Kovárna (Zamèeno)
+OLDT_EXIT_DESC_10               Hostinec u Ètyø Jelenù
+OLDT_EXIT_DESC_10_L             Hostinec u Ètyø Jelenù (Zamèeno)
+OLDT_EXIT_DESC_11               Brána k Severní Ètvrti
+OLDT_EXIT_DESC_11_L             Brána k Severní Ètvrti (Zamèeno)
+
+EGAT_EXIT_DESC_1                Staré Mìsto
+EGAT_EXIT_DESC_1_L              Staré Mìsto (Zamèeno)
+EGAT_EXIT_DESC_2                Bonnské Støíbrné Doly
+EGAT_EXIT_DESC_2_L              Bonnské Støíbrné Doly (Zamèeno)
+
+SIM1_EXIT_DESC_0                Ven k Bonnskım Horám
+SIM1_EXIT_DESC_1                Dolù do Støíbrnıch Dolù 2
+SIM1_EXIT_DESC_2                Dolù do Støíbrnıch Dolù 3
+SIM2_EXIT_DESC_0                Nahoru do Støíbrnıch Dolù 1
+SIM2_EXIT_DESC_1                Dolù do Støíbrnıch Dolù 3
+SIM3_EXIT_DESC_0                Nahoru do Støíbrnıch Dolù 2
+SIM3_EXIT_DESC_1                Nahoru do Støíbrnıch Dolù 1
+
+INN4_EXIT_DESC_1                Staré Mìsto
+INN4_EXIT_DESC_1_L              Staré Mìsto (Zamèeno)
+
+CNVT_EXIT_DESC_1                Staré Mìsto
+CNVT_EXIT_DESC_1_L              Staré Mìsto (Zamèeno)
+
+UNIV_EXIT_DESC_1                Staré Mìsto
+UNIV_EXIT_DESC_1_L              Staré Mìsto (Zamèeno)
+
+HAVN_EXIT_DESC_1                Staré Mìsto
+HAVN_EXIT_DESC_1_L              Staré Mìsto (Zamèeno)
+
+STHM_EXIT_DESC_1                Staré Mìsto
+STHM_EXIT_DESC_1_L              Staré Mìsto (Zamèeno)
+
+SMTY_EXIT_DESC_1                Staré Mìsto
+SMTY_EXIT_DESC_1_L              Staré Mìsto (Zamèeno)
+
+JUDB_EXIT_DESC_1                Zlatá Ulièka
+JUDB_EXIT_DESC_1_L              Zlatá Ulièka (Zamèeno)
+JUDB_EXIT_DESC_2                Brána na Území Praského Hradu
+JUDB_EXIT_DESC_2_L              Brána na Území Praského Hradu (Zamèeno)
+JUDB_EXIT_DESC_3                Brána do Starého Mìsta
+JUDB_EXIT_DESC_3_L              Brána do Starého Mìsta (Zamèeno)
+JUDB_EXIT_DESC_4                Juditin Most
+JUDB_EXIT_DESC_4_L              Juditin Most (Zamèeno)
+
+CAST_EXIT_DESC_1                Brána k Juditinì Mostu
+CAST_EXIT_DESC_1_L              Brána k Juditinì Mostu (Zamèeno)
+CAST_EXIT_DESC_2                Místnost Prince Brandla
+CAST_EXIT_DESC_2_L              Místnost Prince Brandla (Zamèeno)
+
+PRIN_EXIT_DESC_1                Území Praského Hradu
+PRIN_EXIT_DESC_1_L              Území Praského Hradu (Zamèeno)
+
+NQTR_EXIT_DESC_0		           Brána do Starého Mìsta
+NQTR_EXIT_DESC_0_L	           Brána do Starého Mìsta (Zamèeno)
+NQTR_EXIT_DESC_1                Josefovské Tunely
+NQTR_EXIT_DESC_1_L              Josefovské Tunely (Zamèeno)
+
+HILL_EXIT_DESC_1                Klášter na Petøínì
+HILL_EXIT_DESC_1_L              Klášter na Petøínì (Zamèeno)
+
+MON1_EXIT_DESC_1                Klášter na Petøínì
+MON1_EXIT_DESC_1_L              Klášter na Petøínì (Zamèeno)
+MON1_EXIT_DESC_2				     Dolù do Kláštera 2
+MON2_EXIT_DESC_0				     Nahoru do Kláštera 1
+MON2_EXIT_DESC_1				     Dolù do Kláštera 3
+MON3_EXIT_DESC_0				     Nahoru do Kláštera 2
+MON3_DOOR_DESC_1				     Garinolovi Dveøe
+MON3_DOOR_DESC_2				     Mercuriovi Dveøe
+
+GOLD_EXIT_DESC_1                Unornin Obchod
+GOLD_EXIT_DESC_1_L              Unornin Obchod (Zamèeno)
+GOLD_EXIT_DESC_2                Lékárna
+GOLD_EXIT_DESC_2_L              Lékárna (Zamèeno)
+GOLD_EXIT_DESC_2a               Ardan Tremere Oltáø
+GOLD_EXIT_DESC_2a_L             Ardan Tremere Oltáø (Zamèeno)
+GOLD_EXIT_DESC_3                Josefovské Podzemní Tunely
+GOLD_EXIT_DESC_3_L              Josefovské Podzemní Tunely (Zamèeno)
+GOLD_EXIT_DESC_4                Brána k Juditinì Mostu
+GOLD_EXIT_DESC_4_L              Brána k Juditinì Mostu (Zamèeno)
+GOLD_EXIT_DESC_5                Zlatá Ulièka
+GOLD_EXIT_DESC_5_L              Zlatá Ulièka (Zamèeno)
+GOLD_EXIT_DESC_6                Lékárna
+GOLD_EXIT_DESC_6_L              Lékárna (Zamèeno)
+GOLD_EXIT_DESC_7				     Brána dolù do katakomb
+GOLD_EXIT_DESC_7_L   		     Brána dolù do katakomb (Zamèeno)
+
+ARC1_EXIT_DESC_0                Zlatá Ulièka
+ARC1_EXIT_DESC_1                Dolù k Ardanovì Oltáøi 2
+ARC2_EXIT_DESC_0                Nahoru k Ardanovì Oltáøi 1
+ARC2_EXIT_DESC_1                Dolù k Ardanovì Oltáøi 3
+ARC3_EXIT_DESC_0                Nahoru k Ardanovì Oltáøi 2
+ARC3_EXIT_DESC_1                Dolù k Ardanovì Oltáøi 4
+ARC4_EXIT_DESC_0                Nahoru k Ardanovì Oltáøi 3
+
+JOS1_EXIT_DESC_0                Severní Ètvr
+JOS1_EXIT_DESC_1                Josefovské Tunely 2
+JOS2_EXIT_DESC_0                Josefovské Tunely 1
+JOS2_EXIT_DESC_1                Josefovské Tunely 3
+JOS2_EXIT_DESC_2                Nahoru do Zlaté Ulièky
+JOS3_EXIT_DESC_0                Josefovské Tunely 2
+
+JOS3_CHRONICLE			Kronika Cainea
+
+// ............................................................................ 
+// Description ID for Doors/Exits for the Prague2 chron - included here
+// for the MP_Prague_Null chronicle that uses prague.nls as well
+// ............................................................................ 
+
+VYC1_EXIT_DESC_0                Ven k Vyšehradské Hoøe
+VYC1_EXIT_DESC_1                Dolù k Vyšehradskému Hradu 2
+VYC2_EXIT_DESC_0                Nahoru k Vyšehradskému Hradu 1
+VYC2_EXIT_DESC_1                Dolù k Vyšehradskému Hradu 3
+VYC3_EXIT_DESC_0                Nahoru k Vyšehradskému Hradu 2
+VYC3_EXIT_DESC_1                Dolù k Vyšehradskému Hradu 4
+VYC4_EXIT_DESC_0                Nahoru k Vyšehradskému Hradu 3
+
+VYSM_EXIT_DESC_0                Dolù do Starého Mìsta
+VYSM_EXIT_DESC_1                Vyšehradskı Hrad
+

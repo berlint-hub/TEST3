@@ -1,0 +1,52 @@
+<TEXT IntroTextLOT none 0>
+<TITLE Leaves of Three>
+<P 0xFFFFFFFF>
+Jste pøíbuzní obyvatel New York City. Camarilla má tenkou pozici ve mìstì, malý ostrov u Manhattanu, totálnì obklopující Sabbat. Nynìjší Knìžna - Ventrue Michaela udržuje tuto oblast uvnitø centrálního Manhattanu, což zabraòuje každonoèním útokùm Sabbatu. Dost dobøe víte, než aby jste se odvážili pøíliš pøiblížit k hranicím, mnoho lidí se setkalo pøi bojích nedávné noci, se smrtí. 
+<P 0xFFFFFFFF>
+Hodnì pøíbuzných si stìžuje na Knìžnino slaboduché jednání pøi každonoèních bojích se Sabbat a dokonce šeptají o možnosti zmìny v moci. Takovéto podivnosti se vyskytují v každém mìstì, ale k okolnostem se zdají pravdìpodobné, protože jejich ozvìny jsou nìkdy pravdivé a pak se pokraèuje v tajných diskusích o Primogenu. 
+<P 0xFFFFFFFF>
+Dostali jste pøedvolací zprávu o následujícím veèeru do úøadù Knìžny uvnitø Jižní Barclay. Výšková budova v obchodní èásti, kterou Michaela uživá k vedení záležitostí svého pøíbuzenstva. Je to dost pøíznivé pozvání, toho, který slouží k podpoøe vaší koncepce, která má ustanovit vás jako dùležité pøíbuzné uvnitø mìsta. To pozvání bylo dodáno vlkodlakem, který se nevrle uvedl jako Campbell. Struènì - byl jste urèený objevit se v Barclayho pøedsíni v 11 hodin veèer následující veèer... 
+</TEXT>
+
+<TEXT MirabilisMurder none 0>
+<TITLE The Hit>
+<P 0xFFFFFFFF>
+Vzbudil jste se z vašeho denního odpoèinku, aby jste našel hotel ve zmatku. Mirabilis byl asi zabit, jeho místnost je zaplavená krví. U jeho vchodu se našlo tìlo mladé Tracy a bylo k nepoznání. Michaela zavolala mimoøádnou schùzi, aby se diskutovalo o této události. 
+</TEXT>
+
+
+<TEXT EndTextBadLOT none 0>
+<TITLE Chronicle Completed>
+<P 0xFFFFFFFF>
+Od té doby co nebyla obnovena krevní smlouva, nemáte žádný dùkaz proti Seneschal. Dominic se asi zajímá o otvji ocharnu, aèkoli kdo ví jestli nezamýšlí pøedat tì Triplets nebo krvìžíznivým válèícím stranám Sabbat? Budoucnost je zajisté nebezpeèná pro kotérie ...
+<P 0xFFFFFFFF>
+Konec.
+</TEXT>
+
+<TEXT EndTextGoodLOT none 0>
+<TITLE Chronicle Completed>
+<P 0xFFFFFFFF>
+Gratuluji! Obstál jste v prùchodu trnitými cestami politiky Pøíbuzných - pøinejmenším pro teï. Získal jste respekt Primogen (kromì Arianny, která si nyní dìlá starosti kolik toho víte o podpoøe Dominica) a možná i Lucinde samotné!
+<P 0xFFFFFFFF>
+Krotérie hrála hlavní roli v reformování pravidel Pøíbuzných v New Yorku. Zda tato zmìna byla dobrá, zùstává prozatím nejasné ...
+<P 0xFFFFFFFF>
+Konec.
+</TEXT>
+
+<TEXT EndTextMediumLOT none 0>
+<TITLE Chronicle Completed>
+<P 0xFFFFFFFF>
+Gratuluji! Podaøilo se vám odhalit Dominikovu zradu a Michala je vám za to dlužna! Poèínejte si opatrnì, protože tyto události vám zajistily jak spojence, tak nepøátelé ve stejných èástech ...
+<P 0xFFFFFFFF>
+Konec.
+</TEXT>
+
+<TEXT EndTextNeutralLOT none 0>
+<TITLE Chronicle Completed>
+<P 0xFFFFFFFF>
+Nepodaøilo se vám pøedat Dominica spravedlnosti, ale pøinejmenším jste uložil vaše mrtvoly. Teï bude nejlepší opustit tuto oblast, doufejme že to Krotérie udìlá døíve, než pøijedou Sabbat ...
+<P 0xFFFFFFFF>
+Konec.
+</TEXT>
+
+

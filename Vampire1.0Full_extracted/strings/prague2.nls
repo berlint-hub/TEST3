@@ -1,0 +1,120 @@
+// ****************************************************************************
+//
+// PRAGUE2.NLS
+//
+// Prague2-specific string table
+//
+// ****************************************************************************
+
+// ............................................................................ 
+// Quests
+// ............................................................................ 
+
+Q_ECATERINA_S                Navštívit Ecaterinu.
+Q_ECATERINA_L                Vra se do Univerzity a promluv s Ecaterinou.
+Q_INFILTRATEVYS_S	           Vniknout do Hradu Vyšehrad.
+Q_INFILTRATEVYS_L	           Opus Staré Mìsto Jiní Branou a pokraèuj v hledání Aneky uvnitø Hradu Vyšehrad.
+
+// ............................................................................ 
+// Levels
+// ............................................................................ 
+UNIVERSITY						Univerzita
+EASTGATENIGHT					Vıchodní Brána
+OLDTOWN							Staré Mìsto
+INN4STAGS						Hostinec u Ètyø Jelenù
+HAVEN							Útulek v Univerzitì
+VYSEHRADMOUNTAIN				Hora Vyšehrad
+VYSEHRADCASTLE1					Hrad Vyšehrad 1
+VYSEHRADCASTLE2					Hrad Vyšehrad 2
+VYSEHRADCASTLE3					Hrad Vyšehrad 3
+VYSEHRADCASTLE4					Hrad Vyšehrad 4
+
+// ............................................................................ 
+// Scenes
+// ............................................................................ 
+
+EGNT_25_1S                      Vıchodní Brána
+EGNT_25_1L                      Scéna 25.1 - Vıchodní Brána
+HAVN_25_1S                      Útulek v Univerzitì
+HAVN_25_1L                      Scéna 25.1 - Útulek v Univerzitì
+OLDT_25_1S                      Staré Mìsto Praské
+OLDT_25_1L                      Scéna 25.1 - Staré Mìsto Praské
+UNIV_25_1S                      Univerzita
+UNIV_25_1L                      Scéna 25.1 - Univerzita
+VYSM_25_1S                      Hora Vyšehrad
+VYSM_25_1L                      Scéna 25.1 - Hora Vyšehrad
+VYC1_25_1S                      Hrad Vyšehrad 1
+VYC1_25_1L                      Scéna 25.1 - Hrad Vyšehrad 1
+VYC2_25_1S                      Hrad Vyšehrad 2
+VYC2_25_1L                      Scéna 25.1 - Hrad Vyšehrad 2
+VYC3_25_1S                      Hrad Vyšehrad 3
+VYC3_25_1L                      Scéna 25.1 - Hrad Vyšehrad 3
+VYC4_25_1S                      Hrad Vyšehrad 4
+VYC4_25_1L                      Scéna 25.1 - Hrad Vyšehrad 4
+
+// ............................................................................ 
+// Map labels
+// ............................................................................ 
+
+mapOldTownCenter              Staré Mìsto Praské
+mapPrinceRudolfsChambers      Pøijímací Pokoj Prince Rudolfa
+mapPragueCastle               Námìstí Praského Hradu
+mappharmacy                   Ardanùv Oltáø
+mapGoldenLane                 Zlatá Ulièka
+mapUnornas                    Unornin Obchod
+mapPetrinHillMonastery        Klášter na Petøínì
+mapJudithBridge               Juditin Most
+mapNorthGate                  Severní Brána
+mapNorthQuarter               Severní Ètvr
+mapSmithy                     Kovárna
+mapFourStagsInn               Hostinec u Ètyø Jelenù
+mapUniversityHaven            Útulek v Univerzitì
+mapUniversity                 Univerzita
+mapConvent                    Klášter
+mapSaintThomasCathedral       Katedrála Sv. Tomáše
+mapEastGate                   Vıchodní Brána
+mapBonnSilvermines            Støíbrné Doly
+mapSouthGate                  Jiní Brána
+mapVysehradCastle             Hrad Vyšehrad
+mapNorthQuarterMain           Severní Ètvr
+mapRabbisHouse                Rabbiho Dùm
+mapJosefsTunnels              Josefovské Tunely
+
+// ............................................................................ 
+// Description ID for Doors/Exits
+// ............................................................................ 
+
+OLDT_EXIT_DESC_1                Útulek v Univerzitì
+OLDT_EXIT_DESC_1_L              Útulek v Univerzitì (Zamèeno)
+OLDT_EXIT_DESC_2                Univerzita
+OLDT_EXIT_DESC_2_L              Univerzita (Zamèeno)
+OLDT_EXIT_DESC_3                Brána k Pohoøí Bonn
+OLDT_EXIT_DESC_3_L              Brána k Pohoøí Bonn (Zamèeno)
+
+OLDT_EXIT_DESC_7                Brána k Hoøe Vyšehrad
+OLDT_EXIT_DESC_7_L              Brána k Hoøe Vyšehrad
+
+OLDT_EXIT_DESC_4                Klášter
+OLDT_EXIT_DESC_4_L              Klášter (Zamèeno)
+OLDT_EXIT_DESC_5                Sv. Tomáš
+OLDT_EXIT_DESC_5_L              Sv. Tomáš (Zamèeno)
+OLDT_EXIT_DESC_10               Hostinec u Ètyø Jelenù
+OLDT_EXIT_DESC_10_L             Hostinec u Ètyø Jelenù (Zamèeno)
+
+EGAT_EXIT_DESC_1                Staré Mìsto
+
+UNIV_EXIT_DESC_1                Staré Mìsto
+
+HAVN_EXIT_DESC_1                Staré Mìsto
+
+VYC1_EXIT_DESC_0                Pryè k Vyšehradské Hoøe
+VYC1_EXIT_DESC_1                Dolù k Hradu Vyšehrad 2
+VYC2_EXIT_DESC_0                Nahoru k Hradu Vyšehrad 1
+VYC2_EXIT_DESC_1                Dolù k Hradu Vyšehrad 3
+VYC3_EXIT_DESC_0                Nahoru k Hradu Vyšehrad 2
+VYC3_EXIT_DESC_1                Dolù k Hradu Vyšehrad 4
+VYC3_EXIT_DESC_1_L              Dolù k Hradu Vyšehrad 4 (Zamèeno)
+VYC4_EXIT_DESC_0                Nahoru k Hradu Vyšehrad 3
+
+VYSM_EXIT_DESC_0                Dolù do Starého Mìsta
+VYSM_EXIT_DESC_1                Hrad Vyšehrad

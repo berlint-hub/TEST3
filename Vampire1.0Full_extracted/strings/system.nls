@@ -1,0 +1,888 @@
+// ****************************************************************************
+//
+// SYSTEM.NLS
+//
+// System string table
+//
+// ****************************************************************************
+
+
+// ............................................................................ 
+// generic stuff
+// ............................................................................ 
+
+STRID_COMPANY                   Nihilistic Software, Inc.
+STRID_COPYRIGHT                 Copyright (c) Nihilistic Software, Inc. 1998-1999
+
+STRID_YES                       ANO
+STRID_NO                        NE
+STRID_NULL                      ***NEMÌL BY JSI MNE VIDÌT !!!***
+
+
+// ............................................................................ 
+// rpg messages
+// ............................................................................ 
+
+RPG_HUMANITYLOST                %P ztrácí èást Lidskosti!
+RPG_FRENZY                      %P zaèíná Zuøit!
+RPG_UNFRENZY                    %P konèí Šílenství.
+RPG_DIED			%P umírá.
+RPG_DIEDV			%P zaèíná nehybnìt.
+RPG_HUMANITYLOSTALT				  Ztratil jsi èást Lidskosti!
+
+RPG_ENDGAME_PARTYDEAD           Všichni èlenové frakce jsou mrtví!                       
+RPG_ENDGAME_HUMANITYLOST        %P ztratil všechnu Lidskost!                        
+RPG_ENDGAME_PRESSESC            Stiskni Esc k nahrání uloené hry.
+RPG_ENDGAME_PRESSESCMP			Stiskni Esc k obnovení.
+RPG_ENDGAME_MULTIPLAYER         Multiplayer ukonèen!
+
+RPG_NEWRANKGAINED				%P získal novou hodnost!
+RPG_DISCIPLINELEARNED           Nauèil jsi se novou Skupinu Oboru - %d
+RPG_OUTOFAMMO                   %A je bez munice!
+RPG_PICKEDUPCASHDA              Sebral jsi %D zlata.
+RPG_PICKEDUPCASHMD              Sebral jsi %D hotovosti.
+
+RPG_DAMAGE_NORMAL               Úderem
+RPG_DAMAGE_LETHAL               Smrtelné
+RPG_DAMAGE_AGGRAVATED           Rozèílením
+RPG_DAMAGE_ELECTRIC             Elektrikou
+RPG_DAMAGE_FIRE                 Ohòem
+RPG_DAMAGE_SUN                  Sluncem
+RPG_DAMAGE_FAITH                Vírou
+RPG_DAMAGE_COLD                 Chladem
+RPG_DAMAGE_POISON               Jedem
+RPG_DAMAGE_DISEASE              Chorobou
+
+
+RPG_NOTIDENTIFIED               [neidetifikováno]
+
+RPG_CHARGES			Náplò:
+RPG_CASH                        Hotovost:
+
+RPG_WPNAMMO                     Munice:
+RPG_WPNDAMAGE                   Poškození:
+RPG_WPNACCURACY                 Pøesnost:
+RPG_WPNSPEED	                Rychlost:
+RPG_WPNSILVERED                 Støíbrné
+
+RPG_DISCLEVEL			Úroveò:
+RPG_DISCNOLEVEL			[Zatím nemono pouít]
+RPG_DISCCOSTBLOOD		Krev:
+RPG_DISCCOSTMANA		Mana:
+RPG_DISCTEMPORARY		Teplota (Svitek)
+RPG_DISCCASTON			Dát na:
+
+RPG_DISCTARGET_NONE             Sebe
+RPG_DISCTARGET_AREA             Oblast
+RPG_DISCTARGET_ITEM             Pøedmìt
+RPG_DISCTARGET_ENEMY            Nepøítel
+RPG_DISCTARGET_FRIENDLY         Pøítel
+RPG_DISCTARGET_DEAD             Mrtvı
+RPG_DISCTARGET_HEAD             Hlavní
+
+RPG_DISCMSG_CASTS               %C pouívá Obor %d.
+RPG_DISCMSG_RECASTS             %C pouívá Obor %d.
+RPG_DISCMSG_FIZZLES             %C oslabuje Obor %d.
+RPG_DISCMSG_RESISTED		%C oslabuje Obor %d.
+
+
+RPG_STAT_STRENGTH               Síla
+RPG_STAT_DEXTERITY              Obratnost
+RPG_STAT_STAMINA                Vıdr
+RPG_STAT_PERCEPTION             Bystrost
+RPG_STAT_INTELLIGENCE           Inteligence
+RPG_STAT_WITS                   Dùvtip
+RPG_STAT_BLOOD                  Krev
+RPG_STAT_HUMANITY               Lidskost
+RPG_STAT_FRENZY                 Šílenství
+RPG_STAT_GENERATION             Tvorba
+RPG_STAT_FAITH                  Víra
+RPG_STAT_CHARISMA               Charisma
+RPG_STAT_MANIPULATION           Ovládání
+RPG_STAT_APPEARANCE             Vzhled
+RPG_STAT_FRENZYRATING           Pomìr šílenství
+RPG_STAT_BLOODRATING            Pomìr krve
+RPG_STAT_BLOODPOOL              Nádoba krve
+RPG_STAT_MANA                   Mana
+RPG_STAT_MANAPOOL               Nádoba many
+
+RPG_RESTRICT_NONE               Neomezenì
+RPG_RESTRICT_STRENGTH           Síla
+RPG_RESTRICT_DEXTERITY          Obratnost
+RPG_RESTRICT_STAMINA            Vıdr
+RPG_RESTRICT_PERCEPTION         Bystrost
+RPG_RESTRICT_INTELLIGENCE       Inteligence
+RPG_RESTRICT_WITS               Dùvtip
+RPG_RESTRICT_BLOOD              Krev
+RPG_RESTRICT_HUMANITY           Lidskost
+RPG_RESTRICT_FRENZY             Šílenství
+RPG_RESTRICT_GENERATION         Tvorba
+RPG_RESTRICT_FAITH              Víra
+RPG_RESTRICT_CHARISMA           Charisma
+RPG_RESTRICT_MANIPULATION       Ovládání
+RPG_RESTRICT_APPEARANCE         Vzhled
+RPG_RESTRICT_FRENZYRATING       Pomìr šílenství
+RPG_RESTRICT_BLOODRATING        Pomìr krve
+RPG_RESTRICT_BLOODPOOL          Nádoba krve
+RPG_RESTRICT_HEALTH             Zdraví
+RPG_RESTRICT_VAMPIRE            Jen pøíbuzní
+RPG_RESTRICT_GHOUL              Jen démon
+RPG_RESTRICT_HUMAN              Jen èlovìk
+RPG_RESTRICT_NOVAMPIRE          Jen Ne-Pøíbuzní
+RPG_RESTRICT_NOGHOUL            Jen Ne-Démoni
+RPG_RESTRICT_NOHUMAN            Jen Ne-Èlovìk
+RPG_RESTRICT_MANA               Mana
+RPG_RESTRICT_MANAPOOL           Nádoba many
+
+RPG_RESTRICT_MINSTAT		Min %V %S
+RPG_RESTRICT_MAXSTAT		Max %V %S
+
+
+RPG_HIT                         %A poškozuje %T
+RPG_NOCAUSEHIT                  %T zraòuje
+RPG_GROUPS                      %A uèí novou Skupinu Oboru - %g
+
+
+// ............................................................................ 
+// discipline groups names
+// ............................................................................ 
+
+DGRP_COMMON                     Bìnı     
+DGRP_ANIMALISM                  ivoèišno  
+DGRP_AUSPEX                     Auspex     
+DGRP_CELERITY                   Hbitost   
+DGRP_OBFUSCATE                  Zatemnìní  
+DGRP_DEMENTATION                Slabomyslnost
+DGRP_DOMINATE                   Ovládnutí   
+DGRP_FORTITUDE                  Stateènost  
+DGRP_POTENCE                    Síla    
+DGRP_PROTEAN                    Protean    
+DGRP_PRESENCE                   Pøítomnost   
+DGRP_MORTIS                     Úmrtí     
+DGRP_THAU_BLOODPATH             Krvavá magie
+DGRP_THAU_LUREOFFLAMES          Kouzlo plamenù
+DGRP_THAU_HANDSOFDESTRUCTION    Ruce znièení
+DGRP_THAU_RITUALS               Krvavé rituály
+DGRP_NUMINA                     Numina
+DGRP_FAITH                      Víra
+DGRP_OBTENEBRATION              Obtenebrace
+DGRP_SERPENTIS                  Serpentis
+
+
+// ............................................................................ 
+// discipline names
+// ............................................................................ 
+
+// Common
+FEED                            Jídlo
+BLOODHEALING                    Krvavé uzdravování
+BLOODSTRENGTH                   Krvavá síla
+BLOODDEXTERITY                  Krvavá obratnost
+BLOODSTAMINA                    Krvavá vytrvalost
+AWAKEN                          Procitnutí
+WALKTHEABYSS			Chùze propastí
+NUKE                            Nuke! (debug)
+
+// Animalism
+FERALWHISPERS                   Krutı šepot
+BECKONING                       Pøivolání
+QUELLBEAST                      Uklidnìní pøíšery
+SUBSUMETHESPIRIT                Zaøazení ducha
+DRAWINGOUTBEAST                 Odeslání pøíšery
+
+// Auspex
+HEIGHTENEDSENSES                Zvıšení smyslù
+AURAPERCEPTION                  Aura postøehu
+SPIRITSTOUCH                    Dotyk ducha
+PSYCHICPROJECTION               Psychická pøedstava
+
+// Celerity
+CELERITY                        Hbitost
+
+// Obfuscate
+CLOAKOFSHADOWS                 	Pláš stínù
+MASK1000FACES			Maska tisíce tváøí
+CLOAKTHEGATHERING		Pláš shromádìní
+
+// Dementation
+PASSION                         Vášeò
+THEHAUNTING                     Strašení
+EYESOFCHAOS                     Oèi chaosu
+VOICEOFMADNESS                  Hlas šílenství
+
+// Dominate
+COMMAND                         Ovládnutí
+MESMERIZE                       Hypnóza
+THEFORGETFULMIND                Zapomnìtlivá mysl
+POSSESSION                      Posedlost
+
+// Fortitude
+FORTITUDE                       Stateènost
+
+// Potence
+POTENCE                         Moc
+
+// Protean
+EYESOFTHEBEAST                  Oèi pøíšery
+FERALCLAWS                      Kruté drápy
+EARTHMELD                       Tavení zemì
+SHAPEOFTHEBEAST                 Vytvoøení pøíšery
+MISTFORM                        Tvorba mlhy
+
+
+// Presence
+AWE                             Úcta
+DREADGAZE                       Dìsivı pohled
+ENTRANCEMENT                    Vstoupení
+MAJESTY                         Vznešenost
+
+// Mortis
+SHAMBLINGHORDES                 Šourající se hordy
+VIGORMORTIS                     Vigor Mortis
+PLAGUEWIND                      Morovı vítr
+SUMMONSOUL                      Vyvolání duše
+BLACKDEATH                      Èerná smrt
+
+// Blood Magic
+BLOODRAGE                       Krvavé bìsnìní
+BLOODOFPOTENCY                  Krvavá moc
+THEFTOFVITAE                    Kradení ivota
+CAULDRONOFBLOOD                 Kotel krve
+
+// Lure of Flames
+TORCH                           Pochodeò
+FIREBALL                        Ohnivá koule
+FLAMERING                       Ohnivı kruh
+IMMOLATE                        Obìtování
+FIRESTORM                       Ohnivá bouøe
+
+// Hands of Destruction
+DECAY                           Rozklad
+ACIDICTOUCH                     Dotyk kyseliny
+ATROPHY                         Zakrnìní
+TURNTODUST                      Obrácení v prach
+
+// Blood Rituals
+HEARTOFSTONE                    Kamenné srdce
+PRISONOFICE                     Vìzení ledu
+CALLLIGHTNING                   Pøivolání blesku
+IGNOREFLAME                     Pøehlíení prudkého plamene
+SUMMONELEMENTAL                 Vyvolání elementálu
+
+// Faith
+HEAL				Uzdravení
+PRAYER                          Modlení
+TRUEFAITH                       Pravá víry
+
+// Numina
+INVISIBILITY                    Neviditelnost
+FLASH                           Záblesk
+TRUESIGHT                       Pohled pravdy
+
+// Obtenebration
+DARKHUNTER                      Temnı lovec
+
+// Serpentis
+EYESOFTHESERPENT                Oèi hada
+SKINOFTHEADDER                  Zmijí kùe
+HATCHTHEVIPER                   Vylíhnutá zmije
+TONGUEOFTHEASP			Jazyk Asp
+
+// ............................................................................ 
+// long discipline names
+// ............................................................................ 
+
+// Common
+FEED_L				Saje krev ze zacílené obìti
+BLOODHEALING_L                  Navrací zdraví
+BLOODSTRENGTH_L                 Zvyšuje sílu
+BLOODDEXTERITY_L                Zvyšuje obratnost
+BLOODSTAMINA_L                  Zvyšuje vıdr
+AWAKEN_L                        Probouzí zacílené vampíry ze strnulosti
+WALKTHEABYSS_L			Vytváøí mystické portály
+NUKE_L                          Okamitì nièí urèitého herce - JEN DEBUG
+
+// Animalism
+FERALWHISPERS_L                 Získá zacílené zvíøata vám na pomoc
+BECKONING_L                     Vyvolá zvíøata vám na pomoc
+QUELLBEAST_L                    Sniuje úroveò šílenosti a vytváøí uspokojení v zacílenıch pøíšerách
+SUBSUMETHESPIRIT_L              Umoòuje ovládání zacílenıch zvíøat
+DRAWINGOUTBEAST_L               Uvolní šílenství na zacíleného nepøítele
+
+// Auspex
+HEIGHTENEDSENSES_L              Zvyšuje vampíøí smysly
+AURAPERCEPTION_L                Uvidí auru a další statistiky u zacílené potvory
+SPIRITSTOUCH_L                  Urèí vlastnosi pøedmìtu
+PSYCHICPROJECTION_L             Umoní prùzkum s neviditelnou astrální formou
+
+// Celerity
+CELERITY_L                      Poskytne zvıšenı pohyb a rychlejší útok
+
+// Obfuscate
+CLOAKOFSHADOWS_L                Zkryje uivatele pøed zrakem
+MASK1000FACES_L			Zmìní uivatele jako zacílenou potvoru
+CLOAKTHEGATHERING_L             Zkryje frakci pøed zrakem
+
+// Dementation
+PASSION_L                       Zvıší pocity cíle, zvıší šílenství a sníí dùvtip
+THEHAUNTING_L                   Zpùsobí strach u cíle
+EYESOFCHAOS_L                   Umoní vidìt informace o zacílené potvoøe
+VOICEOFMADNESS_L                Zpùsobí rozšíøení strachu a pøípadného šílenství u cíle
+
+// Dominate
+COMMAND_L                       Poskytne krátkou kontrolu nad cílem (sobì rovnı nebo vysokı Gen)
+MESMERIZE_L                     Pøivolá zacílenou potvoru (sobì rovnı nebo vysokı Gen) k tobì
+THEFORGETFULMIND_L              Vytvoøí omraèující úèinek na cíl (sobì rovnı nebo vysokı Gen)
+POSSESSION_L                    Poskytne kontrolu nad zacílenou potvorou (sobì rovnı nebo vysokı Gen)
+
+// Fortitude
+FORTITUDE_L                     Dovolí pøidání ochrany proti poškození
+
+// Potence
+POTENCE_L                       Umoní zvıšení automatického poškození
+
+// Protean
+EYESOFTHEBEAST_L                Zvıší vizuální smysly
+FERALCLAWS_L                    Pøemìní ruce na velké paøáty
+EARTHMELD_L                     Ponoøí uivatele do zemì, umoní bezpeènı odpoèinek
+SHAPEOFTHEBEAST_L               Pøemìní uivatele na vlka
+MISTFORM_L                      Pøemìní uivatele v pláš mlhy
+
+// Presence
+AWE_L                           Okouzlí cíl pøed uivatelem
+DREADGAZE_L                     Zpùsobí strach na cíli
+ENTRANCEMENT_L                  Umoní kontrolu nad cílem uivatelem
+MAJESTY_L                       Zpùsobí, e se všechny okolní pøíšery zastaví a zírají na uivatele
+
+// Mortis
+SHAMBLINGHORDES_L               Probudí zacílené mrtvé na tvou pomoc
+VIGORMORTIS_L                   Dá kontrolu nad zacílenou mrtvou pøíšerou
+PLAGUEWIND_L                    Vypustí na cíl závoj nedıchatelného oparu
+SUMMONSOUL_L                    Vyádá pøízrak na tvou pomoc
+BLACKDEATH_L                    Zpùsobí škodlivou nákazu na dotèenı cíl
+
+// Blood Magic
+BLOODRAGE_L                     Donutí cíl k vydání krve
+BLOODOFPOTENCY_L                Umoní niší náklady krve pro pouití oboru
+THEFTOFVITAE_L                  Ukradne ivot ze zacílené potvory
+CAULDRONOFBLOOD_L               Uvaøí krev v dotèeném cíli
+
+// Lure of Flames
+TORCH_L                         Vytvoøí svìtelnou ohnivou kouli, která následuje uivatele
+FIREBALL_L                      Pohání ohnivou kouli na cíl
+FLAMERING_L                     Vytvoøí ohnivı kruh kolem uivatele
+IMMOLATE_L                      Poškozuje dotèenı cíl prudkım plamenem
+FIRESTORM_L                     Vytvoøí ohnivı déš z nebe
+
+// Hands of Destruction
+DECAY_L                         Zpùsobí zhoršené poškození na dotèeném cíli
+ACIDICTOUCH_L                   Zpùsobí zhoršené poškození na dotèeném cíli
+ATROPHY_L                       Zpùsobí zhoršené poškození, sniuje sílu a obratnost na dotèeném cíli
+TURNTODUST_L                    Zpùsobí zhoršené poškození na dotèeném cíli
+
+// Blood Rituals
+HEARTOFSTONE_L                  Prevence proti kolíkùm
+PRISONOFICE_L                   Zmrazí zacílenou potvoru v led
+CALLLIGHTNING_L                 Vyádá blesk na cíl
+IGNOREFLAME_L                   Ochrana proti zhoršenému ohnivému poškození
+SUMMONELEMENTAL_L               Pøivolá Golema na tvou pomoc
+
+// Faith
+HEAL_L				Léèí zranìní
+PRAYER_L                        Poškozuje cíl svatımi slovy
+TRUEFAITH_L                     Poškozuje nadpøirozené pøíšery uvnitø rádiusu okolo uivatele
+
+// Numina
+FLASH_L                         Vytváøí oslepující svìtlo, které mùe spustit zuøivost ve Vampírech
+TRUESIGHT_L                     Zvyšuje vidìní v temnotì
+INVISIBILITY_L                  Vyvrhuje uivatele z viditelnosti
+
+// Obtenebration
+DARKHUNTER_L                    Vyvolá Temného lovce tobì na pomoc
+
+// Serpentis
+EYESOFTHESERPENT_L             	Uchvátí cíl do omámení
+SKINOFTHEADDER_L                Chrání uivatele od poškození Hadí kùí (Pùsobí na zjev)
+HATCHTHEVIPER_L                 Vytvoøí zmiji na tvou pomoc
+TONGUEOFTHEASP_L		Krade ivot z cíle
+
+
+// ............................................................................ 
+// discipline specific message
+// ............................................................................ 
+
+RPG_DISC_NOTHEFTOFVITAE1        Nemùeš sát krev z tohoto cíle!
+RPG_DISC_NOTHEFTOFVITAE2        Tento cíl ji nemá více krve k vysátí!
+RPG_DISC_NOWALKTHEABYSS         Nemùeš tu pouít Chùzi Propastí!
+RPG_DISC_NOTANIMAL		Tento Obor mùe bıt pouit pouze na zvíøata!
+RPG_DISC_TOOMANYPETS		Nemùeš ovládat více sluhù!
+RPG_DISC_AURAPERC0		Typ: %t
+RPG_DISC_AURAPERC1		Typ: %t Aura: %A
+RPG_DISC_AURAPERC2		Typ: %t Aura: %A Klan: %C
+RPG_DISC_AURAPERC3		Zdraví: %H
+RPG_DISC_AURAPERC4		Zdraví: %H Krev: %B
+RPG_DISC_NOMASK1000		Nemùeš pouít Masku Tisíce Tváøí na tento cíl!
+RPG_DISC_NOBLOODHEALING			Nemùeš pouít Krvavé Uzdravování na plné zdraví!
+RPG_DISC_NOHEAL					Nemùeš pouít Uzdravení na plné zdraví!
+RPG_DISC_NOSPIRITSTOUCH			Tento pøedmìt je u identifikován!
+RPG_DISC_NODRAWINGOUTTHEBEAST	Mùe bıt pouito jen na Vampíry a Démony!
+RPG_DISC_NOPOSSESSION			Nemùeš tento Obor pouít na hráèe!
+RPG_DISC_NOBLOOD				Tento cíl nemá krev!
+
+// ............................................................................ 
+// discipline tomes
+// ............................................................................ 
+
+DISCTOME_FAIL_ANIMALISM         U jsi zaèal studium v ivoèišnu.
+DISCTOME_SUCCESS_ANIMALISM      Získal jsi novou Skupinu Oboru - ivoèišno.
+DISCTOME_FAIL_AUSPEX            U jsi zaèal studium v Auspexu.
+DISCTOME_SUCCESS_AUSPEX         Získal jsi novou Skupinu Oboru - Auspex.
+DISCTOME_FAIL_CELERITY          U jsi zaèal studium ve Hbitosti.
+DISCTOME_SUCCESS_CELERITY       Získal jsi novou Skupinu Oboru - Hbitost.
+DISCTOME_FAIL_OBFUSCATE         U jsi zaèal studium v Zatemnìní.
+DISCTOME_SUCCESS_OBFUSCATE      Získal jsi novou Skupinu Oboru - Zatemnìní.
+DISCTOME_FAIL_DEMENTATION       U jsi zaèal studium ve Slabomyslnosti.
+DISCTOME_SUCCESS_DEMENTATION    Získal jsi novou Skupinu Oboru - Slabomyslnost.
+DISCTOME_FAIL_DOMINATE          U jsi zaèal studium v Ovládnutí.
+DISCTOME_SUCCESS_DOMINATE       Získal jsi novou Skupinu Oboru - Ovládnutí.
+DISCTOME_FAIL_FORTITUDE         U jsi zaèal studium ve Stateènosti.
+DISCTOME_SUCCESS_FORTITUDE      Získal jsi novou Skupinu Oboru - Stateènost.
+DISCTOME_FAIL_POTENCE           U jsi zaèal studium v Moci.
+DISCTOME_SUCCESS_POTENCE        Získal jsi novou Skupinu Oboru - Moc.
+DISCTOME_FAIL_PROTEAN           U jsi zaèal studium Protestu.
+DISCTOME_SUCCESS_PROTEAN        Získal jsi novou Skupinu Oboru - Protesty.
+DISCTOME_FAIL_PRESENCE          U jsi zaèal studium v Pøítomnosti.
+DISCTOME_SUCCESS_PRESENCE       Získal jsi novou Skupinu Oboru - Pøítomnost.
+DISCTOME_FAIL_MORTIS            U jsi zaèal studium v Úmrtí. 
+DISCTOME_SUCCESS_MORTIS         Získal jsi novou Skupinu Oboru - Úmrtí.
+DISCTOME_FAIL_BLOODPATH         U jsi zaèal studium v Krevní Magii.
+DISCTOME_SUCCESS_BLOODPATH      Získal jsi novou Skupinu Oboru - Krevní Magii.
+DISCTOME_FAIL_LUREOFFLAMES      U jsi zaèal studium v Kouzlech Plamenù.
+DISCTOME_SUCCESS_LUREOFFLAMES   Získal jsi novou Skupinu Oboru - Kouzlo Plamenù.
+DISCTOME_FAIL_HANDSDESTRUCT     U jsi zaèal studium v Rukou Znièení.
+DISCTOME_SUCCESS_HANDSDESTRUCT  Získal jsi novou Skupini Oboru - Ruce Znièení.
+DISCTOME_FAIL_RITUALS           U jsi zaèal studium v Krvavıch Rituálech.
+DISCTOME_SUCCESS_RITUALS        Získal jsi novou Skupinu Oboru - Krvavé Rituály.
+DISCTOME_FAIL_NUMINA            U jsi zaèal studium v Numinì.
+DISCTOME_SUCCESS_NUMINA         Získal jsi novou Skupinu Oboru - Numina.
+DISCTOME_FAIL_OBTENEBRATION     U jsi zaèal studium v Obtenebraci.
+DISCTOME_SUCCESS_OBTENEBRATION  Získal jsi novou Skupinu Oboru - Obtenebrace.
+DISCTOME_FAIL_SERPENTIS         U jsi zaèal studium v Serpentis.
+DISCTOME_SUCCESS_SERPENTIS      Získal jsi novou Skupinu Oboru - Serpentis.
+DISCTOME_FAIL_FAITH             U jsi zaèal studium ve Víøe.
+DISCTOME_SUCCESS_FAITH          Získal jsi novou Skupinu Oboru - Víra.
+
+// ............................................................................ 
+// clan names
+// ............................................................................ 
+
+BRUJAH                          Brujah
+CAPPADOCIAN                     Cappadocian
+GANGREL                         Gangrel
+NOSFERATU                       Nosferatu
+TOREADOR                        Toreador
+ASSAMITE                        Assamite
+GIOVANNI                        Giovanni
+LASOMBRA                        Lasombra
+MALKAVIAN                       Malkavian
+RAVNOS                          Ravnos
+SETITE                          Setite
+TREMERE                         Tremere
+TZIMISCE                        Tzimisce
+VENTRUE                         Ventrue
+CAITIFF                         Caitiff
+HUMAN				Lidé
+
+// ............................................................................ 
+// actor types
+// ............................................................................ 
+
+ACTOR_TYPE_VAMPIRE              Spøíznìnı
+ACTOR_TYPE_GHOUL                Démon
+ACTOR_TYPE_HUMAN                Èlovìk
+ACTOR_TYPE_MONSTER              Pøíšera
+ACTOR_TYPE_LUPINE               Dravec
+
+// ............................................................................ 
+// actor auras
+// ............................................................................ 
+
+ACTOR_AURA_NONE                 Neèitelnı
+ACTOR_AURA_AFRAID               Vydìšenı
+ACTOR_AURA_AGGRESSIVE           Agresivní
+ACTOR_AURA_ANGRY                Rozhnìvanı
+ACTOR_AURA_BITTER               Nevlídnı
+ACTOR_AURA_CALM                 Klidnı
+ACTOR_AURA_COMPASSIONATE        Soucitnı
+ACTOR_AURA_CONFUSED             Zmatenı
+ACTOR_AURA_CONSERVATIVE         Opatrnı
+ACTOR_AURA_DAYDREAMING          Fantazírující
+ACTOR_AURA_DEPRESSED            Sklíèenı
+ACTOR_AURA_DESIROUS             ádostivı
+ACTOR_AURA_DIABLERIST           Rozpustilı
+ACTOR_AURA_DISTRUSTFUL          Nedùvìøivı
+ACTOR_AURA_ENVIOUS              Závistivı
+ACTOR_AURA_EXCITED              Rozèílenı
+ACTOR_AURA_FRENZIED             Zuøivı
+ACTOR_AURA_GENEROUS             Velkorysı
+ACTOR_AURA_HAPPY                Šastnı
+ACTOR_AURA_HATEFUL              Ohavnı
+ACTOR_AURA_IDEALISTIC           Idealistickı
+ACTOR_AURA_INNOCENT             Nevinnı
+ACTOR_AURA_LOVESTRUCK           Milovnickı
+ACTOR_AURA_LUSTFUL              Chlípnı
+ACTOR_AURA_OBSESSED             Posedlı
+ACTOR_AURA_PSYCHOTIC            Psychotickı
+ACTOR_AURA_SAD                  Smutnı
+ACTOR_AURA_SPIRITUAL            Duševní
+ACTOR_AURA_SUSPICIOUS           Podezíravı
+ACTOR_AURA_FAERIE               Kouzelnı
+ACTOR_AURA_GHOST                Pøízrak
+ACTOR_AURA_MAGICUSE             Kouzelník
+ACTOR_AURA_VAMPIRE              Vampír      
+ACTOR_AURA_WEREBEAST            Werebeast
+ACTOR_AURA_USERDEFINED          Uivatelem urèen
+
+
+// ............................................................................ 
+// Multiplayer Character Template Descriptions
+// ............................................................................ 
+
+MP_CHRISTOF_DA                  Christof Temnıch Vìkù
+MP_CHRISTOF_MD                  Moderní Christof
+MP_ERIK                         Erik Temnıch Vìkù
+MP_ERIK_MD                      Moderní Erik
+MP_GOTHGIRL                     Moderní Gótické Dìvèe
+MP_GOTHGUY                      Moderní Gótickı Hoch
+MP_HEAVYG_DA                    HeavyG Temnıch Vìkù
+MP_HEAVYG_MD                    Moderní HeavyG
+MP_KAZI                         Kazi Temnıch Vìkù
+MP_KAZI_MD                      Moderní Kazi
+MP_LILY                         Moderní Lily
+MP_PINK                         Moderní Pink
+MP_SAMUEL                       Moderní Samuel
+MP_SAMUEL_DA                    Samuel Temnıch Vìkù
+MP_SERENA                       Serena Temnıch Vìkù
+MP_TREMERE                      Tremere Temnıch Vìkù
+MP_WILHEM_DA                    Wilhem Temnıch Vìkù
+MP_WILHEM_MD                    Moderní Wilhem
+MP_ZIL_MD                       Moderní Zil
+
+
+// ............................................................................ 
+// ui hints
+// ............................................................................ 
+
+UI_HINT_INVENTORYBUTTON         Panel Inventáøe
+UI_HINT_CHARACTERBUTTON         Panel Charakteru
+UI_HINT_MAPBUTTON               Zobrazení Mapy
+UI_HINT_QUESTBUTTON             Panel Úkolu
+UI_HINT_DISCIPLINEBUTTON        Panel Dovedností
+
+UI_STSBOBJECTCHECK              Panel Objektu
+UI_STSBLOCATIONCHECK            Panel Místa
+UI_STSBSCENECHECK               Panel Scény
+UI_STSBACTORCHECK               Panel Postavy
+UI_STSBCONTROLSCHECK            Panel Ovládání
+
+UI_STSBDELTHINGERROR            Nelze smazat aktivní postavu.
+UI_STSBREVIVENOSELECTION        Není nic vybráno pro vzkøíšení.
+UI_STSBREVIVENOTDEAD            Není vybrána mrtvá postava.
+UI_STSBDELETENOSELECTION        Není nic vybráno k vymazání.
+UI_STSBDELETEPROTECTED          Vıbìr je chránìn pøed smazáním.
+UI_STSBPAUSE                    Hra pozastavena.
+UI_STSBUNPAUSE                  Hra pokraèuje.
+UI_STSBPOSSESS                  Vlastní %s.
+UI_STSBTALKMODE                 %s nastaven na mód MLUVENÍ.
+UI_STSBNEUTRALMODE              %s nastaven na mód NEUTRÁLNÍ.
+UI_STSBENEMYMODE                %s nastaven na mód NEPØÍTELE.
+
+
+UI_STSPADVANCE                  Postoupit ve scénì
+UI_STSPSKIPTO                   Pøeskoèit
+
+UI_STAPSELECT                   Vybrat postavu
+UI_STAPSTATS                    Statistiky postavy
+UI_STAPPOSSESS                  Vlastnit postavu
+UI_STAPREVIVE                   Vzkøísit postavu
+UI_STAPDELETE                   Smazat postavu
+UI_STAPKILL                     Zabít postavu
+
+UI_STOPCREATE                   Vytvoøit vìc
+UI_STOPLISTITEMS                Ukázat jen pøedmìty
+UI_STOPLISTPROPS                Ukázat jen vlastnosti
+UI_STOPLISTACTORS               Ukázat jen postavy
+UI_STOPTOGGLELISTS              Krátké/dlouhé pøehledy
+UI_STOPCREATEDOBJECT            Vytvoøen objekt '%s'
+UI_STOPCOULDNTCREATEOBJECT      Nelze vytvoøit objekt '%s'
+
+UI_STEPLOAD                     Nahrát lokaci
+
+UI_STLPJUMPTO                   Skoèit do lokace
+UI_STLPJUMPALL                  Skoèit všemi hráèi do lokace
+
+UI_STCPKICKBUTTON               Vykopnout hráèe
+UI_STCPKICKQUESTION             Jste si jist vykopnutím hráèe
+UI_STCPENABLEAUTOST             Autovypravìè zapnutı.
+UI_STCPDISABLEAUTOST            Autovypravìè vypnutı.
+UI_STCPCOMMSLOCKED              Vnìjší komunikace uzamèená.
+UI_STCPCOMMSUNLOCKED            Vnìjší komunikace odemèená.
+
+UI_STCPLOCKED                   Hra je zamèena.
+UI_STCPUNLOCKED                 Hra je odemèena.
+UI_STCPAIENABLED                AI Zapnuté.
+UI_STCPAIDISABLED               AI Vypnuté.
+UI_STCPSERVER                   Server
+
+UI_MPPC_NONAME                  Prosím vlote jméno hráèe.
+
+UI_HINT_DELETEOBJECTBUTTON      Smazat objekt
+UI_HINT_SETGHOSTBUTTON          Nastavit ST pohled
+UI_HINT_ADVANCEBUTTON           Postup
+UI_HINT_PAUSEBUTTON             Pauza Hry
+UI_HINT_STCHARACTERBUTTON       Pøepnout do módu charakteru
+UI_HINT_STSTORYTELLERBUTTON     Pøepnout do módu vypravìèe
+UI_HINT_POSSESSBUTTON           Vlastnictví
+UI_HINT_CHARACTERMODEBUTTON     Mluvit/neutrál/nepøítel
+UI_HINT_REVIVEBUTTON            Vzkøísit
+UI_HINT_CURRENTTARGET           Souèasnı cíl
+
+UI_HINT_OFFENSIVE               Útoènı postoj
+UI_HINT_NEUTRAL                 Neutrální postoj
+UI_HINT_DEFENSIVE               Obrannı postoj
+UI_HINT_GROUPSTATUS             Skupina/zrušit
+UI_HINT_REGROUP                 Pøeskupit
+
+UI_GENERAL_NOTAPPLICABLE        N/A
+UI_GENERAL_ERROR                Chyba
+UI_GENERAL_VAMPIRE              Pøíbuznı
+UI_GENERAL_GHOUL                Duch
+UI_GENERAL_HUMAN                Èlovìk
+UI_GENERAL_HEALTH               Zdraví
+
+UI_STATUS_FLEDGELING            Ptáèátko
+UI_STATUS_NEONATE               Novorozenì
+UI_STATUS_ANCILLAE              Ancillae
+UI_STATUS_ELDER                 Starší
+UI_STATUS_METHUSELAH            Methuselah
+UI_STATUS_ANTEDILUVIAN          Pøedpotopní
+UI_STATUS_PROGENITOR            Prapøedek
+
+UI_STATUS_HUMAN0                Pomocník
+UI_STATUS_HUMAN1                Køiákr
+UI_STATUS_HUMAN2                Paladin
+UI_STATUS_HUMAN3                Inkvizitor
+UI_STATUS_HUMAN4                Lovec
+
+UI_STATUS_GHOUL0                Dınkaø
+UI_STATUS_GHOUL1                Stráce
+UI_STATUS_GHOUL2                Duch
+UI_STATUS_GHOUL3                Otrok
+UI_STATUS_GHOUL4                Vìrnı sluha
+
+UI_MPCREATEGAME_PWPROTECT       Chránìno heslem
+UI_MPCREATEGAME_PW              Heslo
+UI_MPCREATEGAME_PWCONFIRM       Potvrdit
+UI_MPCREATEGAME_GAMENAME        Jméno hry
+UI_MPCREATEGAME_CHRONICLELIST   Kroniky
+UI_MPCREATEGAME_OPTIONS         Nastavení hry
+UI_MPCREATEGAME_CREATE          Vytvoøit hru
+UI_MPCREATEGAME_LOAD            Nahrát uloení
+
+UI_WONLOBBY_ROOMS               Místnosti
+UI_WONLOBBY_GAMES               Hry
+UI_WONLOBBY_ENTERGAME           Vstup do hry
+UI_WONLOBBY_PLAYERSETUP         Nastavení hráèe
+UI_WONLOBBY_QUITWON             Opustit WON
+UI_WONLOBBY_ROOMNAME            Jméno místnosti
+UI_WONLOBBY_PLAYERS             Hráèi
+
+UI_WONGAMES_LISTLABEL           Hry v místnosti
+UI_WONGAMES_PING                Ping her
+UI_WONGAMES_JOIN                Pøipojit
+UI_WONGAMES_CREATE              Vytvoøit
+UI_WONGAMES_BACK                Zpìt
+
+UI_WONROOMS_LISTLABEL           Dostupné místnosti
+UI_WONROOMS_JOIN                Spojit místnost
+UI_WONROOMS_CREATE              Vytvoøit Novou
+UI_WONROOMS_BACK                Zpìt
+
+UI_WONCREATEROOM_NAME           Jméno místnosti
+UI_WONCREATEROOM_DESC           Druh místnosti
+UI_WONCREATEROOM_PWPROTECT      Ochranné Heslo
+UI_WONCREATEROOM_PW             Heslo
+UI_WONCREATEROOM_PWCONFIRM      Potvrdit
+UI_WONCREATEROOM_CREATE         Vytvoø místnost
+UI_WONCREATEROOM_CANCEL         Zrušit
+
+UI_CANCELSTRING                 Zrušit
+UI_WARNING                      Varování!
+
+UI_DISPLAY_DEVICENAME           Jméno Zaøízení:
+UI_DISPLAY_DRIVER               Ovladaè:
+UI_DISPLAY_TOTALRAM             Totalní RAM textur:
+UI_DISPLAY_BYTES                byty
+
+UI_DETAIL_VERYLOW               Velmi Nízké
+UI_DETAIL_LOW                   Nízké
+UI_DETAIL_NORMAL                Normalní
+UI_DETAIL_HIGH                  Vysoké
+UI_DETAIL_CUSTOM                Volitelné
+
+UI_DETAIL_CUSTOMWARN            DÙLEITÉ: Vámi vytvoøené zmìny poadují restartuvat hru, aby mohly fungovat!
+
+UI_DISPLAY_BADRESWARN           Vybrané rozlišení není podporováno vaší grafickou kartou.
+
+UI_INV_DROPCASH                 Kolik si pøejete odhodit hotovosti?
+UI_CHAR_ADDXP                   Kolik zkušeností k pøidání?
+
+UI_SPLOADSAVE_AUTOSAVE          Autouloení
+UI_SPLOADSAVE_OVERWRITESAVE     Pøepsat uloenou hru?
+UI_SPLOADSAVE_UNUSEDSLOT        Nepouito
+UI_SPLOADSAVE_SLOT              Slot %d
+SPLOADSAVE_GAMESAVED		        Hra uloena.
+
+UI_MPPC_OVERWRITE               Hráè u existuje; Chtìl by jste pøepsat existujícího hráèe?
+UI_MPPS_DELETE                  Trvale vymazat hráèe '%s'?
+
+UI_OPGP_NOPASSWORD              Prosím vlote heslo ke zmìnì na Dospìlı Zámek
+UI_OPGP_PASSWORDSDONTMATCH      Heslo neodpovídá
+UI_OPGP_ENTERPASSWORD           Vlote heslo k odemèení
+
+UI_MAP_RETURNTOGAME             Návrat ke Høe
+UI_MAP_NOMAPAVAILABLE           V této oblasti není dostupná ádná mapa.
+
+UI_NET_PWMISMATCH		Heslo neodpovídá.
+UI_NET_JOINROOMERROR		Chyba spojené místnosti
+UI_NET_JOINGAMEERROR		Spojení selhalo
+UI_NET_CREATEGAMEERROR		Chyba vytvoøené hry
+UI_NET_WRONGROOMPASSWORD	Špatné heslo k soukromé místnosti.
+UI_NET_WRONGGAMEPASSWORD	Špatné vstupní heslo ke spojení se soukromou hrou.
+UI_NET_ROOMFULL			Místnost je plná.
+UI_NET_UNKNOWNERROR		Neznámá chyba: %s
+UI_NET_NAMEINUSE		Toto jméno je u pouíváno.
+UI_NET_CHATROOM			Rozhovory v místnosti:
+UI_NET_LOGINFAILED		Pøihlášení selhalo.
+UI_NET_SERVERERROR		Server vrátil chybu: %s
+UI_NET_ENTERKEY		Vlote CD-Klíè
+UI_NET_REENTERKEY		Prosím vlote váš CD-Klíè.
+UI_NET_CANTCREATEROOM		Chybnì vytvoøená chat místnost.
+UI_NET_WONERROR			WON.Net Chyba
+UI_NET_ENTERROOM		vstupuje do místnosti.
+UI_NET_LEAVEROOM		opuští místnost.
+UI_NET_INVALIDCDKEY		Chybnı CD Klíè
+UI_NET_INVALIDCDKEYEXP		Vstupní klíè není platnı pro tento produkt.
+UI_NET_ROOMEXISTS		Místnost s tímto jménem u existuje.
+UI_NET_CONNECTING		Spojuji...
+UI_NET_WAITCONNECTING	        Prosím èekejte, spojuji chat místnost.
+UI_NET_CONNECTIONERROR		Chybné Spojení
+UI_NET_BADADDR			Nelze otevøít spojení s hostem.  Hra mùe bıt ukonèena, nebo jsou problémy se sítí.
+UI_NET_NONEWPLAYERS		Hra je plná nebo neakceptuje nové hráèe.
+UI_NET_ENTERGAMEPASSWORD	Vloit heslo hry
+UI_NET_JOINEDASPLAYER		Hra pøipojena
+UI_NET_JOINBANNED		Nelze pøipojit hru, zakázána serverem.
+UI_NET_JOINCLOSED		Spojení selhalo, tato hra je momentálnì zavøená.
+UI_NET_JOINFULL			Spojení selhalo, tato hra je momentálnì plná.
+UI_NET_JOINREJECTED		Spojení selhalo, odepøeno serverem.
+UI_NET_JOINFAILED		Spojení selhalo kvùli problémùm se spojením.
+UI_NET_HASLEFT			opouští hru.
+UI_NET_HASJOINED		pøipojil hru.
+UI_NET_HASDISCONNECTED		se odpojil ze hry.
+UI_NET_YOULEFTGAME              Opustil jste hru.
+UI_NET_YOUJOINEDGAME            Pøipojil jste hru
+UI_NET_YOUAREHOSTING            Jste hostem hry
+UI_NET_DEFAULTGAME		%P's hra
+UI_NET_PLEASEENTERNAME		Prosím vlote platné jméno hry.
+UI_NET_PLAYERSINGAME		Hráèi ve høe:
+UI_NET_PLAYER			Hráè
+UI_NET_CHRONICLE		Kronika
+UI_NET_PING			Ping èas
+UI_NET_HOST			Host
+UI_NET_CLIENT			Klient
+UI_NET_STORYTELLER		Vypravìè
+UI_NET_CLOSED			Zavøeno
+UI_NET_COMBATIVE		Bojechtivé
+UI_NET_ENTERROOMPASS		Vlote heslo do soukromé místnosti:
+UI_NET_DUPLICATENAME		odmítnuto - dvojí jméno
+UI_NET_JOINDUPLICATE		Nelze spojit hru, jméno je u pouíváno.
+UI_NET_LANCHAT			LAN Chat
+UI_NET_INGAME			Ve høe
+UI_NET_BADPROTOCOL		Host má nekompatibilní verzi hry.  Vlote patch a znovu pøipojte.
+UI_NET_OLDVERSION		Vaše verze hry je zastaralá.  Prosím kliknìte na Download Updates ke staení aktualizace hry.
+UI_NET_DISCONNECTED	        Herní server byl odpojen.  Návrat do haly.
+UI_NET_WHISPERNOTFOUND		Oslovenı hráè nenalezen.
+UI_NET_POSSESSED		Jste v drení Vypravìèe a nelze se hıbat!
+UI_NET_CANTOPENWON	Nelze získat spojení s WON.NET.  Prosím vlote status serveru a opakujte pozdìji.
+UI_NET_OKTOEXIT		Musíte opustit hru k aplikování patchù.  Ok k opuštìní?
+UI_NET_DUPEGAMENAME	Hra s tímto jménem ji existuje.  Prosím zvolte jiné jméno.
+UI_NET_BADDATA			Vaše data neodpovídají datùm pouívanım serverem.  Vlote svá místní data a opakujte.
+UI_NET_GAMENAME		Jméno hry:
+UI_NET_FORMING			Vytváøí se hra.
+UI_NET_INPROGRESS		Hra je ve vıvoji.
+UI_NET_BADTEMPLATE	Server nerozpoznal multiplayer model pouívanı vašim hráèem.  Prosím pouijte dalšího hráèe nebo jinı server.
+UI_NET_WELCOME			Zpráva: Vampire podporuje ètyøi hráèe ve høe.
+
+UI_ADVANCEMENT_DISCCOST         Cena k nauèení %s: %d
+UI_ADVANCEMENT_STATCOST         Cena za zvıšení %s: %d
+UI_ADVANCEMENT_REVERTCHAR       Vrátit stavy charakteru
+UI_ADVANCEMENT_DONE             Dokonèeno s postupem charakteru
+
+UI_STATUSIND_HINT               Kliknìte zde k následujícímu statusu
+UI_STATUSIND_ROLLOVERKINDRED    Zdraví: %h Krev: %b Šílenství: %f
+UI_STATUSIND_ROLLOVERHUMAN      Zdraví: %h Mana: %b Víra: %f
+
+UI_BUYSELL_BUYHINT              Klikni zde ke koupi pøedmìtu
+UI_BUYSELL_SELLHINT             Klikni zde k prodeji pøedmìtu
+
+UI_QUESTCHANGED			        Záznam ùkolu byl doplnìn.
+
+UI_INSERTCD					Prosím Vlote Vampire CD #2 (Herní CD) a Stisknìte OK
+UI_INSERTCDTITLE			Vlote CD s hrou Vampire
+
+UI_SOUND_PROVNOTSUPPORTED       Vybranı poskytovatel zvuku není podporován vaším hardware.
+
+// ............................................................................ 
+// game messages
+// ............................................................................ 
+
+GAMEMESSAGE_SYSTEM1             Blíí se svítání, musíš si odpoèinout.
+GAMEMESSAGE_SYSTEM2             Vra se do Kláštera, musíš si odpoèinout.
+
+MP_SAY				%S øíká '%T'
+MP_SHOUT			%S køièí '%T'
+MP_WHISPER			%S šeptá '%T'
+MP_WHISPERALT		%S šeptá k %R, '%T'
+MP_SOMEONE			Nìkterı
+MP_ROLLS			%S rolls: %T
+MP_BOW				%S se hluboce uklání.
+MP_WAVE				%S mává.
+MP_TEAMSAY			%S øíká tvému tımu '%T'
+MP_TEAMSAYALT		%S øíká tımu %D, '%T'
+MP_TRIEDTOSAY			%S snaí se øíci '%T' (posedlost)
+MP_SAYFAILED			Jsi posedlı a nemùeš mluvit!
+MP_LOBBYSAY			%S (lobby): %T
+
+// Emote tags (for producing animations during an emote)
+MP_EMOTE_BOW		poklona
+MP_EMOTE_MENACE		hrozba
+MP_EMOTE_TAUNT		vısmìch
+MP_EMOTE_WAVE		mávání
+
+MP_ST_CONVTRIGGER_MSG           %a - %t conversation triggered - location: %L
+
+// ............................................................................ 
+// event messages
+// ............................................................................ 
+
+ENTERED                         Region
+CLICKED                         Clicked
+ARRIVED                         Arrived
+BEGINSCENE                      Beginscene
+KILLED                          Killed
+PICKUP                          Pickup
+CONVENDED                       Conversation ended
+
+
+
+

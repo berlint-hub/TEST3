@@ -1,0 +1,228 @@
+// ****************************************************************************
+//
+// NEW_YORK.NLS
+//
+// New York-specific string table
+//
+// ****************************************************************************
+
+// ............................................................................ 
+// Quests
+// ............................................................................ 
+
+Q_GETACCESSCODES_S		Získat Pøístupové Kódy Skladištì.
+Q_GETACCESSCODES_L		Prozkoumej ulice New Yorku k získání informací o pøístupových kódech.
+Q_TRANSPONDER_S			Pøipojit Zprostøedkovaè Spojení.
+Q_TRANSPONDER_L			Najdi FBI CC Linku #204 v kanalizacích pod mìstem.
+Q_USEACCESSCODES_S		Použít Pøístupové Kódy ke vstupu do skladištì.
+Q_USEACCESSCODES_L		Použij Pøístupové Kódy ke vstupu do skladištì v Oblasti Dokù v New Yorku.
+Q_FINDALEXANDRA_S		Najít Alexandru.
+Q_FINDALEXANDRA_L		Najdi Skladištì na Jižním Barclay a promluv s Alexandrou.
+Q_FINDORSI_S			Najít Orsiho.
+Q_FINDORSI_L			Najdi Orsiho kanceláø v horních patrech továrny.
+Q_INFILTRATEFACTORY_S	Vniknout do Orsiho Továrny.
+Q_INFILTRATEFACTORY_L	Vnikni do Orsiho Továrny na Okraji New Yorku.
+Q_ENTERCATHEDRAL_S		Vstoupit do Katedrály Masa.
+Q_ENTERCATHEDRAL_L		Vstup do Katedrály Masa ukryté pod opuštìným kostelem na Okraji New Yorku.
+Q_DESTROYVUKODLAK_S		Znièit Vukodlaka.
+Q_DESTROYVUKODLAK_L		Poraž Tzimisce Methuselah Vukodlaka v jeho Katedrále Masa.
+Q_ORSIPENTHOUSE_S       Vstoupit do Orsiho luxusního bytu.
+Q_ORSIPENTHOUSE_L       Najdi a dostaò se do Orsiho luxusního bytu v Jižní Barclay, která je v Okraji New Yorku.
+
+
+// ............................................................................ 
+// Levels
+// ............................................................................ 
+NEWYORKDOCKS			Centrum New Yorku (Oblast Dokù)
+NEWYORKUPTOWN			Okraj New Yorku
+ORSIFACTORY1			Orsiho Mezinárodní 1
+ORSIFACTORY2			Orsiho Mezinárodní 2
+ORSIFACTORY3            Orsiho Mezinárodní 3
+ORSIFACTORY4            Orsiho Mezinárodní 4
+SEWERS1					Kanály Patro 1
+SEWERS2                 Kanály Patro 2
+SEWERS3                 Kanály Patro 3
+SEWERS4                 Kanály Patro 4
+GIOVANNIWAREHOUSE1		Giovanniho Sklad 1
+GIOVANNIWAREHOUSE2      Giovanniho Sklad 2
+GIOVANNIWAREHOUSE3      Giovanniho Sklad 3
+CATHEDRALOFFLESH1		Katedrála Masa 1
+CATHEDRALOFFLESH2       Katedrála Masa 2
+CATHEDRALOFFLESH3       Katedrála Masa 3
+GUNHAVEN				Azyl Zbraní
+ORSIPENTHOUSE			Orsiho Luxusní Byt
+NEWMOON					Nový Mìsíc
+DEVNULLAPARTMENT		Dev/Nullùv Byt
+BARCLAYLOBBY			Vestibul Jižního Barclay
+BARCLAYSTORAGEROOM		Skladištì Jižního Barclay
+
+// ............................................................................ 
+// Scenes
+// ............................................................................ 
+
+DOCK_33_1S				Centrum New Yorku (Oblast Dokù)
+DOCK_33_1L				Scene 33.1 - Centrum New Yorku (Oblast Dokù)
+UTWN_33_1S				Okraj New Yorku
+UTWN_33_1L				Scene 33.1 - Okraj New Yorku
+DEVN_33_2S				Dev/Nullùv Byt 
+DEVN_33_2L				Scene 33.3 - Dev/Nullùv Byt
+LOBY_33_1S				Vestibul Jižního Barclay 
+LOBY_33_1L				Scene 33.1 - Vestibul Jižního Barclay
+GUNH_35_1S				Azyl Zbraní
+GUNH_35_1L				Scene 35.1 - Azyl Zbraní
+SEW1_35_1S				Kanály Patro 1
+SEW1_35_1L				Scene 35.1 - Kanály Patro 1
+SEW2_35_1S				Kanály Patro 2
+SEW2_35_1L				Scene 35.1 - Kanály Patro 2
+SEW3_35_1S				Kanály Patro 3
+SEW3_35_1L				Scene 35.1 - Kanály Patro 3
+SEW4_35_1S				Kanály Patro 4
+SEW4_35_1L				Scene 35.1 - Kanály Patro 4
+DEVN_36_1S				Dev/Nullùv Byt
+DEVN_36_1L				Scene 36.1 - Dev/Nullùv Byt
+WAR1_36_1S				Giovanniho Sklad 1
+WAR1_36_1L				Scene 36.1 - Giovanniho Sklad 1
+WAR2_36_1S				Giovanniho Sklad 2
+WAR2_36_1L				Scene 36.1 - Giovanniho Sklad 2
+WAR3_36_1S				Giovanniho Sklad 3
+WAR3_36_1L				Scene 36.1 - Giovanniho Sklad 3
+DOCK_37_4S				Centrum New Yorku (Oblast Dokù)
+DOCK_37_4L				Scene 37.4 - Centrum New Yorku (Oblast Dokù)
+FAC1_37_4S				Orsiho Mezinárodní 1
+FAC1_37_4L				Scene 37.4 - Orsiho Mezinárodní 1
+FAC2_37_4S				Orsiho Mezinárodní 2
+FAC2_37_4L				Scene 37.4 - Orsiho Mezinárodní 2
+FAC3_37_4S				Orsiho Mezinárodní 3
+FAC3_37_4L				Scene 37.4 - Orsiho Mezinárodní 3
+FAC4_37_4S				Orsiho Mezinárodní 4
+FAC4_37_4L				Scene 37.4 - Orsiho Mezinárodní 4
+NEWM_37_4S				Nový Mìsíc
+NEWM_37_4L				Scene 37.4 - Nový Mìsíc
+LOBY_37_4S				Vestibul Jižního Barclay
+LOBY_37_4L				Scene 37.4 - Vestibul Jižního Barclay
+ORSI_37_4S				Orsiho Luxusní Apartmá
+ORSI_37_4L				Scene 37.4 - Orsiho Luxusní Apartmá
+LOBY_38_1S				Vestibul Jižního Barclay
+LOBY_38_1L				Scene 38.1 - Vestibul Jižního Barclay
+STOR_38_1S				Skladištì Jižního Barclay
+STOR_38_1L				Scene 38.1 - Skladištì Jižního Barclay
+UTWN_38_1S				Okraj New Yorku
+UTWN_38_1L				Scene 38.1 - Okraj New Yorku
+UTWN_40_1S				Okraj New Yorku
+UTWN_40_1L				Scene 40.1 - Okraj New Yorku
+FLS1_40_1S				Katedrála Masa 1
+FLS1_40_1L	            Scene 40.1 - Katedrála Masa 1
+FLS2_40_1S	            Katedrála Masa 2
+FLS2_40_1L	            Scene 40.1 - Katedrála Masa 2
+FLS3_40_1S	            Katedrála Masa 3
+FLS3_40_1L	            Scene 40.1 - Katedrála Masa 3
+
+// ............................................................................ 
+// Map labels
+// ............................................................................ 
+
+mapNYDocksMain       Centrum New Yorku (Oblast Dokù)
+mapGiovanniWarehouse Giovanniho Sklad
+mapSewers            NYC Kanály
+mapDevNulls          Dev/Nullùv Byt
+mapGunHaven          Azyl Zbraní
+mapNYMidtownMain     Okraj New Yorku
+mapCathedralOfFlesh  Katedrála Masa
+mapOrsisFactory      Orsiho Mezinárodní
+mapBarclaySouth      Jižní Barclay
+mapNewMoon           Nový Mìsíc
+
+// ............................................................................ 
+// Description ID for Doors/Exits
+// ............................................................................ 
+
+DOCK_EXIT_DESC_1	   Azyl Zbraní
+DOCK_EXIT_DESC_1_L	Azyl Zbraní (Zamèeno)
+DOCK_EXIT_DESC_2	   Kanály
+DOCK_EXIT_DESC_2_L	Kanály (Zamèeno)
+DOCK_EXIT_DESC_3	   Taxi do Okraje New Yorku
+DOCK_EXIT_DESC_3_L	Taxi do Okraje New Yorku (Zamèeno)
+DOCK_EXIT_DESC_4	   Dev/Nullùv byt
+DOCK_EXIT_DESC_4_L	Dev/Nullùv byt (Zamèeno)
+DOCK_EXIT_DESC_5	   Giovanniho Sklad
+DOCK_EXIT_DESC_5_L	Giovanniho Sklad (Zamèeno)
+	
+UTWN_EXIT_DESC_0	   Taxi do Dokù New Yorku
+UTWN_EXIT_DESC_0_L	Taxi do Dokù New Yorku (Zamèeno)
+UTWN_EXIT_DESC_1	   Kanály
+UTWN_EXIT_DESC_1_L	Kanály (Zamèeno)
+UTWN_EXIT_DESC_2	   Vestibul Jižního Barclay
+UTWN_EXIT_DESC_2_L	Vestibul Jižního Barclay (Zamèeno)
+UTWN_EXIT_DESC_3	   Orsiho Továrna
+UTWN_EXIT_DESC_3_L	Orsiho Továrna (Zamèeno)
+UTWN_EXIT_DESC_4	   Nový Mìsíc
+UTWN_EXIT_DESC_4_L	Nový Mìsíc (Zamèeno)
+UTWN_EXIT_DESC_5	   Katedrála Masa
+UTWN_EXIT_DESC_5_L	Katedrála Masa (Zamèeno)
+UTWN_EXIT_DESC_6	   Skladištì Jižního Barclay
+UTWN_EXIT_DESC_6_L	Skladištì Jižního Barclay (Zamèeno)
+	
+FAC1_EXIT_DESC_0	   Mezipatro Továrny 1
+FAC1_EXIT_DESC_0_L	Mezipatro Továrny 1 (Zamèeno)
+FAC1_EXIT_DESC_1	   Mezipatro Továrny 2
+FAC1_EXIT_DESC_1_L	Mezipatro Továrny 2 (Zamèeno)
+FAC2_EXIT_DESC_0	   Mezipatro Továrny 2
+FAC2_EXIT_DESC_0_L	Mezipatro Továrny 2 (Zamèeno)
+FAC2_EXIT_DESC_1	   Mezipatro Továrny 3
+FAC2_EXIT_DESC_1_L	Mezipatro Továrny 3 (Zamèeno)
+FAC3_EXIT_DESC_0	   Mezipatro Továrny 3
+FAC3_EXIT_DESC_0_L	Mezipatro Továrny 3 (Zamèeno)
+FAC3_EXIT_DESC_1	   Mezipatro Továrny 4
+FAC3_EXIT_DESC_1_L	Mezipatro Továrny 4 (Zamèeno)
+
+FAC4_EXIT_DESC_0	   Okraj New Yorku
+FAC4_EXIT_DESC_0_L	Okraj New Yorku (Zamèeno)
+FAC4_EXIT_DESC_1	   Do Továrny Patro 1
+FAC4_EXIT_DESC_1_L	Do Továrny Patro 1 (Zamèeno)
+FAC4_EXIT_DESC_3	   Do Továrny Patro 2
+FAC4_EXIT_DESC_3_L	Do Továrny Patro 2 (Zamèeno)
+FAC4_EXIT_DESC_5	   Do Továrny Patro 3
+FAC4_EXIT_DESC_5_L	Do Továrny Patro 3 (Zamèeno)
+	
+LOBY_EXIT_DESC_1	   Okraj New Yorku
+LOBY_EXIT_DESC_1_L	Okraj New Yorku (Zamèeno)
+LOBY_EXIT_DESC_2	   Orsiho Luxusní Byt
+LOBY_EXIT_DESC_2_L	Orsiho Luxusní Byt (Zamèeno)
+	
+SEW1_EXIT_DESC_0	   Doky New Yorku
+SEW1_EXIT_DESC_1	   Dolù do Kanálù New Yorku 2
+SEW2_EXIT_DESC_0	   Nahoru do Kanálù New Yorku 1
+SEW2_EXIT_DESC_1	   Dolù do Kanálù New Yorku 3 
+SEW3_EXIT_DESC_0	   Nahoru do Kanálù New Yorku 2
+SEW3_EXIT_DESC_1	   Dolù do Kanálù New Yorku 4 
+SEW4_EXIT_DESC_0	   Nahoru do Kanálù New Yorku 3
+SEW4_EXIT_DESC_1	   Okraj New Yorku
+	
+WAR1_EXIT_DESC_1	   Doky New Yorku
+WAR1_EXIT_DESC_2	   Dolù do Skladu 2
+WAR2_EXIT_DESC_1	   Nahoru do Skladu 1
+WAR2_EXIT_DESC_2	   Dolù do Skladu 3
+WAR3_EXIT_DESC_1	   Nahoru do Skladu 2
+WAR3_EXIT_DESC_2	   Nahoru do Skladu 1
+	
+GUNH_EXIT_DESC_1	   Doky New Yorku
+GUNH_EXIT_DESC_1_L   Doky New Yorku (Zamèeno)
+	
+NEWM_EXIT_DESC_1	   Okraj New Yorku
+NEWM_EXIT_DESC_1_L	Okraj New Yorku (Zamèeno)
+	
+STOR_EXIT_DESC_1	   Okraj New Yorku
+STOR_EXIT_DESC_1_L	Okraj New Yorku (Zamèeno)
+	
+DEVN_EXIT_DESC_1	   Doky New Yorku
+DEVN_EXIT_DESC_1_L	Doky New Yorku (Zamèeno)
+	
+ORSI_EXIT_DESC_1	   Vestibul Jižního Barclay
+ORSI_EXIT_DESC_1_L	Vestibul Jižního Barclay (Zamèeno)
+
+FLS1_EXIT_DESC_0     Okraj New Yorku
+FLS1_EXIT_DESC_1     Dolù do Katedrály Masa 2
+FLS1_EXIT_DESC_2     Útroby Katedrály
+FLS1_EXIT_DESC_2_L   Útroby Katedrály (Zamèeno)
+FLS2_EXIT_DESC_0     Nahoru do Katedrály Masa 1
+FLS3_EXIT_DESC_0     Nahoru do Katedrály Masa 1

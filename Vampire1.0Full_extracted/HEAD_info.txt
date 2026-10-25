@@ -1,0 +1,2 @@
+Vampire The Masquerade - Cz Patch 1.0 Full
+Registry (INSTALLDIR hry): HKEY_LOCAL_MACHINE\Software\Activision\Vampire: The Masquerade - Redemption\v1.0\INSTALLDIR
