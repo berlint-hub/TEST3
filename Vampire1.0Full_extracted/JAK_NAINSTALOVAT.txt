@@ -127,6 +127,21 @@ ui\materials\  (67 souboru)
     wonMOTD01.tga                           196626 B
     wonMOTD02.tga                           196626 B
 
+KDYZ MENU ZUSTANE ANGLICKY (ale titulky a texty ve hre jsou cesky)
+----------------------------------------------------------------------
+Je to normalni a nic neni rozbite. U edic z GOGu/Steamu nejsou anglicke
+originaly volne ve slozkach, ale v archivu Local_Eng.nob ve slozce hry;
+cestina se prida jako volne soubory a hra je uprednostni. Grafika menu
+(.tga) je ale z puvodni cestiny pripravena jen pro 32bit rezim textur:
+
+  Ve hre: Options -> Display -> Advanced -> Texture Bit Depth = 32-bit
+  (a displej take na 32 bpp), pak hru restartuj.
+
+Bez toho hra sahe po 16bit texturach z archivu a ceske obrazky menu
+se neukazi. Texty (strings) funguji nezavisle na tomto nastaveni.
+Kdyz ceske menu nepotrebujes, resit to nemuses - hra je s ceskymi
+texty plne hratelna i s anglickymi obrazky menu.
+
 POZNAMKY
 ----------------------------------------------------------------------
 - Puvodni instalator slozku hry hledal sam v registrech Windows

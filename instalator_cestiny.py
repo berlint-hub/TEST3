@@ -106,7 +106,12 @@ def list_patch_files(src_dir):
 def is_game_dir(p):
     try:
         p = Path(p)
-        return p.is_dir() and any((p / m).is_file() for m in GAME_MARKERS)
+        if not p.is_dir():
+            return False
+        if any((p / m).is_file() for m in GAME_MARKERS):
+            return True
+        # GOG/Steam edice: originaly nejsou volne ve slozkach, ale v archivech .nob
+        return (p / "Local_Eng.nob").is_file() or (p / "vampire.exe").is_file()
     except Exception:
         return False
 
@@ -230,6 +235,9 @@ def install(game_dir, src_dir, log=print, progress=None):
         f"přidaných (předtím neexistovaly) {stats['added']}.")
     if stats["errors"]:
         log(f"Chyby: {len(stats['errors'])} (viz výpis výše).")
+    log("Kdyby menu zůstalo anglicky: ve hře nastav Options -> Display -> "
+        "Advanced -> Texture Bit Depth na 32-bit (požadavek původní češtiny) "
+        "a hru restartuj.")
     return stats
 
 
