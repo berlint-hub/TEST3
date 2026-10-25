@@ -166,3 +166,13 @@ Proto jsou v koreni balicku spoustece: zkopiruj spustit_hru.py
 slozky hry a svuj autorun/launcher nasmeruj na ne misto na
 Vampire.exe. Spoustec pracovni adresar vynuti na slozku hry,
 pripravi SaveGames a odemkne soubory k zapisu.
+
+OPATCHOVANE EXE (kdyz nechces/nemuzes pouzit spoustec ani Python)
+----------------------------------------------------------------------
+V balicku je i Vampire_portable.exe - puvodni Vampire.exe s malym
+patchem: hra si hned pri startu sama nastavi pracovni adresar na
+slozku, kde EXE lezi (GetModuleFileNameA + SetCurrentDirectoryA).
+Nastaveni (masquerade.ini) i savy (SaveGames) pak vzdy zustanou
+ve slozce hry, at hru spusti autorun/Wine/zastupce s jakymkoli
+pracovnim adresarem. Original si nech jako zalohu; portable verzi
+dej do slozky hry a spoustej ji. Zdroj patche: patch_vampire_portable.py.
