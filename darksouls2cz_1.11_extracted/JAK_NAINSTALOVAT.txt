@@ -44,6 +44,29 @@ je zpet, nebo ve Steamu "Overit integritu hernich souboru".
 
 3) INSTALACE
 ------------
+JAK POZNAS, KTERY PATCHER BEZI:
+- ORIGINAL pri spatnem MD5 vypise "Neznama verze hry Dark
+  Souls 2!" a skonci.
+- UPRAVENY tuhle hlasku vypsat NEMUZE. Vzdy napise:
+  "Verze v poradku." a pokracuje "Importuji data...".
+- Jistota pres hash (v cmd ve slozce Game\):
+    certutil -hashfile ds2patcher.exe SHA256
+  original = 836F0459A2C7F2BEF718DF396A60496C
+             09EA0DF0ABA63805FFD2BAEC5EB8278A
+  upraveny = 88E1DC939CD92F0A8F9A60E2B3AF27A
+             93BA517F4E6052A12C60492990FE74D9B
+
+POZOR NA PORADI KROKU: kdyz do slozky Game\ kopirujes obsah
+game\ opakovane, je v nem i ORIGINALNI ds2patcher.exe a prepise
+ti ten upraveny! Spravne poradi:
+  1. nakopiruj obsah game\ do Game\,
+  2. teprve pak do Game\ dej upraveny exe (a pripadne
+     prejmenuj na ds2patcher.exe),
+  3. over hash vys, 4. spust.
+(Jmeno souboru nevadi - upraveny muzes spoustet i jako
+ds2patcher_bez_kontroly_verze.exe.)
+
+
 1. Ukonci hru. Antivir muze stare fanouskovske nastroje hlasit,
    slozku hry pripadne docasne povol.
 2. Zkopiruj OBSAH zdejsi slozky game\   (ne slozku samotnou!)
