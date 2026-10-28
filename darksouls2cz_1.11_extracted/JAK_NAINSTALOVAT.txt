@@ -1,0 +1,86 @@
+CESTINA DO DARK SOULS II - RUCNI INSTALACE (bez instalateru)
+============================================================
+
+Co to je: fanouskovska cestina (aktualizace 1.11, preklad beta 0.99)
+pro PUVODNI Dark Souls II - Steam, App 236430, verze hry 1.10 se
+vsemi 3 DLC. NENI to pro Scholar of the First Sin (App 335300)!
+Obsah tohoto baliku byl staticky vybalen z instalateru
+"darksouls2cz 1.11.exe" - jde nainstalovat i bez nej.
+
+V JEDNE VETE: zkopiruj obsah slozky game\ do slozky
+<Dark Souls II>\Game\ a tam spust ds2patcher.exe. Zbytek udela on.
+
+1) NEJDRIV ZKONTROLUJ, JESTLI MAS SPRAVNOU VERZI HRY
+----------------------------------------------------
+Ve slozce <Dark Souls II>\Game\ najdi tyto dva soubory a over
+jejich velikosti (pravy klik > Vlastnosti > Velikost):
+
+    GameDataEbl.bhd   ma mit presne      760 042 bajtu
+    GameDataEbl.bdt   ma mit presne  5 400 821 795 bajtu (5,03 GiB)
+
+Kdyz velikosti nesedi, je rozlozeni archivu tve verze hry jine
+a preklad V TEHLE PODOBE NEJDE bezpecne aplikovat (data by skoncila
+na spatnych mistech). Dal nepokracuj.
+
+Volitelne (uskok pro stoury): originalni ds2patcher.exe kontroluje
+MD5 souboru GameDataEbl.bhd. Spravne je:
+
+    38bb57bb292cc3e1773d0ee6873d0351
+
+Spocitas ve Windows prikazem:  certutil -hashfile GameDataEbl.bhd MD5
+Kdyz MD5 sedi, muzes pouzit originalni ds2patcher.exe z baliku.
+Kdyz sedi velikosti, ale MD5 ne (typicky jina aktualizace hry),
+pouzij pribaleny ds2patcher_bez_kontroly_verze.exe - viz krok 3.
+
+2) ZALOHUJ SI ARCHIV HRY
+------------------------
+Ze slozky <Dark Souls II>\Game\ si nekam bokem zkopiruj:
+
+    GameDataEbl.bhd
+    GameDataEbl.bdt
+
+(Klidne do podslozky Game\zaloha\.) Kdyby neco, obnova = nakopirovat
+je zpet, nebo ve Steamu "Overit integritu hernich souboru".
+
+3) INSTALACE
+------------
+1. Ukonci hru. Antivir muze stare fanouskovske nastroje hlasit,
+   slozku hry pripadne docasne povol.
+2. Zkopiruj OBSAH zdejsi slozky game\   (ne slozku samotnou!)
+   do <Dark Souls II>\Game\ - tam, kde lezi GameDataEbl.bhd.
+   Prepisy povol.
+3. Spust patcher ze slozky Game\ (jako spravce):
+   - sedi MD5 z kroku 1:   ds2patcher.exe
+   - MD5 nesedi, ale sedi velikosti: nakopiruj odsud
+     ds2patcher_bez_kontroly_verze.exe do Game\ , prejmenuj ho na
+     ds2patcher.exe (prepis puvodni) a spust ten.
+4. Patcher vypise "Kontroluji verzi hry..." a pak par minut
+   "Importuji data". Sam nakopiruje referencni GameDataEbl.bhd,
+   prejmenuje ceske fonty (FeFont_*-cz), spusti importer, vysledek
+   (GameDataEbl_new.bhd/.bdt) vymeni za puvodni a pracovni soubory
+   po sobe uklidi. Hotovo = hlaska "Cestina do hry Dark Souls 2
+   byla uspesne nainstalovana."
+5. Spust hru. Jazyk ve hre nech ANGLICKY - preklad nahrazuje
+   anglicke texty a fonty.
+
+POCITEJ S TIM, ZE:
+------------------
+- Behem importu je potreba ~5-6 GB volneho mista navic.
+- Originalni patcher pri odmitnuti ("Neznama verze hry...")
+  pracovni soubory ze slozky Game\ sam SMAZE. To vadi jen tak,
+  ze je tam pak musis z tohoto baliku nakopirovat znovu.
+- Kdyz importer skonci chybami "Error in header" / "Error in
+  zlib data", tva verze hry je uvnitr opravdu jina. Obnov zalohu
+  z kroku 2 (pripadne smaz GameDataEbl_new.bhd/.bdt).
+
+ODINSTALACE
+-----------
+Steam > Dark Souls II > Vlastnosti > Mistni soubory > "Overit
+integritu hernich souboru", nebo nakopiruj zpet zalohu z kroku 2.
+
+POZNAMKA K AUTORUM
+------------------
+Preklad je fanouskovske dilo, vsechna prava a podminky sireni
+urcuji jeho autori - licence a informace z puvodniho instalateru
+najdes v TEXTY_INSTALATERU.txt. Tenhle balik je jen technicke
+vybaleni pro rucni instalaci.
