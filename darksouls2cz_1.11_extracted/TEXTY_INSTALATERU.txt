@@ -1,0 +1,136 @@
+Texty vypsane z instalateru darksouls2cz 1.11.exe (blok STRINGS),
+vctne uvodnich informaci a licencniho ujednani autoru prekladu.
+================================================================
+
+C:\program files\Steam\steamapps\common\Dark Souls II
+
+SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 236430
+
+<b><fontsize=12>Vítejte v Instalačním programu produktu čeština do hry Dark Souls 2.</font></b>
+
+Tento program vám umožní nainstalovat produkt čeština do hry Dark Souls 2 na váš pevný disk.
+
+Před spuštěním Instalačního programu je doporučeno ukončit ostatní běžící programy v systému Windows.
+
+Tlačítkem 'Konec' ukončíte Instalační program. V instalaci pokračujte tlačítkem 'Další'.
+
+ Aktualizace české lokalizace hry Dark Souls 2 pro PC ve Steam verzi 1.10 se všemi aktuálně vydanými (3) DLC. 
+Verze překladu: beta 0.99
+
+Pokud máte zájem zaslat autorům jakoukoli finanční částku jako ocenění jejich mnohahodinového snažení či jako podporu v další činnosti, zde je číslo účtu: 1689508/3500.
+
+Češtinu pro vás vytvořili:
+Sarakat, Kramla, Mrazík, Nobanek, Shirea a Lukáš Mastík
+Díky všem za odvedenou práci
+
+POZOR!! INSTALACE VYŽADUJE PŘIBLIŽNĚ 6GB VOLNÉHO MÍSTA NA DISKU, PROTO SE PŘED INSTALACÍ UJISTĚTE, ŽE MÁTE K DISPOZICI DOSTATEK VOLNÉHO MÍSTA A SAMOTNÁ INSTALACE MŮŽE TRVAT NĚKOLIK MINUT!!!
+
+Jedná se o kompletní překlad vč. české diakritiky. Čeština byla vytvořena a testována na aktualní PC verzi hry na Steamu pod systémem Windows 7 64bit . Funkčnost na jiných verzích není zaručena, avšak nepřepokládají se problémy. 
+
+Instalace je snadná - stačí se řídit pokyny a pouze v případě, že instalátor sám správně nevyhledá umístění hry, zadejte svou cestu ručně např. C:\Program Files (x86)\steam\steamapps\common\Dark Souls 2. Budete-li mít potíže s instalací v systémech Windows Vista, 7 spousťte instalátor jako správce.
+
+V češtině se mohou (a patrně budou) vyskytovat chyby nebo nepřesnosti. V případě nálezu takovýchto chyb Vás žádám o jejich zaslání na papemajasa@seznam.cz, abych je mohl odstranit. Děkuji.
+
+SARAKAT Březen 2015, všechna práva vyhrazena.
+Není na světě člověk ten, aby se zavděčil lidem všem
+Google+ češtiny do her
+papemajasa@seznam.cz
+
+Přečtěte si prosím níže Licenční ujednání.
+
+Přečtěte si prosím níže Licenční ujednání a vyberte "Souhlasím", pokud souhlasíte s jejími ustanoveními a podmínkami.
+
+   Licenční ustanovení k české lokalizaci
+
+Povolení pro šíření mají: Cenega, www.abcgames.cz.
+
+A. Licenční charakteristika lokalizace
+Lokalizace je určena pro zakoupený produkt šířený podle platných mezinárodních licencí a autorských práv. Do hry se po nainstalovaní lokalizace nepřidává žádná reklama související s jejími autory, jejich sponzory anebo jinými skupinami, zařízeními, produkty či společnostmi, s vyjímkou Autorů, kde mohou, ale nemusí být uvedené osoby, které na lokalizaci pracovali.
+
+B. Základní stanovy
+Vydání lokalizace podléhá licencím o mezinárodních autorských právech. Je zakázané ji podle zákona č.121/2000 Sb. o autorském právu jakkoliv modifikovat či využívat textů bez svolení autorů lokalizace. Vytvořením lokalizace vzniká duševní vlastnictví všech zúčastněných osob. Porušení může vést ke sporu jakéhokoliv druhu. Autor nenese žádnu zodpovědnost za případné škody způsobené nesprávným používáním lokalizace či za případné softwérové chyby.
+
+C. Další šíření díla
+Pokud byste měli zájem rozšiřovat lokalizaci dále, ať už umístěním na vlastní internetovou stránku nebo optická média, napište na e-mailovou adresu autora lokalizace. Lokalizaci je zakázané šířit za jakýkoliv poplatek. Pokud se tak stane, stali jste se obětí krádeže.
+
+D. Dodatek
+Je vysloveně zakázané kopírovat jakoukoliv část překladu, ať už se jedná o jazykové, technické nebo grafické materiály, to samé se týká i nápadů použitých při řešení některých situací. Vědomé obcházení kterékoliv časti výše stanovených podmínek se bere za jejich porušovaní.
+
+Děkujeme vám, že jste si stáhli tuto lokalizaci a přejeme vám příjemné hraní hry Dark Souls 2 v českém jazyce. 
+
+SARAKAT Březen 2015, všechna práva vyhrazena.
+Není na světě člověk ten, aby se zavděčil lidem všem
+Google+ češtiny do her
+papemajasa@seznam.cz
+
+Souhlasím s výše uvedenými ustanoveními a podmínkami.
+
+Vyberte instalační adresář a pokračujte tlačítkem Další.
+
+Vyberte adresář, do kterého bude produkt čeština do hry Dark Souls 2 nainstalován:
+
+Klikněte na tlačítko 'Další' pro pokračování.
+
+Nyní jste připraveni instalovat produkt čeština do hry Dark Souls 2.
+
+Tento program nainstaluje produkt čeština do hry Dark Souls 2 do %s.
+
+Tlačítkem 'Spustit' zahájíte instalaci produktu čeština do hry Dark Souls 2.
+
+Produkt čeština do hry Dark Souls 2 byl úspěšně nainstalován.
+
+Instalace produktu čeština do hry Dark Souls 2 nebyla správně dokončena z následujícího důvodu:
+
+%s
+
+Budete muset znovu kompletně nainstalovat produkt čeština do hry Dark Souls 2.
+
+Systém Windows se nyní musí restartovat pro aplikaci všech změn a nastavení. Klikněte na tlačítko 'Restartovat', pokud si přejete restartovat Windows okamžitě.
+
+čeština do hry Dark Souls 2 Instalační program
+
+Cílový adresář neexistuje. Chcete ho vytvořit?
+
+Jeden nebo více souborů je chráněno proti zápisu. Chcete je přesto přepsat?
+
+Program nemůže nainstalovat produkt čeština do hry Dark Souls 2 z následujícího důvodu:
+
+Přístup k následujícímu souboru je odepřen:
+%s
+
+Následující soubor je právě používán:
+
+%s
+
+Zavřete jej prosím a opakujte akci.
+
+V cílovém adresáři není dostatek volného místa. Chcete to přesto zkusit?
+
+Nyní jste v procesu instalace součástí.
+Pokud nyní ukončíte instalaci, nebudou tyto komponenty nainstalovány správně.
+
+Opravdu chcete skončit?
+
+Instalace nebyla dokončena. Opravdu chcete ukončit instalaci?
+
+Průvodce instalací nedokončil instalaci úspěšně.
+
+Nelze zapsat do následujícího souboru:
+%s
+
+Chyba CRC - nelze nainstalovat následující soubor:
+%s
+
+Přístup k následujícímu souboru je odepřen:
+%s
+
+%s
+
+Tento soubor existuje v jiné jazykové verzi než soubor, který má být nainstalován.
+
+Chcete přesto přepsat tuto existující verzi souboru?
+
+Datová chyba v následujícím souboru:
+%s
+
+Chcete přesto pokračovat?

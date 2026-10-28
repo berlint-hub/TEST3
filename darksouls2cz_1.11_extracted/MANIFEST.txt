@@ -1,0 +1,59 @@
+darksouls2cz 1.11.exe - staticky rozbor a obsah (pro poradek)
+==============================================================
+
+Vstup:  "darksouls2cz 1.11.exe", 4 937 887 B
+sha256: 1d3683e539eda4889d66b59cd16481578095c8b0bec3a5390d42df56e3c99628
+
+Je to instalater Clickteam Install Creator 2.0.0.44 (signatura
+"wwgT)H" na offsetu 0x23000). Rozbaleno nastrojem
+tools/extract_clickteam.py (prepis formatu podle open-source
+cicdec od Bioruebe). Bloky instalateru: dialog/font (0x1435),
+cisla (0x1444), obrazek pozadi (0x1437), texty (0x143E) - viz
+TEXTY_INSTALATERU.txt, registry (0x1445, jen zapis do Uninstall),
+seznam souboru (0x143A), data (0x7F7F).
+
+Instalater hleda hru v registrech (Steam App 236430 =
+puvodni Dark Souls II), rozbali 128 souboru do slozky hry
+(slozka Game\) a spusti jeji vlastni ds2patcher.exe.
+
+EXTRAHOVANE SOUBORY (slozka game\, celkem 128, 10 636 924 B):
+- 1_<id>.lang       x66  ceske texty (data FMG pro importer);
+                          id = poradi zaznamu v hernim archivu
+- 1_<id>.tpf        x54  textury fontu s ceskou diakritikou (TPF)
+- 1_545.dat          1   BND4 binder, 4 474 044 B
+- font\English\FeFont_Big-cz.fontbnd.dcx, FeFont_Small-cz... (2)
+                          ceske fonty; patcher je prejmenuje misto
+                          anglickych (FeFont_Big/Small.fontbnd.dcx)
+- GameDataEbl-orig.bhd   referencni BHD5 hlavicka archivu
+                          (760 042 B, 13 905 zaznamu, 2 099 bucketu,
+                          sul "FRPG2_STEAM_GAME_DATA_EBL_SALT");
+                          patcher ji nakopiruje jako GameDataEbl.bhd
+                          a importer z ni + z tveho .bdt slozi novy
+                          archiv. Zaznamy na sebe v .bdt presne
+                          navazuji - celkova velikost puvodniho
+                          GameDataEbl.bdt je 5 400 821 795 B.
+- md5-cryptedorig.txt    38bb57bb292cc3e1773d0ee6873d0351 =
+                          ocekavane MD5 herniho GameDataEbl.bhd
+                          (Steam verze 1.10 + 3 DLC)
+- ds2patcher.exe         ridici nastroj (C++, autor "kramla"):
+                          kontrola MD5 verze, kopie bhd, prejmenovani
+                          fontu, spusteni importeru, vymena _new
+                          archivu, uklid. sha256:
+                          836f0459a2c7f2bef718df396a60496c09ea0df0ab
+                          a63805ffd2baec5eb8278a
+- darksouls2importer.exe importer: z archivu GameDataEbl.bhd/.bdt
+                          postavi GameDataEbl_new.bhd/.bdt s nahra-
+                          zenymi zaznamy 1_<id>.lang/.tpf/.dat
+                          (zlib resi pres zlibc.exe)
+- zlibc.exe              zlib komprese/dekomprese pro importer
+
+PRIBALENO NAVIC (nase prace, neni z instalateru):
+- ds2patcher_bez_kontroly_verze.exe - stejny ds2patcher.exe, jen
+  s vyrazennou MD5 kontrolou (na VA 0x40312a byl podmineny skok
+  "je" do vetve "Neznama verze hry!" nahrazen 6x NOP). Zmeneno
+  presne 6 bajtu, nic vic. Dela tools/patch_ds2patcher.py.
+  sha256: 88e1dc939cd92f0a8f9a60e2b3af27a93ba517f4e6052a12c60492
+  990fe74d9b - POUZIVEJ jen dle navodu v JAK_NAINSTALOVAT.txt
+  (musi sedet aspon velikosti .bhd i .bdt!).
+
+Navod k rucni instalaci: JAK_NAINSTALOVAT.txt
