@@ -96,3 +96,42 @@ Preklad je fanouskovske dilo, vsechna prava a podminky sireni
 urcuji jeho autori - licence a informace z puvodniho instalateru
 najdes v TEXTY_INSTALATERU.txt. Tenhle balik je jen technicke
 vybaleni pro rucni instalaci.
+
+KDYZ TO JEN "PROBLIKNE" A NIC NEVYPISE
+--------------------------------------
+Spravne ma patcher psat hlasky ("Kontroluji verzi hry..." atd.)
+a na konci zustat stat na "Press any key" / PAUSE. Kdyz okno
+jen problikne, proces umrel moc brzo, nebo vubec nenastartoval
+(typicky antivirus/SmartScreen). Zkus to takhle a vysledek
+posli zpet:
+
+1. Otevri prikazovou radku primo ve slozce <jednotka>\...\Game\
+   (Shift+pravy klik ve slozce > "Otevrit okno prikazoveho radku
+   zde", nebo v Przkumniku do adresniho radku napis cmd a Enter).
+   Spust:  ds2patcher.exe
+   Zkopiruj uplne vsechno, co vypise.
+
+2. To same udelej s ORIGINALNIM ds2patcher.exe (u nas lezi ve
+   slozce game\). Ten ma vypsat "Kontroluji verzi hry..." a pak
+   bud "Verze v poradku.", nebo "Neznama verze hry..." a cekat
+   na klavesu. POZOR: oba patchery po sobe ve slozce Game\
+   uklizeji pracovni soubory - pred kazdym pokusem tam obsah
+   game\ nakopiruj znovu z tehle predlohy.
+
+3. Existuje exe ve slozce Game i po probliknuti? Koukni se do
+   Windows Defender > Historie ochrany, jestli ho nesebral
+   antivirus (nepodepsane fanouskovske nastroje roku 2015
+   obcas bere jako hrozbu).
+
+4. Napis, co ted ve slozce Game je: zustaly tam soubory
+   1_*.lang, darksouls2importer.exe, zlibc.exe a
+   GameDataEbl-orig.bhd? (Podle toho se pozna, jak daleko
+   to dobehlo.)
+
+5. Jestli chces jit na jistotu: Prohlizec udalosti (Event
+   Viewer) > Protokoly Windows > Aplikace - hledej cervenou
+   chybu s ds2patcher.exe. Polozka "Posun chyby" (Faulting
+   offset) nam presne rekne, kde program padl.
+
+Vetsinu pokusu delaj ze slozky Game a prikazovou radku musis
+spoustet "jako spravce" (zapis do Program Files).
