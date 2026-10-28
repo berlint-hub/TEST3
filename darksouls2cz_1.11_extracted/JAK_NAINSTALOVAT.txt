@@ -141,7 +141,23 @@ posli zpet:
    uklizeji pracovni soubory - pred kazdym pokusem tam obsah
    game\ nakopiruj znovu z tehle predlohy.
 
-3. Existuje exe ve slozce Game i po probliknuti? Koukni se do
+3. Exit kody (hned po spusteni bez hlasek):
+      echo %ERRORLEVEL%
+   0 = program sam skoncil "ciste" (pak je to divne, posli to),
+   zaporne cislo kolem -1073741xxx = pad programu.
+
+3b. Hash samotneho upraveneho souboru - POZOR, hashuj ten soubor,
+   ktery poustis:
+      certutil -hashfile ds2patcher_bez_kontroly_verze.exe SHA256
+   Ma byt 88e1dc93... a velikost 176128 B. Jiny hash = mas jiny/
+   poskozeny soubor - stahni ho z repa znovu (po stazeni ve
+   Vlastnostech souboru odskrtni "Odblokovat", jestli tam je).
+
+3c. Jestli soubor po pokusu o spusteni ze slozky zmizel, nebo
+    se mu zmenila velikost, sahla na nej antivirova ochrana.
+    Koukni se do Windows Defender > Historie ochrany.
+
+3d. Existuje exe ve slozce Game i po probliknuti? Koukni se do
    Windows Defender > Historie ochrany, jestli ho nesebral
    antivirus (nepodepsane fanouskovske nastroje roku 2015
    obcas bere jako hrozbu).
