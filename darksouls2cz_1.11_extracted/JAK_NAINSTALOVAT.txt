@@ -64,6 +64,18 @@ je zpet, nebo ve Steamu "Overit integritu hernich souboru".
    anglicke texty a fonty.
 
 POCITEJ S TIM, ZE:
+- POZOR: patcher pri KAZDEM svem ukonceni (i kdzy se mu neco
+  nepovede) v adresari, ze ktereho je spusteny, PREMAZE pracovni
+  soubory cestiny (1_*.lang/.tpf/.dat, fonty -cz, GameDataEbl-
+  orig.bhd, importer i zlibc). NIKDY ho proto nespoustej primo
+  v teto rozbalene slozce darksouls2cz_1.11_extracted - znicil
+  by sis zalohu a jeste by napsal "Soubory ze hry...
+  nenalezeny". Tuhle slozku ber jako nedotknutelnou predlohu;
+  do slozky hry vzdy kopiruj cerstvy obsah game\.
+  (Kdyz uz se to stalo: stahni si obsah z repa znovu.)
+- Kdyz nevis, proc to konci: spoustej to z prikazove radky
+  (cmd ve slozce hry a prikaz  ds2patcher.exe ), okno ti pak
+  zustane a hlasky si v klidu prectes.
 ------------------
 - Behem importu je potreba ~5-6 GB volneho mista navic.
 - Originalni patcher pri odmitnuti ("Neznama verze hry...")
